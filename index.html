@@ -3,28 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>R Λ Z Ξ — Aeza</title>
+<title>Aèzα — R Λ Z Ξ</title>
 <meta name="description" content="R Λ Z Ξ · Aeza · @rz3nx">
 <meta property="og:title" content="R Λ Z Ξ"><meta property="og:description" content="Aeza · модули и плагины на Python"><meta property="og:image" content="avatar.jpg">
 <link rel="icon" href="avatar.jpg">
-<meta name="theme-color" content="#1a110f">
+<meta name="theme-color" content="#141218">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,300..1000&display=swap" rel="stylesheet">
 <style>
 :root{
-  --primary:#8f4c38;--on-primary:#fff;--pc:#ffdbd1;--on-pc:#3a0b01;
-  --secondary:#77574e;--sc:#ffdbd1;--on-sc:#2c150f;
-  --tertiary:#6c5d2f;--tc:#f5e1a7;--on-tc:#231b00;
-  --bg:#fff8f6;--c0:#fff1ed;--c1:#fceae5;--c2:#f7e4e0;--c3:#f1dfda;
-  --fg:#231917;--fg2:#53433f;--outline:#85736e;--ov:#d8c2bc;--inv:#392e2b;--on-inv:#ffede8;
+  --primary:#6b4fa8;--on-primary:#fff;--pc:#ebddff;--on-pc:#25005a;
+  --secondary:#635b70;--sc:#e9def8;--on-sc:#1f182b;
+  --tertiary:#7e525e;--tc:#ffd9e1;--on-tc:#31101b;
+  --bg:#fdf7ff;--c0:#f8f1fc;--c1:#f2ecf6;--c2:#ece6f0;--c3:#e6e0ea;
+  --fg:#1d1b20;--fg2:#4a4550;--outline:#7b757f;--ov:#cbc4cf;--inv:#322f35;--on-inv:#f5eff7;
   --spring:cubic-bezier(.34,1.56,.64,1);--spring2:cubic-bezier(.22,1.4,.36,1);--emph:cubic-bezier(.2,0,0,1);
 }
 [data-theme=dark]{
-  --primary:#ffb5a0;--on-primary:#561f0f;--pc:#723523;--on-pc:#ffdbd1;
-  --secondary:#e7bdb2;--sc:#5d4037;--on-sc:#ffdbd1;
-  --tertiary:#d8c58d;--tc:#4f4215;--on-tc:#f5e1a7;
-  --bg:#1a110f;--c0:#1f1714;--c1:#271d1b;--c2:#322825;--c3:#3d3230;
-  --fg:#f1dfda;--fg2:#d8c2bc;--outline:#a08c87;--ov:#53433f;--inv:#f1dfda;--on-inv:#392e2b;
+  --primary:#d4bbff;--on-primary:#3b1e75;--pc:#52378e;--on-pc:#ebddff;
+  --secondary:#cdc2db;--sc:#4b4358;--on-sc:#e9def8;
+  --tertiary:#f0b7c5;--tc:#643b47;--on-tc:#ffd9e1;
+  --bg:#141218;--c0:#1a1720;--c1:#211e26;--c2:#2b2930;--c3:#36333b;
+  --fg:#e7e0e8;--fg2:#cbc4cf;--outline:#958e99;--ov:#4a4550;--inv:#e7e0e8;--on-inv:#322f35;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{background:var(--bg);scroll-behavior:auto}
@@ -65,13 +65,13 @@ a{-webkit-tap-highlight-color:transparent}
 .pit{position:relative;height:min(62vh,560px);min-height:400px;border-radius:48px;background:var(--c1);overflow:hidden;touch-action:pan-y;isolation:isolate;
   transition:border-radius .8s var(--spring),background .5s}
 .pit .who{position:absolute;left:clamp(20px,4vw,44px);top:clamp(20px,4vw,40px);right:20px;z-index:1;pointer-events:none}
-.av{width:clamp(88px,12vw,120px);height:clamp(88px,12vw,120px);display:block;margin-bottom:18px;pointer-events:auto;cursor:pointer;overflow:visible}
+.av{width:clamp(104px,13vw,140px);height:clamp(104px,13vw,140px);display:block;margin-bottom:18px;pointer-events:auto;cursor:pointer;overflow:visible}
 .av .u{fill:var(--pc)}
 .name{font-size:100px;line-height:.82;letter-spacing:-.05em;font-weight:900;white-space:nowrap;width:max-content;
   font-variation-settings:"wdth" 151,"opsz" 144;pointer-events:auto;cursor:pointer;user-select:none}
 .name span{display:inline-block;transition:font-variation-settings .6s var(--spring),color .3s,transform .6s var(--spring)}
 .name span:hover{font-variation-settings:"wdth" 25,"opsz" 144;color:var(--primary);transform:translateY(-4px)}
-.tag{margin-top:14px;font-size:clamp(16px,1.7vw,19px);color:var(--fg2);letter-spacing:.2px}
+.tag{margin-top:14px;min-height:2.6em;font-size:clamp(16px,1.7vw,19px);color:var(--fg2);letter-spacing:.2px}
 .tag b{color:var(--fg);font-weight:650}
 .hint{position:absolute;right:20px;top:22px;transition:opacity .4s;z-index:1;font-size:12px;font-weight:650;color:var(--fg2);opacity:.75;letter-spacing:.3px;pointer-events:none;font-variation-settings:"wdth" 115}
 .body{position:absolute;left:0;top:0;display:grid;place-items:center;cursor:grab;user-select:none;touch-action:none;will-change:transform;z-index:2}
@@ -174,6 +174,66 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
 .menu.open .mi{opacity:1;transform:none}
 .menu.open .mi:nth-last-child(2){transition-delay:.04s}.menu.open .mi:nth-last-child(3){transition-delay:.08s}
 
+
+/* ── v4: projects / marquee / fun ── */
+.typer{color:var(--primary);font-weight:650}
+.caret{display:inline-block;width:2px;height:1.05em;background:var(--primary);margin-left:2px;vertical-align:-3px;animation:car 1s steps(1) infinite}
+@keyframes car{50%{opacity:0}}
+.marquee{overflow:hidden;margin:0 0 20px;-webkit-mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mq{display:flex;gap:10px;width:max-content;animation:mq 26s linear infinite}
+.marquee:hover .mq{animation-play-state:paused}
+.mq span{height:40px;padding:0 18px;border-radius:20px;background:var(--c1);display:inline-flex;align-items:center;font-size:14px;font-weight:650;color:var(--fg2);white-space:nowrap;
+  transition:border-radius .5s var(--spring),background .3s,color .3s}
+.mq span:nth-child(3n){background:var(--sc);color:var(--on-sc)}.mq span:nth-child(4n){border-radius:10px}
+.mq span:hover{border-radius:8px;background:var(--primary);color:var(--on-primary)}
+@keyframes mq{to{transform:translateX(-50%)}}
+.projects{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;perspective:1000px}
+.proj{grid-column:span 2;position:relative;display:flex;flex-direction:column;padding:22px;min-height:280px;border-radius:32px;background:var(--c1);overflow:hidden;isolation:isolate;
+  transform-style:preserve-3d;transition:border-radius .6s var(--spring),background .35s,transform .5s var(--spring)}
+.proj.big{grid-column:span 4;background:var(--pc);color:var(--on-pc)}
+
+.proj:hover{border-radius:16px}
+.proj::after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--primary) 22%,transparent),transparent 70%);opacity:0;transition:opacity .3s}
+.proj:hover::after{opacity:1}
+.pshape{position:relative;width:64px;height:64px;display:grid;place-items:center;margin-bottom:auto;transform:translateZ(30px)}
+.pshape svg{position:absolute;inset:0;width:100%;height:100%;transition:transform 1.1s var(--spring)}
+.pshape path{fill:var(--primary)}
+.proj.big .pshape path{fill:var(--on-pc)}
+.pshape b{position:relative;font-size:22px;font-weight:850;color:var(--on-primary)}
+.proj.big .pshape b{color:var(--pc)}
+.proj:hover .pshape svg{transform:rotate(120deg) scale(1.12)}
+.pmeta{display:flex;gap:6px;margin:22px 0 10px;transform:translateZ(20px)}
+.chip-l{height:26px;padding:0 10px;border-radius:8px;border:1px solid var(--ov);display:inline-flex;align-items:center;font-size:12px;font-weight:650;letter-spacing:.2px}
+.proj.big .chip-l{border-color:color-mix(in srgb,var(--on-pc) 35%,transparent)}
+.chip-l.rel{background:var(--primary);color:var(--on-primary);border-color:transparent}
+.proj.big .chip-l.rel{background:var(--on-pc);color:var(--pc)}
+.proj h3{font-size:clamp(24px,2.6vw,32px);font-weight:850;letter-spacing:-.02em;line-height:1;margin-bottom:8px;font-variation-settings:"wdth" 115,"opsz" 144;transform:translateZ(24px);
+  transition:font-variation-settings .6s var(--spring)}
+.proj:hover h3{font-variation-settings:"wdth" 151,"opsz" 144}
+.proj p{font-size:15px;line-height:1.45;opacity:.85;letter-spacing:.15px}
+.pfoot{display:flex;justify-content:space-between;margin-top:16px;font-size:12px;font-weight:650;opacity:.75;font-variant-numeric:tabular-nums}
+.ghbtn{margin-top:14px;display:flex;align-items:center;justify-content:center;gap:10px;height:60px;border-radius:30px;border:1px solid var(--outline);font-size:16px;font-weight:650;
+  transition:border-radius .45s var(--spring),background .3s,color .3s}
+.ghbtn svg{width:22px;height:22px;fill:currentColor}
+.ghbtn:hover{border-radius:14px;background:var(--fg);color:var(--bg)}
+.bb.ton{background:var(--sc);color:var(--on-sc)}
+/* курсор-блоб */
+.cur{position:fixed;left:0;top:0;width:28px;height:28px;z-index:80;pointer-events:none;mix-blend-mode:difference;opacity:0;transition:opacity .3s,width .4s var(--spring),height .4s var(--spring)}
+.cur svg{width:100%;height:100%}.cur path{fill:#fff}
+.cur.on{opacity:1}.cur.big{width:64px;height:64px}
+@media (hover:none){.cur{display:none}}
+/* split-text заголовков */
+h2 .ch{display:inline-block;opacity:0;transform:translateY(.4em) rotate(8deg);font-variation-settings:inherit;transition:opacity .5s var(--emph),transform .9s var(--spring),font-variation-settings .6s var(--spring)}
+h2.in .ch{opacity:1;transform:none}
+h2 .ch:hover{font-variation-settings:"wdth" 25,"opsz" 144;color:var(--primary)}
+h2 em .ch:hover{font-variation-settings:"wdth" 151,"opsz" 144}
+/* party */
+body.party .body svg{animation:hue 1.2s linear infinite}
+body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) infinite}
+@keyframes hue{to{filter:hue-rotate(360deg)}}@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:700px){
+  .projects{grid-template-columns:minmax(0,1fr)}.proj,.proj.big,.proj:nth-child(4),.proj:nth-child(5){grid-column:auto;min-height:230px}
+}
 /* ripple + particles */
 .rp{position:relative;overflow:hidden;isolation:isolate}
 .rip{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:currentColor;opacity:.16;pointer-events:none;animation:rip .6s var(--emph) forwards;z-index:-1}
@@ -204,7 +264,7 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
 
 <header class="hero wrap" id="s0">
   <div class="top">
-    <div class="brand">AEZA · BIO</div>
+    <div class="brand">AÈZΑ ~/»</div>
     <button class="sw" id="sw" role="switch" aria-checked="true" aria-label="Тёмная тема"><i><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.5 0-.9-.1-1.4A5.5 5.5 0 0 1 13.4 3.1 9 9 0 0 0 12 3"/></svg></i></button>
   </div>
   <div class="pit" id="pit">
@@ -215,7 +275,7 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
         <image href="avatar.jpg" x="0" y="0" width="1" height="1" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
       </svg>
       <h1 class="name" id="name">RΛZΞ</h1>
-      <p class="tag">Aeza, <b>@rz3nx</b> · модули и&nbsp;плагины на&nbsp;Python</p>
+      <p class="tag">Aèzα, <b>@rz3nx</b> · <span class="typer" id="typer">Android на Compose</span><span class="caret"></span></p>
     </div>
     <div class="hint" id="hint">кидай фигуры ↯</div>
   </div>
@@ -224,13 +284,13 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
 <main class="wrap">
   <section id="s1">
     <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="cookie9"/></svg></i>Обо мне</div>
-    <h2 class="rv">Femboy <em>и</em> Python</h2>
-    <p class="lead rv">Пишу на <b>Python</b> и&nbsp;по-русски. Юзербот&nbsp;— <b>Heroku</b>. Мой деф&nbsp;— <b>@Fixyres</b>. One Piece&nbsp;— real.</p>
+    <h2 class="rv">Femboy <em>и</em> Kotlin</h2>
+    <p class="lead rv">Делаю Android-приложения на <b>Kotlin + Compose</b> в&nbsp;стиле Material&nbsp;3 Expressive, пишу на&nbsp;<b>Python</b> модули и&nbsp;плагины. Юзербот&nbsp;— <b>Heroku</b>. Мой деф&nbsp;— <b>@Fixyres</b>.</p>
     <div class="facts">
       <div class="fact f1 rv"><svg viewBox="0 0 1 1"><path data-shape="cookie12"/></svg><div><b>11?</b><span>лет</span></div></div>
       <div class="fact f2 rv"><svg viewBox="0 0 1 1"><path data-shape="clover4"/></svg><div><b>09.11</b><span>др 🎂</span></div></div>
       <div class="fact f3 rv"><svg viewBox="0 0 1 1"><path data-shape="pent"/></svg><div><b>RU</b><span>Russia</span></div></div>
-      <div class="fact f4 rv"><svg viewBox="0 0 1 1"><path data-shape="burst"/></svg><div><b>HRK</b><span>Heroku</span></div></div>
+      <div class="fact f4 rv"><svg viewBox="0 0 1 1"><path data-shape="burst"/></svg><div><b data-n="5">5</b><span>репо</span></div></div>
     </div>
   </section>
 
@@ -245,6 +305,41 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
     </div>
   </section>
 
+
+  <section id="s2g">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="burst"/></svg></i>GitHub</div>
+    <h2 class="rv">Мои <em>проекты</em></h2>
+    <div class="marquee rv" aria-hidden="true"><div class="mq" id="mq"><span>Kotlin</span><span>Jetpack Compose</span><span>Material 3 Expressive</span><span>Python</span><span>TypeScript</span><span>Android IME</span><span>Bluetooth SPP</span><span>GitHub Actions</span></div></div>
+    <div class="projects" id="projects">
+      <a class="proj big rv" data-repo="glimpse" href="https://github.com/aezochka/glimpse" target="_blank" rel="noopener">
+        <div class="pshape"><svg viewBox="0 0 1 1"><path data-shape="cookie9"/></svg><b>G</b></div>
+        <div class="pmeta"><span class="chip-l">Kotlin</span><span class="chip-l rel" data-rel>v1.3.0</span></div>
+        <h3>Glimpse</h3><p>Быстрая M3E-галерея для Android со встроенным редактором и системным выбором файлов.</p>
+        <div class="pfoot"><span class="pushed" data-pushed></span><span class="star" data-stars>★ 0</span></div></a>
+      <a class="proj rv" data-repo="buds-control" href="https://github.com/aezochka/buds-control" target="_blank" rel="noopener">
+        <div class="pshape"><svg viewBox="0 0 1 1"><path data-shape="clover4"/></svg><b>♫</b></div>
+        <div class="pmeta"><span class="chip-l">Kotlin</span><span class="chip-l rel" data-rel>v8.6</span></div>
+        <h3>Buds Control</h3><p>Шумодав, эквалайзер и жесты для TWS realme/OPPO/OnePlus. Без аккаунта и телеметрии.</p>
+        <div class="pfoot"><span class="pushed" data-pushed></span><span class="star" data-stars>★ 0</span></div></a>
+      <a class="proj rv" data-repo="m3e-keyboard" href="https://github.com/aezochka/m3e-keyboard" target="_blank" rel="noopener">
+        <div class="pshape"><svg viewBox="0 0 1 1"><path data-shape="square"/></svg><b>⌨</b></div>
+        <div class="pmeta"><span class="chip-l">Kotlin</span><span class="chip-l rel" data-rel>v1.9.0</span></div>
+        <h3>M3E Keyboard</h3><p>Своя клавиатура на Compose: EN+RU раскладки, Material You.</p>
+        <div class="pfoot"><span class="pushed" data-pushed></span><span class="star" data-stars>★ 0</span></div></a>
+      <a class="proj rv" data-repo="m3e-compose" href="https://github.com/aezochka/m3e-compose" target="_blank" rel="noopener">
+        <div class="pshape"><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg><b>{ }</b></div>
+        <div class="pmeta"><span class="chip-l">Kotlin</span><span class="chip-l">library</span></div>
+        <h3>m3e-compose</h3><p>Общая M3E-библиотека для моих приложений. На ней Glimpse и Buds Control.</p>
+        <div class="pfoot"><span class="pushed" data-pushed></span><span class="star" data-stars>★ 0</span></div></a>
+      <a class="proj rv" data-repo="m3e-canvas" href="https://aezochka.github.io/m3e-canvas/" target="_blank" rel="noopener">
+        <div class="pshape"><svg viewBox="0 0 1 1"><path data-shape="pent"/></svg><b>✎</b></div>
+        <div class="pmeta"><span class="chip-l">TypeScript</span><span class="chip-l">web</span></div>
+        <h3>M3E Canvas</h3><p>Рисуешь экраны в M3E прямо в браузере, на выходе готовый промпт для вайбкодинга.</p>
+        <div class="pfoot"><span class="pushed" data-pushed></span><span class="star" data-stars>★ 0</span></div></a>
+    </div>
+    <a class="ghbtn rv rp" href="https://github.com/aezochka" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2"/></svg>github.com/aezochka</a>
+  </section>
+
   <section id="s3">
     <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Факт</div>
     <h2 class="rv">One Piece <em>is</em> real</h2>
@@ -256,6 +351,7 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
     <h2 class="rv">Пиши <em>в</em> TG</h2>
     <div class="bgroup rv">
       <a class="bb rp" href="https://t.me/rz3nx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4.6 6.8-1.6 7.7c-.1.6-.5.7-1 .4l-2.6-1.9-1.3 1.2c-.1.1-.3.3-.6.3l.2-2.7 4.9-4.4c.2-.2 0-.3-.3-.1L8.3 13l-2.6-.8c-.6-.2-.6-.6.1-.8l10.1-3.9c.5-.2.9.1.7.8"/></svg>@rz3nx</a>
+      <a class="bb ton rp" href="https://github.com/aezochka" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2"/></svg>GitHub</a>
       <div class="split" id="split"><button class="a rp" id="idA">ID 318357554</button><button class="b rp" id="idB" aria-label="Скопировать ID"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m0 16H8V7h11z"/></svg></button></div>
     </div>
     <div class="foot"><span>R Λ Z Ξ · 2026</span><span>Material 3 Expressive</span></div>
@@ -267,7 +363,7 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
     <button class="tb on rp" data-to="s0" aria-label="Главная"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="t">Главная</span></button>
     <button class="tb rp" data-to="s1" aria-label="Обо мне"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8m0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4"/></svg><span class="t">Обо мне</span></button>
     <button class="tb rp" data-to="s2" aria-label="Ссылки"><svg viewBox="0 0 24 24"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12M8 13h8v-2H8zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10"/></svg><span class="t">Ссылки</span></button>
-    <button class="tb rp" data-to="s3" aria-label="Факт"><svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2 7.5 14l-1.7 7z"/></svg><span class="t">Факт</span></button>
+    <button class="tb rp" data-to="s2g" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.3-3.4-1.3-.4-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.3 1.1 2.9.8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7.9.7 1.9V21c0 .3.2.6.7.5A10 10 0 0 0 12 2"/></svg><span class="t">GitHub</span></button>
     <button class="tb rp" data-to="s4" aria-label="Связь"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4-8 5-8-5V6l8 5 8-5z"/></svg><span class="t">Связь</span></button>
   </nav>
   <div class="fabw">
@@ -280,6 +376,7 @@ h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-sett
   </div>
 </div>
 <div class="snack" id="snack"></div>
+<div class="cur" id="cur"><svg viewBox="0 0 1 1"><path id="curp"/></svg></div>
 
 <script>
 const SH={"circle": [0.5, 0.0, 0.5262, 0.0007, 0.5523, 0.0027, 0.5782, 0.0062, 0.604, 0.0109, 0.6294, 0.017, 0.6545, 0.0245, 0.6792, 0.0332, 0.7034, 0.0432, 0.727, 0.0545, 0.75, 0.067, 0.7723, 0.0807, 0.7939, 0.0955, 0.8147, 0.1114, 0.8346, 0.1284, 0.8536, 0.1464, 0.8716, 0.1654, 0.8886, 0.1853, 0.9045, 0.2061, 0.9193, 0.2277, 0.933, 0.25, 0.9455, 0.273, 0.9568, 0.2966, 0.9668, 0.3208, 0.9755, 0.3455, 0.983, 0.3706, 0.9891, 0.396, 0.9938, 0.4218, 0.9973, 0.4477, 0.9993, 0.4738, 1.0, 0.5, 0.9993, 0.5262, 0.9973, 0.5523, 0.9938, 0.5782, 0.9891, 0.604, 0.983, 0.6294, 0.9755, 0.6545, 0.9668, 0.6792, 0.9568, 0.7034, 0.9455, 0.727, 0.933, 0.75, 0.9193, 0.7723, 0.9045, 0.7939, 0.8886, 0.8147, 0.8716, 0.8346, 0.8536, 0.8536, 0.8346, 0.8716, 0.8147, 0.8886, 0.7939, 0.9045, 0.7723, 0.9193, 0.75, 0.933, 0.727, 0.9455, 0.7034, 0.9568, 0.6792, 0.9668, 0.6545, 0.9755, 0.6294, 0.983, 0.604, 0.9891, 0.5782, 0.9938, 0.5523, 0.9973, 0.5262, 0.9993, 0.5, 1.0, 0.4738, 0.9993, 0.4477, 0.9973, 0.4218, 0.9938, 0.396, 0.9891, 0.3706, 0.983, 0.3455, 0.9755, 0.3208, 0.9668, 0.2966, 0.9568, 0.273, 0.9455, 0.25, 0.933, 0.2277, 0.9193, 0.2061, 0.9045, 0.1853, 0.8886, 0.1654, 0.8716, 0.1464, 0.8536, 0.1284, 0.8346, 0.1114, 0.8147, 0.0955, 0.7939, 0.0807, 0.7723, 0.067, 0.75, 0.0545, 0.727, 0.0432, 0.7034, 0.0332, 0.6792, 0.0245, 0.6545, 0.017, 0.6294, 0.0109, 0.604, 0.0062, 0.5782, 0.0027, 0.5523, 0.0007, 0.5262, 0.0, 0.5, 0.0007, 0.4738, 0.0027, 0.4477, 0.0062, 0.4218, 0.0109, 0.396, 0.017, 0.3706, 0.0245, 0.3455, 0.0332, 0.3208, 0.0432, 0.2966, 0.0545, 0.273, 0.067, 0.25, 0.0807, 0.2277, 0.0955, 0.2061, 0.1114, 0.1853, 0.1284, 0.1654, 0.1464, 0.1464, 0.1654, 0.1284, 0.1853, 0.1114, 0.2061, 0.0955, 0.2277, 0.0807, 0.25, 0.067, 0.273, 0.0545, 0.2966, 0.0432, 0.3208, 0.0332, 0.3455, 0.0245, 0.3706, 0.017, 0.396, 0.0109, 0.4218, 0.0062, 0.4477, 0.0027, 0.4738, 0.0007], "cookie4": [0.5, 0.0, 0.5261, 0.0018, 0.5518, 0.007, 0.5767, 0.0155, 0.6005, 0.027, 0.623, 0.041, 0.6439, 0.057, 0.6633, 0.0746, 0.6811, 0.0932, 0.6975, 0.1123, 0.7128, 0.1314, 0.7273, 0.15, 0.7412, 0.168, 0.755, 0.1851, 0.769, 0.2013, 0.7835, 0.2165, 0.7987, 0.231, 0.8149, 0.245, 0.832, 0.2588, 0.85, 0.2727, 0.8686, 0.2872, 0.8877, 0.3025, 0.9068, 0.3189, 0.9254, 0.3367, 0.943, 0.3561, 0.959, 0.377, 0.973, 0.3995, 0.9845, 0.4233, 0.993, 0.4482, 0.9982, 0.4739, 1.0, 0.5, 0.9982, 0.5261, 0.993, 0.5518, 0.9845, 0.5767, 0.973, 0.6005, 0.959, 0.623, 0.943, 0.6439, 0.9254, 0.6633, 0.9068, 0.6811, 0.8877, 0.6975, 0.8686, 0.7128, 0.85, 0.7273, 0.832, 0.7412, 0.8149, 0.755, 0.7987, 0.769, 0.7835, 0.7835, 0.769, 0.7987, 0.755, 0.8149, 0.7412, 0.832, 0.7273, 0.85, 0.7128, 0.8686, 0.6975, 0.8877, 0.6811, 0.9068, 0.6633, 0.9254, 0.6439, 0.943, 0.623, 0.959, 0.6005, 0.973, 0.5767, 0.9845, 0.5518, 0.993, 0.5261, 0.9982, 0.5, 1.0, 0.4739, 0.9982, 0.4482, 0.993, 0.4233, 0.9845, 0.3995, 0.973, 0.377, 0.959, 0.3561, 0.943, 0.3367, 0.9254, 0.3189, 0.9068, 0.3025, 0.8877, 0.2872, 0.8686, 0.2727, 0.85, 0.2588, 0.832, 0.245, 0.8149, 0.231, 0.7987, 0.2165, 0.7835, 0.2013, 0.769, 0.1851, 0.755, 0.168, 0.7412, 0.15, 0.7273, 0.1314, 0.7128, 0.1123, 0.6975, 0.0932, 0.6811, 0.0746, 0.6633, 0.057, 0.6439, 0.041, 0.623, 0.027, 0.6005, 0.0155, 0.5767, 0.007, 0.5518, 0.0018, 0.5261, 0.0, 0.5, 0.0018, 0.4739, 0.007, 0.4482, 0.0155, 0.4233, 0.027, 0.3995, 0.041, 0.377, 0.057, 0.3561, 0.0746, 0.3367, 0.0932, 0.3189, 0.1123, 0.3025, 0.1314, 0.2872, 0.15, 0.2727, 0.168, 0.2588, 0.1851, 0.245, 0.2013, 0.231, 0.2165, 0.2165, 0.231, 0.2013, 0.245, 0.1851, 0.2588, 0.168, 0.2727, 0.15, 0.2872, 0.1314, 0.3025, 0.1123, 0.3189, 0.0932, 0.3367, 0.0746, 0.3561, 0.057, 0.377, 0.041, 0.3995, 0.027, 0.4233, 0.0155, 0.4482, 0.007, 0.4739, 0.0018], "cookie6": [0.5, 0.0, 0.5261, 0.0024, 0.5516, 0.0094, 0.576, 0.0204, 0.5989, 0.0345, 0.6204, 0.0507, 0.6404, 0.0679, 0.6593, 0.0849, 0.6777, 0.1009, 0.6961, 0.1151, 0.7151, 0.1274, 0.7353, 0.1377, 0.7568, 0.1465, 0.7798, 0.1545, 0.804, 0.1624, 0.8289, 0.1711, 0.8537, 0.1816, 0.8774, 0.1944, 0.8991, 0.21, 0.9179, 0.2286, 0.933, 0.25, 0.944, 0.2738, 0.9507, 0.2993, 0.9534, 0.326, 0.9526, 0.3529, 0.9493, 0.3796, 0.9444, 0.4055, 0.9391, 0.4304, 0.9345, 0.4543, 0.9313, 0.4774, 0.9302, 0.5, 0.9313, 0.5226, 0.9345, 0.5457, 0.9391, 0.5696, 0.9444, 0.5945, 0.9493, 0.6204, 0.9526, 0.6471, 0.9534, 0.674, 0.9507, 0.7007, 0.944, 0.7262, 0.933, 0.75, 0.9179, 0.7714, 0.8991, 0.79, 0.8774, 0.8056, 0.8537, 0.8184, 0.8289, 0.8289, 0.804, 0.8376, 0.7798, 0.8455, 0.7568, 0.8535, 0.7353, 0.8623, 0.7151, 0.8726, 0.6961, 0.8849, 0.6777, 0.8991, 0.6593, 0.9151, 0.6404, 0.9321, 0.6204, 0.9493, 0.5989, 0.9655, 0.576, 0.9796, 0.5516, 0.9906, 0.5261, 0.9976, 0.5, 1.0, 0.4739, 0.9976, 0.4484, 0.9906, 0.424, 0.9796, 0.4011, 0.9655, 0.3796, 0.9493, 0.3596, 0.9321, 0.3407, 0.9151, 0.3223, 0.8991, 0.3039, 0.8849, 0.2849, 0.8726, 0.2647, 0.8623, 0.2432, 0.8535, 0.2202, 0.8455, 0.196, 0.8376, 0.1711, 0.8289, 0.1463, 0.8184, 0.1226, 0.8056, 0.1009, 0.79, 0.0821, 0.7714, 0.067, 0.75, 0.056, 0.7262, 0.0493, 0.7007, 0.0466, 0.674, 0.0474, 0.6471, 0.0507, 0.6204, 0.0556, 0.5945, 0.0609, 0.5696, 0.0655, 0.5457, 0.0687, 0.5226, 0.0698, 0.5, 0.0687, 0.4774, 0.0655, 0.4543, 0.0609, 0.4304, 0.0556, 0.4055, 0.0507, 0.3796, 0.0474, 0.3529, 0.0466, 0.326, 0.0493, 0.2993, 0.056, 0.2738, 0.067, 0.25, 0.0821, 0.2286, 0.1009, 0.21, 0.1226, 0.1944, 0.1463, 0.1816, 0.1711, 0.1711, 0.196, 0.1624, 0.2202, 0.1545, 0.2432, 0.1465, 0.2647, 0.1377, 0.2849, 0.1274, 0.3039, 0.1151, 0.3223, 0.1009, 0.3407, 0.0849, 0.3596, 0.0679, 0.3796, 0.0507, 0.4011, 0.0345, 0.424, 0.0204, 0.4484, 0.0094, 0.4739, 0.0024], "cookie9": [0.5, 0.0, 0.526, 0.0038, 0.551, 0.0143, 0.5745, 0.0297, 0.5963, 0.0472, 0.6169, 0.0637, 0.6374, 0.077, 0.659, 0.0857, 0.6825, 0.09, 0.7083, 0.0912, 0.7358, 0.0915, 0.7639, 0.0936, 0.7907, 0.0999, 0.8144, 0.1117, 0.8336, 0.1295, 0.8477, 0.1523, 0.857, 0.1785, 0.8631, 0.2059, 0.8682, 0.2325, 0.8745, 0.2568, 0.884, 0.2783, 0.8978, 0.2973, 0.9157, 0.3149, 0.9362, 0.3325, 0.9569, 0.3515, 0.975, 0.3727, 0.9877, 0.3963, 0.9935, 0.4218, 0.9919, 0.4483, 0.9839, 0.4746, 0.9717, 0.5, 0.9582, 0.524, 0.9463, 0.5469, 0.9383, 0.5694, 0.9351, 0.5925, 0.9363, 0.6169, 0.9403, 0.6431, 0.9445, 0.6706, 0.9461, 0.6986, 0.9428, 0.7256, 0.933, 0.75, 0.9167, 0.7706, 0.8951, 0.787, 0.87, 0.7996, 0.844, 0.8098, 0.8194, 0.8194, 0.7976, 0.8305, 0.7793, 0.8449, 0.7638, 0.8631, 0.7499, 0.8848, 0.7358, 0.9085, 0.72, 0.9317, 0.7012, 0.9518, 0.6791, 0.9665, 0.6541, 0.9742, 0.6273, 0.975, 0.5999, 0.9699, 0.5731, 0.9615, 0.5476, 0.9526, 0.5234, 0.9459, 0.5, 0.9434, 0.4766, 0.9459, 0.4524, 0.9526, 0.4269, 0.9615, 0.4001, 0.9699, 0.3727, 0.975, 0.3459, 0.9742, 0.3209, 0.9665, 0.2988, 0.9518, 0.28, 0.9317, 0.2642, 0.9085, 0.2501, 0.8848, 0.2362, 0.8631, 0.2207, 0.8449, 0.2024, 0.8305, 0.1806, 0.8194, 0.156, 0.8098, 0.13, 0.7996, 0.1049, 0.787, 0.0833, 0.7706, 0.067, 0.75, 0.0572, 0.7256, 0.0539, 0.6986, 0.0555, 0.6706, 0.0597, 0.6431, 0.0637, 0.6169, 0.0649, 0.5925, 0.0617, 0.5694, 0.0537, 0.5469, 0.0418, 0.524, 0.0283, 0.5, 0.0161, 0.4746, 0.0081, 0.4483, 0.0065, 0.4218, 0.0123, 0.3963, 0.025, 0.3727, 0.0431, 0.3515, 0.0638, 0.3325, 0.0843, 0.3149, 0.1022, 0.2973, 0.116, 0.2783, 0.1255, 0.2568, 0.1318, 0.2325, 0.1369, 0.2059, 0.143, 0.1785, 0.1523, 0.1523, 0.1664, 0.1295, 0.1856, 0.1117, 0.2093, 0.0999, 0.2361, 0.0936, 0.2642, 0.0915, 0.2917, 0.0912, 0.3175, 0.09, 0.341, 0.0857, 0.3626, 0.077, 0.3831, 0.0637, 0.4037, 0.0472, 0.4255, 0.0297, 0.449, 0.0143, 0.474, 0.0038], "cookie12": [0.5, 0.0, 0.526, 0.0048, 0.5507, 0.0175, 0.5738, 0.034, 0.5959, 0.049, 0.6183, 0.0586, 0.6425, 0.0615, 0.6691, 0.0595, 0.6973, 0.0568, 0.7251, 0.0582, 0.75, 0.067, 0.7701, 0.0841, 0.7851, 0.1075, 0.7969, 0.1333, 0.8085, 0.1574, 0.8231, 0.1769, 0.8426, 0.1915, 0.8667, 0.2031, 0.8925, 0.2149, 0.9159, 0.2299, 0.933, 0.25, 0.9418, 0.2749, 0.9432, 0.3027, 0.9405, 0.3309, 0.9385, 0.3575, 0.9414, 0.3817, 0.951, 0.4041, 0.966, 0.4262, 0.9825, 0.4493, 0.9952, 0.474, 1.0, 0.5, 0.9952, 0.526, 0.9825, 0.5507, 0.966, 0.5738, 0.951, 0.5959, 0.9414, 0.6183, 0.9385, 0.6425, 0.9405, 0.6691, 0.9432, 0.6973, 0.9418, 0.7251, 0.933, 0.75, 0.9159, 0.7701, 0.8925, 0.7851, 0.8667, 0.7969, 0.8426, 0.8085, 0.8231, 0.8231, 0.8085, 0.8426, 0.7969, 0.8667, 0.7851, 0.8925, 0.7701, 0.9159, 0.75, 0.933, 0.7251, 0.9418, 0.6973, 0.9432, 0.6691, 0.9405, 0.6425, 0.9385, 0.6183, 0.9414, 0.5959, 0.951, 0.5738, 0.966, 0.5507, 0.9825, 0.526, 0.9952, 0.5, 1.0, 0.474, 0.9952, 0.4493, 0.9825, 0.4262, 0.966, 0.4041, 0.951, 0.3817, 0.9414, 0.3575, 0.9385, 0.3309, 0.9405, 0.3027, 0.9432, 0.2749, 0.9418, 0.25, 0.933, 0.2299, 0.9159, 0.2149, 0.8925, 0.2031, 0.8667, 0.1915, 0.8426, 0.1769, 0.8231, 0.1574, 0.8085, 0.1333, 0.7969, 0.1075, 0.7851, 0.0841, 0.7701, 0.067, 0.75, 0.0582, 0.7251, 0.0568, 0.6973, 0.0595, 0.6691, 0.0615, 0.6425, 0.0586, 0.6183, 0.049, 0.5959, 0.034, 0.5738, 0.0175, 0.5507, 0.0048, 0.526, 0.0, 0.5, 0.0048, 0.474, 0.0175, 0.4493, 0.034, 0.4262, 0.049, 0.4041, 0.0586, 0.3817, 0.0615, 0.3575, 0.0595, 0.3309, 0.0568, 0.3027, 0.0582, 0.2749, 0.067, 0.25, 0.0841, 0.2299, 0.1075, 0.2149, 0.1333, 0.2031, 0.1574, 0.1915, 0.1769, 0.1769, 0.1915, 0.1574, 0.2031, 0.1333, 0.2149, 0.1075, 0.2299, 0.0841, 0.25, 0.067, 0.2749, 0.0582, 0.3027, 0.0568, 0.3309, 0.0595, 0.3575, 0.0615, 0.3817, 0.0586, 0.4041, 0.049, 0.4262, 0.034, 0.4493, 0.0175, 0.474, 0.0048], "clover4": [0.5, 0.0, 0.5261, 0.0025, 0.5515, 0.0099, 0.5757, 0.0219, 0.5982, 0.0379, 0.6186, 0.0573, 0.6367, 0.0792, 0.6524, 0.1029, 0.6659, 0.1273, 0.6775, 0.1517, 0.6875, 0.1752, 0.6966, 0.1973, 0.7053, 0.2175, 0.7143, 0.2354, 0.7243, 0.2509, 0.7357, 0.2643, 0.7491, 0.2757, 0.7646, 0.2857, 0.7825, 0.2947, 0.8027, 0.3034, 0.8248, 0.3125, 0.8483, 0.3225, 0.8727, 0.3341, 0.8971, 0.3476, 0.9208, 0.3633, 0.9427, 0.3814, 0.9621, 0.4018, 0.9781, 0.4243, 0.9901, 0.4485, 0.9975, 0.4739, 1.0, 0.5, 0.9975, 0.5261, 0.9901, 0.5515, 0.9781, 0.5757, 0.9621, 0.5982, 0.9427, 0.6186, 0.9208, 0.6367, 0.8971, 0.6524, 0.8727, 0.6659, 0.8483, 0.6775, 0.8248, 0.6875, 0.8027, 0.6966, 0.7825, 0.7053, 0.7646, 0.7143, 0.7491, 0.7243, 0.7357, 0.7357, 0.7243, 0.7491, 0.7143, 0.7646, 0.7053, 0.7825, 0.6966, 0.8027, 0.6875, 0.8248, 0.6775, 0.8483, 0.6659, 0.8727, 0.6524, 0.8971, 0.6367, 0.9208, 0.6186, 0.9427, 0.5982, 0.9621, 0.5757, 0.9781, 0.5515, 0.9901, 0.5261, 0.9975, 0.5, 1.0, 0.4739, 0.9975, 0.4485, 0.9901, 0.4243, 0.9781, 0.4018, 0.9621, 0.3814, 0.9427, 0.3633, 0.9208, 0.3476, 0.8971, 0.3341, 0.8727, 0.3225, 0.8483, 0.3125, 0.8248, 0.3034, 0.8027, 0.2947, 0.7825, 0.2857, 0.7646, 0.2757, 0.7491, 0.2643, 0.7357, 0.2509, 0.7243, 0.2354, 0.7143, 0.2175, 0.7053, 0.1973, 0.6966, 0.1752, 0.6875, 0.1517, 0.6775, 0.1273, 0.6659, 0.1029, 0.6524, 0.0792, 0.6367, 0.0573, 0.6186, 0.0379, 0.5982, 0.0219, 0.5757, 0.0099, 0.5515, 0.0025, 0.5261, 0.0, 0.5, 0.0025, 0.4739, 0.0099, 0.4485, 0.0219, 0.4243, 0.0379, 0.4018, 0.0573, 0.3814, 0.0792, 0.3633, 0.1029, 0.3476, 0.1273, 0.3341, 0.1517, 0.3225, 0.1752, 0.3125, 0.1973, 0.3034, 0.2175, 0.2947, 0.2354, 0.2857, 0.2509, 0.2757, 0.2643, 0.2643, 0.2757, 0.2509, 0.2857, 0.2354, 0.2947, 0.2175, 0.3034, 0.1973, 0.3125, 0.1752, 0.3225, 0.1517, 0.3341, 0.1273, 0.3476, 0.1029, 0.3633, 0.0792, 0.3814, 0.0573, 0.4018, 0.0379, 0.4243, 0.0219, 0.4485, 0.0099, 0.4739, 0.0025], "clover8": [0.5, 0.0, 0.5259, 0.005, 0.5506, 0.019, 0.5729, 0.04, 0.5926, 0.0645, 0.6102, 0.0888, 0.6268, 0.1097, 0.6441, 0.1247, 0.6635, 0.1328, 0.6863, 0.1344, 0.7128, 0.1314, 0.7425, 0.1266, 0.7738, 0.1232, 0.8043, 0.1242, 0.8317, 0.1316, 0.8536, 0.1464, 0.8684, 0.1683, 0.8758, 0.1957, 0.8768, 0.2262, 0.8734, 0.2575, 0.8686, 0.2872, 0.8656, 0.3137, 0.8672, 0.3365, 0.8753, 0.3559, 0.8903, 0.3732, 0.9112, 0.3898, 0.9355, 0.4074, 0.96, 0.4271, 0.981, 0.4494, 0.995, 0.4741, 1.0, 0.5, 0.995, 0.5259, 0.981, 0.5506, 0.96, 0.5729, 0.9355, 0.5926, 0.9112, 0.6102, 0.8903, 0.6268, 0.8753, 0.6441, 0.8672, 0.6635, 0.8656, 0.6863, 0.8686, 0.7128, 0.8734, 0.7425, 0.8768, 0.7738, 0.8758, 0.8043, 0.8684, 0.8317, 0.8536, 0.8536, 0.8317, 0.8684, 0.8043, 0.8758, 0.7738, 0.8768, 0.7425, 0.8734, 0.7128, 0.8686, 0.6863, 0.8656, 0.6635, 0.8672, 0.6441, 0.8753, 0.6268, 0.8903, 0.6102, 0.9112, 0.5926, 0.9355, 0.5729, 0.96, 0.5506, 0.981, 0.5259, 0.995, 0.5, 1.0, 0.4741, 0.995, 0.4494, 0.981, 0.4271, 0.96, 0.4074, 0.9355, 0.3898, 0.9112, 0.3732, 0.8903, 0.3559, 0.8753, 0.3365, 0.8672, 0.3137, 0.8656, 0.2872, 0.8686, 0.2575, 0.8734, 0.2262, 0.8768, 0.1957, 0.8758, 0.1683, 0.8684, 0.1464, 0.8536, 0.1316, 0.8317, 0.1242, 0.8043, 0.1232, 0.7738, 0.1266, 0.7425, 0.1314, 0.7128, 0.1344, 0.6863, 0.1328, 0.6635, 0.1247, 0.6441, 0.1097, 0.6268, 0.0888, 0.6102, 0.0645, 0.5926, 0.04, 0.5729, 0.019, 0.5506, 0.005, 0.5259, 0.0, 0.5, 0.005, 0.4741, 0.019, 0.4494, 0.04, 0.4271, 0.0645, 0.4074, 0.0888, 0.3898, 0.1097, 0.3732, 0.1247, 0.3559, 0.1328, 0.3365, 0.1344, 0.3137, 0.1314, 0.2872, 0.1266, 0.2575, 0.1232, 0.2262, 0.1242, 0.1957, 0.1316, 0.1683, 0.1464, 0.1464, 0.1683, 0.1316, 0.1957, 0.1242, 0.2262, 0.1232, 0.2575, 0.1266, 0.2872, 0.1314, 0.3137, 0.1344, 0.3365, 0.1328, 0.3559, 0.1247, 0.3732, 0.1097, 0.3898, 0.0888, 0.4074, 0.0645, 0.4271, 0.04, 0.4494, 0.019, 0.4741, 0.005], "sunny": [0.5, 0.0, 0.5261, 0.0011, 0.5521, 0.0045, 0.5776, 0.01, 0.6025, 0.0178, 0.6265, 0.0278, 0.6494, 0.0402, 0.6705, 0.0559, 0.6935, 0.0654, 0.7195, 0.0692, 0.7444, 0.0766, 0.7685, 0.0865, 0.7916, 0.0987, 0.8136, 0.1128, 0.8343, 0.1287, 0.8536, 0.1464, 0.8713, 0.1657, 0.8872, 0.1864, 0.9013, 0.2084, 0.9135, 0.2315, 0.9234, 0.2556, 0.9308, 0.2805, 0.9346, 0.3065, 0.9441, 0.3295, 0.9598, 0.3506, 0.9722, 0.3735, 0.9822, 0.3975, 0.99, 0.4224, 0.9955, 0.4479, 0.9989, 0.4739, 1.0, 0.5, 0.9989, 0.5261, 0.9955, 0.5521, 0.99, 0.5776, 0.9822, 0.6025, 0.9722, 0.6265, 0.9598, 0.6494, 0.9441, 0.6705, 0.9346, 0.6935, 0.9308, 0.7195, 0.9234, 0.7444, 0.9135, 0.7685, 0.9013, 0.7916, 0.8872, 0.8136, 0.8713, 0.8343, 0.8536, 0.8536, 0.8343, 0.8713, 0.8136, 0.8872, 0.7916, 0.9013, 0.7685, 0.9135, 0.7444, 0.9234, 0.7195, 0.9308, 0.6935, 0.9346, 0.6705, 0.9441, 0.6494, 0.9598, 0.6265, 0.9722, 0.6025, 0.9822, 0.5776, 0.99, 0.5521, 0.9955, 0.5261, 0.9989, 0.5, 1.0, 0.4739, 0.9989, 0.4479, 0.9955, 0.4224, 0.99, 0.3975, 0.9822, 0.3735, 0.9722, 0.3506, 0.9598, 0.3295, 0.9441, 0.3065, 0.9346, 0.2805, 0.9308, 0.2556, 0.9234, 0.2315, 0.9135, 0.2084, 0.9013, 0.1864, 0.8872, 0.1657, 0.8713, 0.1464, 0.8536, 0.1287, 0.8343, 0.1128, 0.8136, 0.0987, 0.7916, 0.0865, 0.7685, 0.0766, 0.7444, 0.0692, 0.7195, 0.0654, 0.6935, 0.0559, 0.6705, 0.0402, 0.6494, 0.0278, 0.6265, 0.0178, 0.6025, 0.01, 0.5776, 0.0045, 0.5521, 0.0011, 0.5261, 0.0, 0.5, 0.0011, 0.4739, 0.0045, 0.4479, 0.01, 0.4224, 0.0178, 0.3975, 0.0278, 0.3735, 0.0402, 0.3506, 0.0559, 0.3295, 0.0654, 0.3065, 0.0692, 0.2805, 0.0766, 0.2556, 0.0865, 0.2315, 0.0987, 0.2084, 0.1128, 0.1864, 0.1287, 0.1657, 0.1464, 0.1464, 0.1657, 0.1287, 0.1864, 0.1128, 0.2084, 0.0987, 0.2315, 0.0865, 0.2556, 0.0766, 0.2805, 0.0692, 0.3065, 0.0654, 0.3295, 0.0559, 0.3506, 0.0402, 0.3735, 0.0278, 0.3975, 0.0178, 0.4224, 0.01, 0.4479, 0.0045, 0.4739, 0.0011], "burst": [0.5, 0.0, 0.5256, 0.0123, 0.5482, 0.0417, 0.5678, 0.0717, 0.5871, 0.09, 0.6078, 0.0975, 0.6295, 0.1014, 0.6554, 0.0952, 0.6874, 0.079, 0.7217, 0.0649, 0.75, 0.067, 0.766, 0.0904, 0.7708, 0.1272, 0.7729, 0.163, 0.7804, 0.1885, 0.7946, 0.2054, 0.8115, 0.2196, 0.837, 0.2271, 0.8728, 0.2292, 0.9096, 0.234, 0.933, 0.25, 0.9351, 0.2783, 0.921, 0.3126, 0.9048, 0.3446, 0.8986, 0.3705, 0.9025, 0.3922, 0.91, 0.4129, 0.9283, 0.4322, 0.9583, 0.4518, 0.9877, 0.4744, 1.0, 0.5, 0.9877, 0.5256, 0.9583, 0.5482, 0.9283, 0.5678, 0.91, 0.5871, 0.9025, 0.6078, 0.8986, 0.6295, 0.9048, 0.6554, 0.921, 0.6874, 0.9351, 0.7217, 0.933, 0.75, 0.9096, 0.766, 0.8728, 0.7708, 0.837, 0.7729, 0.8115, 0.7804, 0.7946, 0.7946, 0.7804, 0.8115, 0.7729, 0.837, 0.7708, 0.8728, 0.766, 0.9096, 0.75, 0.933, 0.7217, 0.9351, 0.6874, 0.921, 0.6554, 0.9048, 0.6295, 0.8986, 0.6078, 0.9025, 0.5871, 0.91, 0.5678, 0.9283, 0.5482, 0.9583, 0.5256, 0.9877, 0.5, 1.0, 0.4744, 0.9877, 0.4518, 0.9583, 0.4322, 0.9283, 0.4129, 0.91, 0.3922, 0.9025, 0.3705, 0.8986, 0.3446, 0.9048, 0.3126, 0.921, 0.2783, 0.9351, 0.25, 0.933, 0.234, 0.9096, 0.2292, 0.8728, 0.2271, 0.837, 0.2196, 0.8115, 0.2054, 0.7946, 0.1885, 0.7804, 0.163, 0.7729, 0.1272, 0.7708, 0.0904, 0.766, 0.067, 0.75, 0.0649, 0.7217, 0.079, 0.6874, 0.0952, 0.6554, 0.1014, 0.6295, 0.0975, 0.6078, 0.09, 0.5871, 0.0717, 0.5678, 0.0417, 0.5482, 0.0123, 0.5256, 0.0, 0.5, 0.0123, 0.4744, 0.0417, 0.4518, 0.0717, 0.4322, 0.09, 0.4129, 0.0975, 0.3922, 0.1014, 0.3705, 0.0952, 0.3446, 0.079, 0.3126, 0.0649, 0.2783, 0.067, 0.25, 0.0904, 0.234, 0.1272, 0.2292, 0.163, 0.2271, 0.1885, 0.2196, 0.2054, 0.2054, 0.2196, 0.1885, 0.2271, 0.163, 0.2292, 0.1272, 0.234, 0.0904, 0.25, 0.067, 0.2783, 0.0649, 0.3126, 0.079, 0.3446, 0.0952, 0.3705, 0.1014, 0.3922, 0.0975, 0.4129, 0.09, 0.4322, 0.0717, 0.4518, 0.0417, 0.4744, 0.0123], "square": [0.5, 0.0939, 0.5213, 0.0939, 0.5427, 0.0939, 0.5643, 0.0939, 0.5863, 0.0939, 0.6088, 0.094, 0.6319, 0.0942, 0.6556, 0.0945, 0.6802, 0.0953, 0.7055, 0.0966, 0.7316, 0.0989, 0.758, 0.1027, 0.7844, 0.1086, 0.8098, 0.1174, 0.8332, 0.1299, 0.8536, 0.1464, 0.8701, 0.1668, 0.8826, 0.1902, 0.8914, 0.2156, 0.8973, 0.242, 0.9011, 0.2684, 0.9034, 0.2945, 0.9047, 0.3198, 0.9055, 0.3444, 0.9058, 0.3681, 0.906, 0.3912, 0.9061, 0.4137, 0.9061, 0.4357, 0.9061, 0.4573, 0.9061, 0.4787, 0.9061, 0.5, 0.9061, 0.5213, 0.9061, 0.5427, 0.9061, 0.5643, 0.9061, 0.5863, 0.906, 0.6088, 0.9058, 0.6319, 0.9055, 0.6556, 0.9047, 0.6802, 0.9034, 0.7055, 0.9011, 0.7316, 0.8973, 0.758, 0.8914, 0.7844, 0.8826, 0.8098, 0.8701, 0.8332, 0.8536, 0.8536, 0.8332, 0.8701, 0.8098, 0.8826, 0.7844, 0.8914, 0.758, 0.8973, 0.7316, 0.9011, 0.7055, 0.9034, 0.6802, 0.9047, 0.6556, 0.9055, 0.6319, 0.9058, 0.6088, 0.906, 0.5863, 0.9061, 0.5643, 0.9061, 0.5427, 0.9061, 0.5213, 0.9061, 0.5, 0.9061, 0.4787, 0.9061, 0.4573, 0.9061, 0.4357, 0.9061, 0.4137, 0.9061, 0.3912, 0.906, 0.3681, 0.9058, 0.3444, 0.9055, 0.3198, 0.9047, 0.2945, 0.9034, 0.2684, 0.9011, 0.242, 0.8973, 0.2156, 0.8914, 0.1902, 0.8826, 0.1668, 0.8701, 0.1464, 0.8536, 0.1299, 0.8332, 0.1174, 0.8098, 0.1086, 0.7844, 0.1027, 0.758, 0.0989, 0.7316, 0.0966, 0.7055, 0.0953, 0.6802, 0.0945, 0.6556, 0.0942, 0.6319, 0.094, 0.6088, 0.0939, 0.5863, 0.0939, 0.5643, 0.0939, 0.5427, 0.0939, 0.5213, 0.0939, 0.5, 0.0939, 0.4787, 0.0939, 0.4573, 0.0939, 0.4357, 0.0939, 0.4137, 0.094, 0.3912, 0.0942, 0.3681, 0.0945, 0.3444, 0.0953, 0.3198, 0.0966, 0.2945, 0.0989, 0.2684, 0.1027, 0.242, 0.1086, 0.2156, 0.1174, 0.1902, 0.1299, 0.1668, 0.1464, 0.1464, 0.1668, 0.1299, 0.1902, 0.1174, 0.2156, 0.1086, 0.242, 0.1027, 0.2684, 0.0989, 0.2945, 0.0966, 0.3198, 0.0953, 0.3444, 0.0945, 0.3681, 0.0942, 0.3912, 0.094, 0.4137, 0.0939, 0.4357, 0.0939, 0.4573, 0.0939, 0.4787, 0.0939], "soft4": [0.5, 0.0121, 0.5252, 0.0195, 0.5495, 0.0291, 0.5728, 0.0406, 0.5949, 0.0534, 0.616, 0.0672, 0.636, 0.0816, 0.6551, 0.096, 0.6735, 0.1103, 0.6916, 0.1241, 0.7094, 0.1373, 0.7274, 0.1499, 0.7457, 0.1619, 0.7644, 0.1735, 0.7838, 0.1848, 0.8037, 0.1963, 0.8242, 0.2081, 0.845, 0.2206, 0.8659, 0.2342, 0.8865, 0.249, 0.9065, 0.2653, 0.9254, 0.2832, 0.9428, 0.3029, 0.9582, 0.3241, 0.9712, 0.3469, 0.9816, 0.371, 0.989, 0.3961, 0.9933, 0.4219, 0.9945, 0.448, 0.9927, 0.4742, 0.9879, 0.5, 0.9805, 0.5252, 0.9709, 0.5495, 0.9594, 0.5728, 0.9466, 0.5949, 0.9328, 0.616, 0.9184, 0.636, 0.904, 0.6551, 0.8897, 0.6735, 0.8759, 0.6916, 0.8627, 0.7094, 0.8501, 0.7274, 0.8381, 0.7457, 0.8265, 0.7644, 0.8152, 0.7838, 0.8037, 0.8037, 0.7919, 0.8242, 0.7794, 0.845, 0.7658, 0.8659, 0.751, 0.8865, 0.7347, 0.9065, 0.7168, 0.9254, 0.6971, 0.9428, 0.6759, 0.9582, 0.6531, 0.9712, 0.629, 0.9816, 0.6039, 0.989, 0.5781, 0.9933, 0.552, 0.9945, 0.5258, 0.9927, 0.5, 0.9879, 0.4748, 0.9805, 0.4505, 0.9709, 0.4272, 0.9594, 0.4051, 0.9466, 0.384, 0.9328, 0.364, 0.9184, 0.3449, 0.904, 0.3265, 0.8897, 0.3084, 0.8759, 0.2906, 0.8627, 0.2726, 0.8501, 0.2543, 0.8381, 0.2356, 0.8265, 0.2162, 0.8152, 0.1963, 0.8037, 0.1758, 0.7919, 0.155, 0.7794, 0.1341, 0.7658, 0.1135, 0.751, 0.0935, 0.7347, 0.0746, 0.7168, 0.0572, 0.6971, 0.0418, 0.6759, 0.0288, 0.6531, 0.0184, 0.629, 0.011, 0.6039, 0.0067, 0.5781, 0.0055, 0.552, 0.0073, 0.5258, 0.0121, 0.5, 0.0195, 0.4748, 0.0291, 0.4505, 0.0406, 0.4272, 0.0534, 0.4051, 0.0672, 0.384, 0.0816, 0.364, 0.096, 0.3449, 0.1103, 0.3265, 0.1241, 0.3084, 0.1373, 0.2906, 0.1499, 0.2726, 0.1619, 0.2543, 0.1735, 0.2356, 0.1848, 0.2162, 0.1963, 0.1963, 0.2081, 0.1758, 0.2206, 0.155, 0.2342, 0.1341, 0.249, 0.1135, 0.2653, 0.0935, 0.2832, 0.0746, 0.3029, 0.0572, 0.3241, 0.0418, 0.3469, 0.0288, 0.371, 0.0184, 0.3961, 0.011, 0.4219, 0.0067, 0.448, 0.0055, 0.4742, 0.0073], "pent": [0.5, 0.0, 0.5261, 0.0018, 0.5518, 0.0071, 0.5767, 0.0156, 0.6006, 0.0269, 0.6231, 0.0405, 0.6444, 0.0556, 0.6644, 0.0717, 0.6834, 0.0881, 0.7016, 0.1043, 0.7195, 0.1198, 0.7373, 0.1346, 0.7554, 0.1484, 0.7742, 0.1614, 0.7937, 0.1738, 0.8141, 0.1859, 0.8351, 0.1983, 0.8566, 0.2113, 0.878, 0.2253, 0.899, 0.2409, 0.9188, 0.2582, 0.937, 0.2774, 0.9528, 0.2984, 0.9657, 0.3212, 0.9755, 0.3455, 0.9819, 0.3709, 0.9848, 0.397, 0.9844, 0.4233, 0.981, 0.4494, 0.9751, 0.4751, 0.9673, 0.5, 0.9582, 0.524, 0.9485, 0.5471, 0.9387, 0.5695, 0.9294, 0.5913, 0.9208, 0.6128, 0.9133, 0.6343, 0.9068, 0.6561, 0.901, 0.6785, 0.8957, 0.7016, 0.8905, 0.7255, 0.8848, 0.7499, 0.878, 0.7747, 0.8697, 0.7994, 0.8594, 0.8236, 0.8468, 0.8468, 0.8316, 0.8683, 0.814, 0.8877, 0.7939, 0.9045, 0.7717, 0.9184, 0.7478, 0.9292, 0.7226, 0.937, 0.6967, 0.9418, 0.6705, 0.9442, 0.6444, 0.9444, 0.6188, 0.9432, 0.5938, 0.9411, 0.5695, 0.9387, 0.5459, 0.9366, 0.5228, 0.9351, 0.5, 0.9346, 0.4772, 0.9351, 0.4541, 0.9366, 0.4305, 0.9387, 0.4062, 0.9411, 0.3812, 0.9432, 0.3556, 0.9444, 0.3295, 0.9442, 0.3033, 0.9418, 0.2774, 0.937, 0.2522, 0.9292, 0.2283, 0.9184, 0.2061, 0.9045, 0.186, 0.8877, 0.1684, 0.8683, 0.1532, 0.8468, 0.1406, 0.8236, 0.1303, 0.7994, 0.122, 0.7747, 0.1152, 0.7499, 0.1095, 0.7255, 0.1043, 0.7016, 0.099, 0.6785, 0.0932, 0.6561, 0.0867, 0.6343, 0.0792, 0.6128, 0.0706, 0.5913, 0.0613, 0.5695, 0.0515, 0.5471, 0.0418, 0.524, 0.0327, 0.5, 0.0249, 0.4751, 0.019, 0.4494, 0.0156, 0.4233, 0.0152, 0.397, 0.0181, 0.3709, 0.0245, 0.3455, 0.0343, 0.3212, 0.0472, 0.2984, 0.063, 0.2774, 0.0812, 0.2582, 0.101, 0.2409, 0.122, 0.2253, 0.1434, 0.2113, 0.1649, 0.1983, 0.1859, 0.1859, 0.2063, 0.1738, 0.2258, 0.1614, 0.2446, 0.1484, 0.2627, 0.1346, 0.2805, 0.1198, 0.2984, 0.1043, 0.3166, 0.0881, 0.3356, 0.0717, 0.3556, 0.0556, 0.3769, 0.0405, 0.3994, 0.0269, 0.4233, 0.0156, 0.4482, 0.0071, 0.4739, 0.0018], "heart": [0.5, 0.2738, 0.5001, 0.2723, 0.5005, 0.2673, 0.5018, 0.259, 0.5042, 0.2485, 0.5082, 0.2348, 0.5142, 0.2188, 0.5217, 0.2023, 0.5321, 0.1837, 0.5449, 0.1646, 0.5593, 0.1468, 0.5772, 0.1287, 0.5975, 0.1119, 0.6187, 0.0978, 0.6433, 0.0853, 0.6697, 0.0757, 0.6959, 0.0695, 0.7247, 0.0664, 0.7542, 0.0669, 0.782, 0.0709, 0.8112, 0.0787, 0.8395, 0.0901, 0.8649, 0.104, 0.8901, 0.1219, 0.9129, 0.1427, 0.9319, 0.1646, 0.9489, 0.19, 0.9625, 0.2172, 0.9718, 0.2441, 0.9779, 0.2736, 0.98, 0.3038, 0.9782, 0.3326, 0.9723, 0.3632, 0.9625, 0.3937, 0.9498, 0.4221, 0.9329, 0.4517, 0.9129, 0.4808, 0.8915, 0.5076, 0.8665, 0.5355, 0.8395, 0.5627, 0.8129, 0.5878, 0.7837, 0.6139, 0.7542, 0.6395, 0.7264, 0.6632, 0.6976, 0.6878, 0.6697, 0.712, 0.6448, 0.7344, 0.6201, 0.7575, 0.5975, 0.78, 0.5783, 0.8004, 0.5603, 0.8212, 0.5449, 0.8409, 0.5328, 0.8581, 0.5223, 0.875, 0.5142, 0.8901, 0.5085, 0.9026, 0.5044, 0.9137, 0.5018, 0.9225, 0.5006, 0.9286, 0.5001, 0.9325, 0.5, 0.9338, 0.4999, 0.9327, 0.4995, 0.9289, 0.4982, 0.9225, 0.4958, 0.9143, 0.4918, 0.9033, 0.4858, 0.8901, 0.4783, 0.8759, 0.4679, 0.8592, 0.4551, 0.8409, 0.4407, 0.8224, 0.4228, 0.8017, 0.4025, 0.78, 0.3813, 0.7588, 0.3567, 0.7357, 0.3303, 0.712, 0.3041, 0.6893, 0.2753, 0.6646, 0.2458, 0.6395, 0.218, 0.6154, 0.1888, 0.5894, 0.1605, 0.5627, 0.1351, 0.5371, 0.1099, 0.5093, 0.0871, 0.4808, 0.0681, 0.4535, 0.0511, 0.4238, 0.0375, 0.3937, 0.0282, 0.365, 0.0221, 0.3344, 0.02, 0.3038, 0.0218, 0.2754, 0.0277, 0.2458, 0.0375, 0.2172, 0.0502, 0.1916, 0.0671, 0.1661, 0.0871, 0.1427, 0.1085, 0.1231, 0.1335, 0.105, 0.1605, 0.0901, 0.1871, 0.0792, 0.2163, 0.0712, 0.2458, 0.0669, 0.2736, 0.0663, 0.3024, 0.0692, 0.3303, 0.0757, 0.3552, 0.0847, 0.3799, 0.097, 0.4025, 0.1119, 0.4217, 0.1276, 0.4397, 0.1457, 0.4551, 0.1646, 0.4672, 0.1826, 0.4777, 0.2012, 0.4858, 0.2188, 0.4915, 0.2339, 0.4956, 0.2478, 0.4982, 0.259, 0.4994, 0.2669, 0.4999, 0.2721]};
@@ -300,7 +397,7 @@ function morpher(paths, list, period, dur){
   return o;
 }
 const loadM=morpher([$('lp')],['cookie9','clover4','sunny','pent','burst','cookie4'],0,420);
-const avM=morpher([$('bp'),$('bu')],SN,3200,750);
+const avM=morpher([$('bp'),$('bu')],['cookie12','square','cookie9','soft4','circle','cookie6','pent','cookie4'],3200,750);
 $('av').addEventListener('click',e=>{avM.next(135);burst(e.clientX,e.clientY,10)});
 
 /* boot */
@@ -310,7 +407,7 @@ addEventListener('load',()=>setTimeout(done,350)); setTimeout(done,1600);
 
 /* theme switch */
 const root=document.documentElement, meta=document.querySelector('meta[name=theme-color]'), sw=$('sw');
-function setT(t){root.dataset.theme=t;sw.setAttribute('aria-checked',t==='dark');meta.content=t==='dark'?'#1a110f':'#fff8f6';try{localStorage.t=t}catch(_){}}
+function setT(t){root.dataset.theme=t;sw.setAttribute('aria-checked',t==='dark');meta.content=t==='dark'?'#141218':'#fdf7ff';try{localStorage.t=t}catch(_){}}
 setT((()=>{try{return localStorage.t}catch(_){}})()||'dark');
 sw.onclick=()=>setT(root.dataset.theme==='dark'?'light':'dark');
 
@@ -320,7 +417,7 @@ function fit(){const w=nm.parentElement.clientWidth;nm.style.fontSize='100px';nm
 nm.addEventListener('click',e=>{burst(e.clientX,e.clientY,14);kick()});
 
 /* ═══ физика фигур ═══ */
-const pit=$('pit'), LABELS=['Python','Heroku','Femboy','09.11','11?','RU','@rz3nx','One Piece','plugins','UwU','mya','real'];
+const pit=$('pit'), LABELS=['Kotlin','Compose','M3E','Python','Femboy','09.11','11?','@rz3nx','Glimpse','IME','UwU','real'];
 const FILLS=[['--primary','--on-primary'],['--tc','--on-tc'],['--secondary','--on-primary'],['--pc','--on-pc'],['--tertiary','--on-primary']];
 const bodies=[]; let W=0,H=0, pitVisible=true;
 function size(){W=pit.clientWidth;H=pit.clientHeight}
@@ -397,7 +494,7 @@ function onScroll(){
 addEventListener('scroll',onScroll,{passive:true});
 
 /* reveal */
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const t=e.target;t.classList.add('in');io.unobserve(t); if(t.tagName==='H2') setTimeout(()=>t.querySelectorAll('.ch').forEach(c=>c.style.transitionDelay='0ms'),1800)}}),{threshold:.15});
 document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=((i%4)*60)+'ms';io.observe(el)});
 new IntersectionObserver(es=>{pitVisible=es[0].isIntersecting}).observe(pit);
 
@@ -410,6 +507,40 @@ function prog(now){ const max=document.documentElement.scrollHeight-innerHeight|
 /* ripple */
 document.querySelectorAll('.rp').forEach(el=>el.addEventListener('pointerdown',e=>{const r=el.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,s=document.createElement('span');
   s.className='rip';s.style.width=s.style.height=d+'px';s.style.left=(e.clientX-r.left)+'px';s.style.top=(e.clientY-r.top)+'px';el.appendChild(s);setTimeout(()=>s.remove(),650)}));
+
+
+/* ═══ v4 ═══ */
+/* typewriter */
+(()=>{ const el=$('typer'), W=['Android на Compose','Material 3 Expressive','модули на Python','клавиатуры и галереи','femboy ♡']; let i=0,j=W[0].length,del=true;
+  if(RM) return; (function tick(){ const w=W[i]; if(del){j--; if(j<=0){del=false;i=(i+1)%W.length}} else {j++; if(j>=W[i].length){del=true; return setTimeout(tick,1600)}}
+    el.textContent=W[i].slice(0,Math.max(0,j)); setTimeout(tick, del?35:70); })(); })();
+/* split h2 */
+document.querySelectorAll('h2').forEach(h=>{ let k=0; const wrap=n=>{ [...n.childNodes].forEach(c=>{ if(c.nodeType===3){ const f=document.createDocumentFragment();
+  [...c.textContent].forEach(ch=>{ if(ch===' '){f.appendChild(document.createTextNode(' '));return} const sp=document.createElement('span'); sp.className='ch'; sp.textContent=ch; sp.style.transitionDelay=(k++*28)+'ms'; f.appendChild(sp)}); c.replaceWith(f);} else wrap(c); }) }; wrap(h);
+});
+/* tilt + spotlight */
+document.querySelectorAll('.proj').forEach(c=>{ c.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse')return; const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+  c.style.setProperty('--mx',x*100+'%'); c.style.setProperty('--my',y*100+'%'); c.style.transform=`rotateX(${(.5-y)*10}deg) rotateY(${(x-.5)*12}deg) translateZ(0)`; });
+  c.addEventListener('pointerleave',()=>c.style.transform=''); });
+/* github live */
+(async()=>{ try{ const r=await fetch('https://api.github.com/users/aezochka/repos?per_page=100&sort=pushed'); if(!r.ok) return; const data=await r.json();
+  const ago=d=>{const m=(Date.now()-new Date(d))/6e4; if(m<60)return Math.round(m)+' мин назад'; if(m<1440)return Math.round(m/60)+' ч назад'; return Math.round(m/1440)+' дн назад'};
+  document.querySelectorAll('.proj').forEach(c=>{ const d=data.find(x=>x.name===c.dataset.repo); if(!d) return; c.querySelector('[data-stars]').textContent='★ '+d.stargazers_count; c.querySelector('[data-pushed]').textContent='push · '+ago(d.pushed_at); });
+  const n=data.filter(x=>!x.fork&&x.name!=='rz3nx-bio').length; const f=document.querySelector('[data-n]'); if(f&&n) f.textContent=n;
+} catch(_){} })();
+/* cursor blob */
+(()=>{ if(matchMedia('(hover:none)').matches||RM) return; const c=$('cur'), cp=$('curp'); let x=innerWidth/2,y=innerHeight/2,tx=x,ty=y,si=0;
+  cp.setAttribute('d',P(SH.cookie9));
+  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;c.classList.add('on'); c.classList.toggle('big',!!e.target.closest('a,button,.body,.fact,.proj'))});
+  document.addEventListener('pointerleave',()=>c.classList.remove('on'));
+  setInterval(()=>{si=(si+1)%SN.length; cp.setAttribute('d',P(SH[SN[si]]))},900);
+  (function loop(){ x+=(tx-x)*.2; y+=(ty-y)*.2; const s=c.offsetWidth/2; c.style.transform=`translate(${x-s}px,${y-s}px) rotate(${(x+y)*.4}deg)`; requestAnimationFrame(loop) })(); })();
+/* party mode: 5 тапов по аве или «uwu» на клаве */
+(()=>{ let taps=0,tt; const party=()=>{document.body.classList.add('party'); snack('PARTY MODE ✦'); kick(); for(let i=0;i<4;i++) setTimeout(()=>burst(Math.random()*innerWidth,Math.random()*innerHeight*.7,22),i*180); setTimeout(()=>document.body.classList.remove('party'),6000)};
+  $('av').addEventListener('click',()=>{taps++;clearTimeout(tt);tt=setTimeout(()=>taps=0,1200); if(taps>=5){taps=0;party()}});
+  let buf=''; addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toLowerCase(); if(buf==='uwu')party()}); })();
+/* скролл-вращение фигур фактов */
+addEventListener('scroll',()=>{ const k=scrollY*.15; document.querySelectorAll('.fact svg').forEach((s,i)=>s.style.rotate=(i%2?-k:k)+'deg'); },{passive:true});
 
 /* loop */
 let last=performance.now();
