@@ -5,274 +5,421 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>R Λ Z Ξ — Aeza</title>
 <meta name="description" content="R Λ Z Ξ · Aeza · @rz3nx">
-<meta property="og:title" content="R Λ Z Ξ"><meta property="og:image" content="avatar.jpg">
+<meta property="og:title" content="R Λ Z Ξ"><meta property="og:description" content="Aeza · модули и плагины на Python"><meta property="og:image" content="avatar.jpg">
 <link rel="icon" href="avatar.jpg">
-<meta name="theme-color" content="#16110f">
+<meta name="theme-color" content="#1a110f">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,300..1000&display=swap" rel="stylesheet">
 <style>
 :root{
   --primary:#8f4c38;--on-primary:#fff;--pc:#ffdbd1;--on-pc:#3a0b01;
-  --bg:#fff8f6;--c1:#fceae5;--c2:#f5e3de;--fg:#231917;--fg2:#6f5c57;--line:#e6d3cd;
-  --spring:cubic-bezier(.34,1.56,.64,1);--emph:cubic-bezier(.2,0,0,1);
+  --secondary:#77574e;--sc:#ffdbd1;--on-sc:#2c150f;
+  --tertiary:#6c5d2f;--tc:#f5e1a7;--on-tc:#231b00;
+  --bg:#fff8f6;--c0:#fff1ed;--c1:#fceae5;--c2:#f7e4e0;--c3:#f1dfda;
+  --fg:#231917;--fg2:#53433f;--outline:#85736e;--ov:#d8c2bc;--inv:#392e2b;--on-inv:#ffede8;
+  --spring:cubic-bezier(.34,1.56,.64,1);--spring2:cubic-bezier(.22,1.4,.36,1);--emph:cubic-bezier(.2,0,0,1);
 }
 [data-theme=dark]{
   --primary:#ffb5a0;--on-primary:#561f0f;--pc:#723523;--on-pc:#ffdbd1;
-  --bg:#16110f;--c1:#211a17;--c2:#2b2320;--fg:#f1dfda;--fg2:#a8948e;--line:#3a2f2b;
+  --secondary:#e7bdb2;--sc:#5d4037;--on-sc:#ffdbd1;
+  --tertiary:#d8c58d;--tc:#4f4215;--on-tc:#f5e1a7;
+  --bg:#1a110f;--c0:#1f1714;--c1:#271d1b;--c2:#322825;--c3:#3d3230;
+  --fg:#f1dfda;--fg2:#d8c2bc;--outline:#a08c87;--ov:#53433f;--inv:#f1dfda;--on-inv:#392e2b;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
-  font-family:"Roboto Flex",system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .5s var(--emph),color .5s var(--emph)}
+html{background:var(--bg);scroll-behavior:auto}
+body{background:var(--bg);color:var(--fg);font-family:"Roboto Flex",system-ui,sans-serif;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;transition:background .5s var(--emph),color .5s var(--emph);padding-bottom:calc(120px + env(safe-area-inset-bottom))}
 a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+a{-webkit-tap-highlight-color:transparent}
 ::selection{background:var(--pc);color:var(--on-pc)}
-:focus-visible{outline:2px solid var(--primary);outline-offset:4px}
+:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+.wrap{width:min(980px,100% - 32px);margin:0 auto}
 
-/* лента снизу вверх: первая секция внизу */
-.track{position:fixed;inset:0;display:flex;flex-direction:column-reverse;overflow-y:auto;overflow-x:hidden;
-  scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain}
-.track::-webkit-scrollbar{display:none}
-.panel{flex:0 0 100%;min-height:100%;scroll-snap-align:start;display:flex;align-items:center;
-  padding:72px max(28px,calc((100vw - 760px)/2)) 72px}
-.inner{width:100%}
+/* ── loader: M3E LoadingIndicator ── */
+.boot{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;transition:opacity .5s var(--emph),visibility .5s}
+.boot.done{opacity:0;visibility:hidden}
+.boot .li{width:64px;height:64px;border-radius:50%;background:var(--pc);display:grid;place-items:center}
+.boot svg{width:40px;height:40px}.boot path{fill:var(--primary)}
 
-.k{font-size:13px;font-weight:600;letter-spacing:.6px;color:var(--fg2);text-transform:uppercase;margin-bottom:28px;
-  font-variation-settings:"wdth" 120;display:flex;gap:12px;align-items:center}
-.k::before{content:"";width:24px;height:2px;border-radius:2px;background:var(--primary)}
-h2{font-size:clamp(40px,7vw,76px);line-height:.95;letter-spacing:-.035em;font-weight:800;font-variation-settings:"wdth" 118,"opsz" 144;margin-bottom:24px}
-h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-settings:"wdth" 40,"opsz" 144}
-p{font-size:clamp(17px,1.6vw,20px);line-height:1.55;color:var(--fg2);max-width:48ch;letter-spacing:.15px}
-p b{color:var(--fg);font-weight:600}
+/* ── top wavy progress ── */
+.prog{position:fixed;top:0;left:0;right:0;height:14px;z-index:40;pointer-events:none;padding:0 12px}
+.prog svg{width:100%;height:100%;overflow:visible}
+.prog .tr{stroke:var(--sc);stroke-width:4;stroke-linecap:round}
+.prog .wv{fill:none;stroke:var(--primary);stroke-width:4;stroke-linecap:round}
 
-/* reveal: снизу вверх */
-.rv{opacity:0;transform:translateY(40px);transition:opacity .7s var(--emph),transform 1s var(--spring)}
-.panel.in .rv{opacity:1;transform:none}
-.panel.in .rv:nth-child(2){transition-delay:.07s}.panel.in .rv:nth-child(3){transition-delay:.14s}.panel.in .rv:nth-child(4){transition-delay:.21s}
+/* ── hero ── */
+.hero{padding-top:28px}
+.top{display:flex;justify-content:space-between;align-items:center;height:56px;margin-bottom:12px}
+.brand{font-size:14px;font-weight:800;letter-spacing:.6px;color:var(--fg2);font-variation-settings:"wdth" 125}
+.sw{position:relative;width:64px;height:40px;border-radius:20px;background:var(--c3);border:2px solid var(--outline);transition:background .3s,border-color .3s}
+.sw i{position:absolute;top:50%;left:6px;width:24px;height:24px;border-radius:50%;background:var(--outline);transform:translateY(-50%);display:grid;place-items:center;
+  transition:left .45s var(--spring),width .3s var(--spring),height .3s var(--spring),background .3s,border-radius .45s var(--spring)}
+.sw i svg{width:16px;height:16px;fill:var(--c3);transition:fill .3s}
+.sw[aria-checked=true]{background:var(--primary);border-color:var(--primary)}
+.sw[aria-checked=true] i{left:26px;width:28px;height:28px;background:var(--on-primary);border-radius:9px}
+.sw[aria-checked=true] i svg{fill:var(--primary)}
+.sw:active i{width:32px;height:32px}
 
-/* hero */
-.av{width:132px;height:132px;margin-bottom:36px;display:block;cursor:pointer;overflow:visible}
+.pit{position:relative;height:min(62vh,560px);min-height:400px;border-radius:48px;background:var(--c1);overflow:hidden;touch-action:pan-y;isolation:isolate;
+  transition:border-radius .8s var(--spring),background .5s}
+.pit .who{position:absolute;left:clamp(20px,4vw,44px);top:clamp(20px,4vw,40px);right:20px;z-index:1;pointer-events:none}
+.av{width:clamp(88px,12vw,120px);height:clamp(88px,12vw,120px);display:block;margin-bottom:18px;pointer-events:auto;cursor:pointer;overflow:visible}
 .av .u{fill:var(--pc)}
-.name{font-size:clamp(84px,19vw,200px);line-height:.8;letter-spacing:-.05em;font-weight:900;white-space:nowrap;
-  font-variation-settings:"wdth" 151,"opsz" 144;margin-bottom:28px}
-.name span{display:inline-block;transition:font-variation-settings .6s var(--spring),color .3s}
-.name span:hover{font-variation-settings:"wdth" 25,"opsz" 144;color:var(--primary)}
-.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
-.meta span{height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);display:inline-flex;align-items:center;font-size:14px;color:var(--fg2);
-  transition:border-radius .5s var(--spring),background .25s,color .25s}
-.meta span:hover{border-radius:10px;background:var(--c2);color:var(--fg)}
-.up{margin-top:56px;display:inline-flex;align-items:center;gap:12px;font-size:14px;color:var(--fg2)}
-.up i{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;animation:bob 2s var(--emph) infinite}
-.up svg{width:18px;height:18px;fill:currentColor}
-@keyframes bob{50%{transform:translateY(-6px)}}
+.name{font-size:100px;line-height:.82;letter-spacing:-.05em;font-weight:900;white-space:nowrap;width:max-content;
+  font-variation-settings:"wdth" 151,"opsz" 144;pointer-events:auto;cursor:pointer;user-select:none}
+.name span{display:inline-block;transition:font-variation-settings .6s var(--spring),color .3s,transform .6s var(--spring)}
+.name span:hover{font-variation-settings:"wdth" 25,"opsz" 144;color:var(--primary);transform:translateY(-4px)}
+.tag{margin-top:14px;font-size:clamp(16px,1.7vw,19px);color:var(--fg2);letter-spacing:.2px}
+.tag b{color:var(--fg);font-weight:650}
+.hint{position:absolute;right:20px;top:22px;transition:opacity .4s;z-index:1;font-size:12px;font-weight:650;color:var(--fg2);opacity:.75;letter-spacing:.3px;pointer-events:none;font-variation-settings:"wdth" 115}
+.body{position:absolute;left:0;top:0;display:grid;place-items:center;cursor:grab;user-select:none;touch-action:none;will-change:transform;z-index:2}
+.body:active{cursor:grabbing}
+.body svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform-origin:50% 50%}
+.body span{position:relative;font-weight:800;font-size:15px;letter-spacing:-.01em;font-variation-settings:"wdth" 115;white-space:nowrap;pointer-events:none}
 
-/* факты */
-.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line);margin-top:40px}
-.facts div{padding:20px 0 0}
-.facts b{display:block;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.03em;font-variation-settings:"wdth" 125,"opsz" 144}
-.facts span{font-size:13px;color:var(--fg2)}
+/* ── sections ── */
+section{padding-top:clamp(72px,10vw,120px)}
+.lbl{display:inline-flex;align-items:center;gap:10px;height:32px;padding:0 14px 0 6px;border-radius:16px;background:var(--sc);color:var(--on-sc);
+  font-size:13px;font-weight:700;letter-spacing:.2px;margin-bottom:20px;font-variation-settings:"wdth" 115}
+.lbl i{width:22px;height:22px;display:block}.lbl i svg{width:100%;height:100%}.lbl i path{fill:var(--primary)}
+h2{font-size:clamp(44px,8vw,96px);line-height:.9;letter-spacing:-.035em;font-weight:860;font-variation-settings:"wdth" 120,"opsz" 144;margin-bottom:28px}
+h2 em{font-style:normal;font-weight:300;color:var(--primary);font-variation-settings:"wdth" 30,"opsz" 144}
+.lead{font-size:clamp(17px,1.7vw,21px);line-height:1.55;color:var(--fg2);max-width:52ch;letter-spacing:.2px}
+.lead b{color:var(--fg);font-weight:650}
 
-/* ссылки — список */
-.list{border-top:1px solid var(--line)}
-.row{position:relative;display:flex;align-items:center;gap:20px;padding:22px 8px;border-bottom:1px solid var(--line);overflow:hidden;isolation:isolate}
-.row::before{content:"";position:absolute;inset:6px 0;border-radius:999px;background:var(--c1);transform:scaleX(.6);opacity:0;z-index:-1;
-  transition:transform .6s var(--spring),opacity .3s,border-radius .6s var(--spring)}
-.row:hover::before{transform:none;opacity:1;border-radius:20px}
-.row .ic{width:32px;height:32px;flex:0 0 auto;transition:transform .8s var(--spring)}
-.row .ic path{fill:var(--primary)}
-.row:hover .ic{transform:rotate(90deg) scale(1.1)}
-.row h3{font-size:clamp(20px,2.4vw,26px);font-weight:700;font-variation-settings:"wdth" 110}
-.row small{display:block;font-size:14px;color:var(--fg2);margin-top:2px}
-.row .ar{margin-left:auto;width:20px;height:20px;fill:var(--fg2);transition:transform .5s var(--spring),fill .2s}
-.row:hover .ar{transform:translate(4px,-4px);fill:var(--primary)}
+.rv{opacity:0;transform:translateY(36px) scale(.98);transition:opacity .7s var(--emph),transform 1s var(--spring2)}
+.rv.in{opacity:1;transform:none}
 
-.poster{display:block;margin-top:36px;border-radius:28px;overflow:hidden;aspect-ratio:16/9;background:#df765e;max-width:560px;
-  transition:border-radius .7s var(--spring)}
-.poster:hover{border-radius:72px}
-.poster img{width:100%;height:100%;object-fit:cover;display:block}
+/* facts — разные MaterialShapes */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:36px}
+.fact{position:relative;aspect-ratio:1;display:grid;place-items:center;text-align:center;isolation:isolate;cursor:pointer}
+.fact svg{position:absolute;inset:0;width:100%;height:100%;z-index:-1;transition:transform 1s var(--spring)}
+.fact:hover svg{transform:rotate(60deg) scale(1.05)}
+.fact:active svg{transform:rotate(90deg) scale(.92)}
+.fact b{display:block;font-size:clamp(24px,3.6vw,40px);font-weight:850;letter-spacing:-.03em;line-height:1;font-variation-settings:"wdth" 125,"opsz" 144}
+.fact span{display:block;font-size:13px;font-weight:600;margin-top:4px;opacity:.85}
+.f1{color:var(--on-primary)}.f1 path{fill:var(--primary)}
+.f2{color:var(--on-tc)}.f2 path{fill:var(--tc)}
+.f3{color:var(--on-sc)}.f3 path{fill:var(--sc)}
+.f4{color:var(--on-pc)}.f4 path{fill:var(--pc)}
 
-/* контакты */
-.cta{display:inline-flex;align-items:center;gap:12px;height:64px;padding:0 30px;border-radius:32px;background:var(--primary);color:var(--on-primary);
-  font-size:20px;font-weight:650;margin-top:12px;transition:border-radius .45s var(--spring),transform .45s var(--spring),padding .45s var(--spring)}
-.cta svg{width:22px;height:22px;fill:currentColor}
-.cta:hover{border-radius:16px;padding:0 38px}.cta:active{transform:scale(.95)}
-.idc{display:inline-flex;align-items:center;gap:8px;margin:28px 0 0;font-size:14px;color:var(--fg2)}
-.idc b{color:var(--fg);font-variant-numeric:tabular-nums;font-weight:600}
-.idc u{text-decoration:none;color:var(--primary);font-weight:600}
-.foot{margin-top:72px;font-size:13px;color:var(--fg2);opacity:.7}
+/* grouped list (M3E) */
+.group{display:flex;flex-direction:column;gap:3px;margin-top:8px}
+.item{position:relative;display:flex;align-items:center;gap:18px;min-height:84px;padding:14px 20px 14px 16px;background:var(--c1);border-radius:8px;overflow:hidden;isolation:isolate;
+  transition:border-radius .5s var(--spring),background .3s,transform .5s var(--spring)}
+.item:first-child{border-radius:28px 28px 8px 8px}.item:last-child{border-radius:8px 8px 28px 28px}
+.item:hover{border-radius:28px;background:var(--c2)}
+.item:active{transform:scale(.98)}
+.item .ic{flex:0 0 auto;width:52px;height:52px;display:grid;place-items:center;position:relative}
+.item .ic svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .9s var(--spring)}
+.item .ic path{fill:var(--pc)}
+.item .ic b{position:relative;font-size:20px;line-height:1;color:var(--on-pc)}
+.item:hover .ic svg{transform:rotate(72deg)}
+.item h3{font-size:clamp(18px,2vw,22px);font-weight:700;font-variation-settings:"wdth" 110;letter-spacing:.1px}
+.item small{display:block;font-size:14px;color:var(--fg2);margin-top:2px;letter-spacing:.2px}
+.item .ar{margin-left:auto;width:22px;height:22px;fill:var(--fg2);flex:0 0 auto;transition:transform .5s var(--spring),fill .2s}
+.item:hover .ar{transform:translate(3px,-3px);fill:var(--primary)}
 
-/* рельса справа + тема */
-.rail{position:fixed;right:max(16px,env(safe-area-inset-right));top:50%;transform:translateY(-50%);z-index:5;
-  display:flex;flex-direction:column-reverse;gap:6px;padding:8px;border-radius:999px}
-.rail button{position:relative;width:28px;height:28px;display:grid;place-items:center}
-.rail button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line);
-  transition:height .5s var(--spring),border-radius .5s var(--spring),background .3s}
-.rail button.on::before{height:22px;border-radius:5px;background:var(--primary)}
-.rail button span{position:absolute;right:100%;margin-right:6px;font-size:12px;color:var(--fg2);white-space:nowrap;opacity:0;transform:translateX(6px);
-  transition:opacity .25s,transform .4s var(--spring);pointer-events:none}
-.rail button:hover span{opacity:1;transform:none}
-.theme{position:fixed;top:max(16px,env(safe-area-inset-top));right:max(16px,calc((100vw - 760px)/2 - 12px));z-index:5;width:48px;height:48px;border-radius:50%;
-  display:grid;place-items:center;color:var(--fg2);transition:border-radius .45s var(--spring),background .25s}
-.theme:hover{background:var(--c2);border-radius:14px}
-.theme svg{width:22px;height:22px;fill:currentColor;transition:transform .7s var(--spring)}
-[data-theme=light] .theme svg{transform:rotate(180deg)}
-.brand{position:fixed;top:max(16px,env(safe-area-inset-top));height:48px;display:flex;align-items:center;left:max(28px,calc((100vw - 760px)/2));z-index:5;font-size:13px;font-weight:700;letter-spacing:.6px;color:var(--fg2);font-variation-settings:"wdth" 125}
-.prog{position:fixed;left:0;bottom:0;width:2px;opacity:.8;background:var(--primary);z-index:5;border-radius:0 3px 3px 0;transition:height .1s linear}
+/* poster */
+.poster{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:48px;overflow:hidden;background:#df765e;cursor:pointer;isolation:isolate;
+  transition:border-radius .8s var(--spring),transform .8s var(--spring)}
+.poster img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 1s var(--spring)}
+.poster:hover{border-radius:24px 120px 24px 120px}.poster:hover img{transform:scale(1.03)}
+.poster:active{transform:scale(.98)}
+.poster .cnt{position:absolute;right:16px;bottom:16px;height:40px;padding:0 16px;border-radius:20px;background:var(--inv);color:var(--on-inv);
+  display:flex;align-items:center;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;transition:transform .4s var(--spring)}
+.poster .cnt.pop{transform:scale(1.18)}
 
-@media (max-width:640px){
-  .panel{padding:84px 52px 72px 24px}
-  .rail{right:6px}
-  .facts{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:8px}
-  .av{width:104px;height:104px;margin-bottom:28px}
-  .row{padding:18px 4px;gap:16px}
+/* contact — button group + split button */
+.bgroup{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.bb{height:72px;padding:0 32px;display:inline-flex;align-items:center;gap:12px;font-size:20px;font-weight:700;border-radius:36px;
+  background:var(--primary);color:var(--on-primary);font-variation-settings:"wdth" 110;
+  transition:border-radius .45s var(--spring),padding .45s var(--spring),transform .45s var(--spring)}
+.bb svg{width:24px;height:24px;fill:currentColor}
+.bb:hover{border-radius:18px}.bb:active{transform:scale(.95);padding:0 40px}
+.split{display:inline-flex;gap:2px}
+.split button{height:72px;background:var(--sc);color:var(--on-sc);font-size:17px;font-weight:650;transition:border-radius .45s var(--spring),background .3s,width .45s var(--spring)}
+.split .a{padding:0 22px 0 26px;border-radius:36px 8px 8px 36px;font-variant-numeric:tabular-nums}
+.split .b{width:56px;border-radius:8px 36px 36px 8px;display:grid;place-items:center}
+.split .b svg{width:22px;height:22px;fill:currentColor;transition:transform .5s var(--spring)}
+.split .a:hover{border-radius:36px 20px 20px 36px}
+.split.ok .b{border-radius:36px;background:var(--tc);color:var(--on-tc)}.split.ok .b svg{transform:rotate(360deg)}
+.foot{margin-top:72px;display:flex;justify-content:space-between;font-size:13px;color:var(--fg2);opacity:.75}
+
+/* ── floating toolbar + FAB menu ── */
+.dock{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;display:flex;align-items:flex-end;gap:8px}
+.bar{display:flex;gap:2px;padding:8px;border-radius:999px;background:var(--c3);box-shadow:0 6px 24px rgba(0,0,0,.22)}
+.tb{height:48px;min-width:48px;padding:0 12px;border-radius:24px;display:inline-flex;align-items:center;gap:8px;color:var(--fg2);font-size:14px;font-weight:700;
+  transition:background .3s var(--emph),color .3s,border-radius .45s var(--spring),padding .45s var(--spring)}
+.tb svg{width:22px;height:22px;fill:currentColor;flex:0 0 auto}
+.tb .t{max-width:0;overflow:hidden;white-space:nowrap;transition:max-width .5s var(--spring)}
+.tb.on{background:var(--primary);color:var(--on-primary);padding:0 16px 0 12px}.tb.on .t{max-width:100px}
+.tb:active{border-radius:12px}
+.fabw{position:relative}
+.fab{width:64px;height:64px;border-radius:20px;background:var(--pc);color:var(--on-pc);display:grid;place-items:center;box-shadow:0 6px 24px rgba(0,0,0,.22);
+  transition:border-radius .5s var(--spring),background .3s,color .3s,transform .4s var(--spring)}
+.fab svg{width:26px;height:26px;fill:currentColor;transition:transform .6s var(--spring)}
+.fab[aria-expanded=true]{border-radius:50%;background:var(--primary);color:var(--on-primary)}
+.fab[aria-expanded=true] svg{transform:rotate(135deg)}
+.fab:active{transform:scale(.92)}
+.menu{position:absolute;right:0;bottom:76px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}
+.mi{height:56px;padding:0 22px 0 18px;border-radius:28px;background:var(--primary);color:var(--on-primary);display:inline-flex;align-items:center;gap:10px;font-size:16px;font-weight:700;
+  white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);opacity:0;transform:translateY(16px) scale(.6);transform-origin:right center;
+  transition:opacity .2s var(--emph),transform .5s var(--spring),border-radius .4s var(--spring)}
+.mi svg{width:22px;height:22px;fill:currentColor}
+.mi:hover{border-radius:16px}
+.menu.open{pointer-events:auto}
+.menu.open .mi{opacity:1;transform:none}
+.menu.open .mi:nth-last-child(2){transition-delay:.04s}.menu.open .mi:nth-last-child(3){transition-delay:.08s}
+
+/* ripple + particles */
+.rp{position:relative;overflow:hidden;isolation:isolate}
+.rip{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:currentColor;opacity:.16;pointer-events:none;animation:rip .6s var(--emph) forwards;z-index:-1}
+@keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.pt{position:fixed;left:0;top:0;width:var(--s);height:var(--s);pointer-events:none;z-index:90;animation:pt var(--d) cubic-bezier(.15,.7,.3,1) forwards}
+.pt svg{width:100%;height:100%}
+@keyframes pt{0%{transform:translate(var(--x0),var(--y0)) scale(.2) rotate(0)}
+  70%{opacity:1}100%{transform:translate(var(--x1),var(--y1)) scale(1) rotate(var(--r));opacity:0}}
+.snack{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:60;background:var(--inv);color:var(--on-inv);
+  padding:14px 20px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .25s,transform .5s var(--spring)}
+.snack.on{opacity:1;transform:translate(-50%,0)}
+
+@media (max-width:700px){
+  .pit{border-radius:36px;height:68vh;min-height:460px}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tb .t{display:none}.tb.on{padding:0 12px}.tb{height:44px;min-width:44px;padding:0 10px}
+  .bar{padding:6px}.fab{width:56px;height:56px;border-radius:18px}.menu{bottom:66px}
+  .bb,.split button{height:60px}.bb{padding:0 26px;font-size:18px}.split .a{padding:0 16px 0 20px;font-size:15px}.split .b{width:48px}
+  .item{min-height:76px;gap:14px;padding:12px 16px 12px 12px}.item .ic{width:46px;height:46px}
+  .poster{border-radius:32px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
 </style>
 </head>
 <body>
-<div class="brand">AEZA</div>
-<button class="theme" id="theme" aria-label="Сменить тему"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18m0 2v14a7 7 0 0 1 0-14"/></svg></button>
-<div class="prog" id="prog"></div>
+<div class="boot" id="boot"><div class="li"><svg viewBox="0 0 1 1"><path id="lp"/></svg></div></div>
+<div class="prog" aria-hidden="true"><svg viewBox="0 0 1000 14" preserveAspectRatio="none"><line class="tr" id="ptr" x1="0" y1="7" x2="1000" y2="7"/><path class="wv" id="pwv"/></svg></div>
 
-<main class="track" id="track">
-  <section class="panel" data-t="Привет">
-    <div class="inner">
-      <svg class="av rv" id="av" viewBox="-.04 -.04 1.08 1.08" aria-label="Аватар">
+<header class="hero wrap" id="s0">
+  <div class="top">
+    <div class="brand">AEZA · BIO</div>
+    <button class="sw" id="sw" role="switch" aria-checked="true" aria-label="Тёмная тема"><i><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.5 0-.9-.1-1.4A5.5 5.5 0 0 1 13.4 3.1 9 9 0 0 0 12 3"/></svg></i></button>
+  </div>
+  <div class="pit" id="pit">
+    <div class="who">
+      <svg class="av" id="av" viewBox="-.04 -.04 1.08 1.08" aria-label="Аватар">
         <defs><clipPath id="clip" clipPathUnits="userSpaceOnUse"><path id="bp"/></clipPath></defs>
         <path class="u" id="bu"/>
         <image href="avatar.jpg" x="0" y="0" width="1" height="1" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
       </svg>
-      <h1 class="name rv" id="name">RΛZΞ</h1>
-      <p class="rv">Aeza, <b>@rz3nx</b>. Модули и плагины на Python.</p>
-      <div class="up rv"><i><svg viewBox="0 0 24 24"><path d="M4 12l1.4 1.4L11 7.8V20h2V7.8l5.6 5.6L20 12l-8-8z"/></svg></i>листай вверх</div>
+      <h1 class="name" id="name">RΛZΞ</h1>
+      <p class="tag">Aeza, <b>@rz3nx</b> · модули и&nbsp;плагины на&nbsp;Python</p>
+    </div>
+    <div class="hint" id="hint">кидай фигуры ↯</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="s1">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="cookie9"/></svg></i>Обо мне</div>
+    <h2 class="rv">Femboy <em>и</em> Python</h2>
+    <p class="lead rv">Пишу на <b>Python</b> и&nbsp;по-русски. Юзербот&nbsp;— <b>Heroku</b>. Мой деф&nbsp;— <b>@Fixyres</b>. One Piece&nbsp;— real.</p>
+    <div class="facts">
+      <div class="fact f1 rv"><svg viewBox="0 0 1 1"><path data-shape="cookie12"/></svg><div><b>11?</b><span>лет</span></div></div>
+      <div class="fact f2 rv"><svg viewBox="0 0 1 1"><path data-shape="clover4"/></svg><div><b>09.11</b><span>др 🎂</span></div></div>
+      <div class="fact f3 rv"><svg viewBox="0 0 1 1"><path data-shape="pent"/></svg><div><b>RU</b><span>Russia</span></div></div>
+      <div class="fact f4 rv"><svg viewBox="0 0 1 1"><path data-shape="burst"/></svg><div><b>HRK</b><span>Heroku</span></div></div>
     </div>
   </section>
 
-  <section class="panel" data-t="Обо мне">
-    <div class="inner">
-      <div class="k rv">Обо мне</div>
-      <h2 class="rv">Femboy <em>и</em> Python</h2>
-      <p class="rv">Пишу на <b>Python</b> и по-русски. Юзербот&nbsp;— <b>Heroku</b>. Мой деф&nbsp;— <b>@Fixyres</b>.</p>
-      <div class="facts rv">
-        <div><b>11?</b><span>лет</span></div>
-        <div><b>09.11</b><span>день рождения</span></div>
-        <div><b>RU</b><span>Russia</span></div>
-        <div><b>Heroku</b><span>юзербот</span></div>
-      </div>
+  <section id="s2">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="clover8"/></svg></i>Ссылки</div>
+    <h2 class="rv">Мои <em>штуки</em></h2>
+    <div class="group rv">
+      <a class="item rp" href="https://t.me/+GWRklKYJTRs4MDY6" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 1 1"><path data-shape="cookie6"/></svg><b>⚙</b></span><div><h3>Modules &amp; plugins</h3><small>мои модули и плагины</small></div><svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
+      <a class="item rp" href="https://t.me/Mya_collection" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 1 1"><path data-shape="clover4"/></svg><b>✿</b></span><div><h3>Коллекция</h3><small>@Mya_collection</small></div><svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
+      <a class="item rp" href="https://t.me/Fixyres" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 1 1"><path data-shape="heart"/></svg></span><div><h3>Мой деф</h3><small>@Fixyres</small></div><svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
+      <a class="item rp" href="https://t.me/rz3nx_bio" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg><b>✦</b></span><div><h3>Канал био</h3><small>@rz3nx_bio</small></div><svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
     </div>
   </section>
 
-  <section class="panel" data-t="Ссылки">
-    <div class="inner">
-      <div class="k rv">Ссылки</div>
-      <div class="list rv">
-        <a class="row" href="https://t.me/+GWRklKYJTRs4MDY6" target="_blank" rel="noopener">
-          <svg class="ic" viewBox="0 0 1 1"><path data-shape="cookie12"/></svg>
-          <div><h3>Modules &amp; plugins</h3><small>мои модули и плагины</small></div>
-          <svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
-        <a class="row" href="https://t.me/Mya_collection" target="_blank" rel="noopener">
-          <svg class="ic" viewBox="0 0 1 1"><path data-shape="clover4"/></svg>
-          <div><h3>Коллекция</h3><small>@Mya_collection</small></div>
-          <svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
-        <a class="row" href="https://t.me/Fixyres" target="_blank" rel="noopener">
-          <svg class="ic" viewBox="0 0 1 1"><path data-shape="heart"/></svg>
-          <div><h3>Мой деф</h3><small>@Fixyres</small></div>
-          <svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
-        <a class="row" href="https://t.me/rz3nx_bio" target="_blank" rel="noopener">
-          <svg class="ic" viewBox="0 0 1 1"><path data-shape="soft4"/></svg>
-          <div><h3>Канал био</h3><small>@rz3nx_bio</small></div>
-          <svg class="ar" viewBox="0 0 24 24"><path d="M6 6v2h8.6L5 17.6 6.4 19 16 9.4V18h2V6z"/></svg></a>
-      </div>
-    </div>
+  <section id="s3">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Факт</div>
+    <h2 class="rv">One Piece <em>is</em> real</h2>
+    <button class="poster rv" id="poster" aria-label="Подтвердить"><img src="onepiece.jpg" alt="ONE PIECE is real" loading="lazy"><span class="cnt" id="cnt">тыкни · 0</span></button>
   </section>
 
-  <section class="panel" data-t="Факт">
-    <div class="inner">
-      <div class="k rv">Факт</div>
-      <h2 class="rv">One Piece <em>is</em> real</h2>
-      <a class="poster rv" href="https://t.me/rz3nx_bio" target="_blank" rel="noopener"><img src="onepiece.jpg" alt="ONE PIECE is real" loading="lazy"></a>
+  <section id="s4">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="soft4"/></svg></i>Связь</div>
+    <h2 class="rv">Пиши <em>в</em> TG</h2>
+    <div class="bgroup rv">
+      <a class="bb rp" href="https://t.me/rz3nx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4.6 6.8-1.6 7.7c-.1.6-.5.7-1 .4l-2.6-1.9-1.3 1.2c-.1.1-.3.3-.6.3l.2-2.7 4.9-4.4c.2-.2 0-.3-.3-.1L8.3 13l-2.6-.8c-.6-.2-.6-.6.1-.8l10.1-3.9c.5-.2.9.1.7.8"/></svg>@rz3nx</a>
+      <div class="split" id="split"><button class="a rp" id="idA">ID 318357554</button><button class="b rp" id="idB" aria-label="Скопировать ID"><svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m0 16H8V7h11z"/></svg></button></div>
     </div>
-  </section>
-
-  <section class="panel" data-t="Связь">
-    <div class="inner">
-      <div class="k rv">Связь</div>
-      <h2 class="rv">Пиши <em>в</em> TG</h2>
-      <a class="cta rv" href="https://t.me/rz3nx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4.6 6.8-1.6 7.7c-.1.6-.5.7-1 .4l-2.6-1.9-1.3 1.2c-.1.1-.3.3-.6.3l.2-2.7 4.9-4.4c.2-.2 0-.3-.3-.1L8.3 13l-2.6-.8c-.6-.2-.6-.6.1-.8l10.1-3.9c.5-.2.9.1.7.8"/></svg>@rz3nx</a>
-      <div class="rv"><button class="idc" id="idc">ID <b>318357554</b> · <u id="ido">копировать</u></button></div>
-      <div class="foot rv">R Λ Z Ξ · 2026</div>
-    </div>
+    <div class="foot"><span>R Λ Z Ξ · 2026</span><span>Material 3 Expressive</span></div>
   </section>
 </main>
 
-<nav class="rail" id="rail" aria-label="Секции"></nav>
+<div class="dock">
+  <nav class="bar" id="bar">
+    <button class="tb on rp" data-to="s0" aria-label="Главная"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span class="t">Главная</span></button>
+    <button class="tb rp" data-to="s1" aria-label="Обо мне"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8m0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4"/></svg><span class="t">Обо мне</span></button>
+    <button class="tb rp" data-to="s2" aria-label="Ссылки"><svg viewBox="0 0 24 24"><path d="M3.9 12a3.1 3.1 0 0 1 3.1-3.1h4V7H7a5 5 0 0 0 0 10h4v-1.9H7A3.1 3.1 0 0 1 3.9 12M8 13h8v-2H8zm9-6h-4v1.9h4a3.1 3.1 0 0 1 0 6.2h-4V17h4a5 5 0 0 0 0-10"/></svg><span class="t">Ссылки</span></button>
+    <button class="tb rp" data-to="s3" aria-label="Факт"><svg viewBox="0 0 24 24"><path d="M12 17.3 18.2 21l-1.6-7L22 9.2l-7.2-.6L12 2 9.2 8.6 2 9.2 7.5 14l-1.7 7z"/></svg><span class="t">Факт</span></button>
+    <button class="tb rp" data-to="s4" aria-label="Связь"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2m0 4-8 5-8-5V6l8 5 8-5z"/></svg><span class="t">Связь</span></button>
+  </nav>
+  <div class="fabw">
+    <div class="menu" id="menu">
+      <a class="mi" href="https://t.me/rz3nx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4.6 6.8-1.6 7.7c-.1.6-.5.7-1 .4l-2.6-1.9-1.3 1.2c-.1.1-.3.3-.6.3l.2-2.7 4.9-4.4c.2-.2 0-.3-.3-.1L8.3 13l-2.6-.8c-.6-.2-.6-.6.1-.8l10.1-3.9c.5-.2.9.1.7.8"/></svg>Написать</a>
+      <button class="mi" id="mShape"><svg viewBox="0 0 24 24"><path d="M12 2 4 7v10l8 5 8-5V7z"/></svg>Ещё фигуру</button>
+      <button class="mi" id="mBurst"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.6L21 9l-5 4.5L17.5 21 12 17.3 6.5 21 8 13.5 3 9l6.6-.4z"/></svg>Конфетти</button>
+    </div>
+    <button class="fab" id="fab" aria-expanded="false" aria-label="Меню"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
+  </div>
+</div>
+<div class="snack" id="snack"></div>
 
 <script>
-const SH = {"cookie9": [0.5, 0.0, 0.526, 0.0042, 0.5509, 0.0161, 0.5739, 0.0334, 0.5951, 0.0528, 0.615, 0.071, 0.6348, 0.0852, 0.6559, 0.0939, 0.6793, 0.0973, 0.7054, 0.0969, 0.7336, 0.0953, 0.7626, 0.0956, 0.7902, 0.1005, 0.8144, 0.1117, 0.8335, 0.1296, 0.8468, 0.1532, 0.8548, 0.1806, 0.8592, 0.2091, 0.8625, 0.2366, 0.8675, 0.2614, 0.8764, 0.2827, 0.8904, 0.3011, 0.9093, 0.3178, 0.9315, 0.3344, 0.954, 0.3525, 0.9737, 0.3731, 0.9875, 0.3964, 0.9934, 0.4218, 0.991, 0.4484, 0.9815, 0.4748, 0.9673, 0.5, 0.9518, 0.5237, 0.9384, 0.5461, 0.9296, 0.568, 0.9266, 0.5907, 0.929, 0.615, 0.9348, 0.6413, 0.941, 0.6693, 0.9445, 0.6979, 0.9423, 0.7254, 0.933, 0.75, 0.9163, 0.7704, 0.8936, 0.786, 0.8671, 0.7973, 0.8398, 0.8059, 0.8141, 0.8141, 0.7919, 0.8241, 0.7737, 0.838, 0.7591, 0.8566, 0.7464, 0.8794, 0.7336, 0.9047, 0.7189, 0.9296, 0.7008, 0.9511, 0.679, 0.9664, 0.654, 0.974, 0.6269, 0.9737, 0.5993, 0.967, 0.5723, 0.9565, 0.5468, 0.9456, 0.5229, 0.9375, 0.5, 0.9346, 0.4771, 0.9375, 0.4532, 0.9456, 0.4277, 0.9565, 0.4007, 0.967, 0.3731, 0.9737, 0.346, 0.974, 0.321, 0.9664, 0.2992, 0.9511, 0.2811, 0.9296, 0.2664, 0.9047, 0.2536, 0.8794, 0.2409, 0.8566, 0.2263, 0.838, 0.2081, 0.8241, 0.1859, 0.8141, 0.1602, 0.8059, 0.1329, 0.7973, 0.1064, 0.786, 0.0837, 0.7704, 0.067, 0.75, 0.0577, 0.7254, 0.0555, 0.6979, 0.059, 0.6693, 0.0652, 0.6413, 0.071, 0.615, 0.0734, 0.5907, 0.0704, 0.568, 0.0616, 0.5461, 0.0482, 0.5237, 0.0327, 0.5, 0.0185, 0.4748, 0.009, 0.4484, 0.0066, 0.4218, 0.0125, 0.3964, 0.0263, 0.3731, 0.046, 0.3525, 0.0685, 0.3344, 0.0907, 0.3178, 0.1096, 0.3011, 0.1236, 0.2827, 0.1325, 0.2614, 0.1375, 0.2366, 0.1408, 0.2091, 0.1452, 0.1806, 0.1532, 0.1532, 0.1665, 0.1296, 0.1856, 0.1117, 0.2098, 0.1005, 0.2374, 0.0956, 0.2664, 0.0953, 0.2946, 0.0969, 0.3207, 0.0973, 0.3441, 0.0939, 0.3652, 0.0852, 0.385, 0.071, 0.4049, 0.0528, 0.4261, 0.0334, 0.4491, 0.0161, 0.474, 0.0042], "clover4": [0.5, 0.0, 0.5261, 0.0025, 0.5515, 0.0099, 0.5757, 0.0219, 0.5982, 0.0379, 0.6186, 0.0573, 0.6367, 0.0792, 0.6524, 0.1029, 0.6659, 0.1273, 0.6775, 0.1517, 0.6875, 0.1752, 0.6966, 0.1973, 0.7053, 0.2175, 0.7143, 0.2354, 0.7243, 0.2509, 0.7357, 0.2643, 0.7491, 0.2757, 0.7646, 0.2857, 0.7825, 0.2947, 0.8027, 0.3034, 0.8248, 0.3125, 0.8483, 0.3225, 0.8727, 0.3341, 0.8971, 0.3476, 0.9208, 0.3633, 0.9427, 0.3814, 0.9621, 0.4018, 0.9781, 0.4243, 0.9901, 0.4485, 0.9975, 0.4739, 1.0, 0.5, 0.9975, 0.5261, 0.9901, 0.5515, 0.9781, 0.5757, 0.9621, 0.5982, 0.9427, 0.6186, 0.9208, 0.6367, 0.8971, 0.6524, 0.8727, 0.6659, 0.8483, 0.6775, 0.8248, 0.6875, 0.8027, 0.6966, 0.7825, 0.7053, 0.7646, 0.7143, 0.7491, 0.7243, 0.7357, 0.7357, 0.7243, 0.7491, 0.7143, 0.7646, 0.7053, 0.7825, 0.6966, 0.8027, 0.6875, 0.8248, 0.6775, 0.8483, 0.6659, 0.8727, 0.6524, 0.8971, 0.6367, 0.9208, 0.6186, 0.9427, 0.5982, 0.9621, 0.5757, 0.9781, 0.5515, 0.9901, 0.5261, 0.9975, 0.5, 1.0, 0.4739, 0.9975, 0.4485, 0.9901, 0.4243, 0.9781, 0.4018, 0.9621, 0.3814, 0.9427, 0.3633, 0.9208, 0.3476, 0.8971, 0.3341, 0.8727, 0.3225, 0.8483, 0.3125, 0.8248, 0.3034, 0.8027, 0.2947, 0.7825, 0.2857, 0.7646, 0.2757, 0.7491, 0.2643, 0.7357, 0.2509, 0.7243, 0.2354, 0.7143, 0.2175, 0.7053, 0.1973, 0.6966, 0.1752, 0.6875, 0.1517, 0.6775, 0.1273, 0.6659, 0.1029, 0.6524, 0.0792, 0.6367, 0.0573, 0.6186, 0.0379, 0.5982, 0.0219, 0.5757, 0.0099, 0.5515, 0.0025, 0.5261, 0.0, 0.5, 0.0025, 0.4739, 0.0099, 0.4485, 0.0219, 0.4243, 0.0379, 0.4018, 0.0573, 0.3814, 0.0792, 0.3633, 0.1029, 0.3476, 0.1273, 0.3341, 0.1517, 0.3225, 0.1752, 0.3125, 0.1973, 0.3034, 0.2175, 0.2947, 0.2354, 0.2857, 0.2509, 0.2757, 0.2643, 0.2643, 0.2757, 0.2509, 0.2857, 0.2354, 0.2947, 0.2175, 0.3034, 0.1973, 0.3125, 0.1752, 0.3225, 0.1517, 0.3341, 0.1273, 0.3476, 0.1029, 0.3633, 0.0792, 0.3814, 0.0573, 0.4018, 0.0379, 0.4243, 0.0219, 0.4485, 0.0099, 0.4739, 0.0025], "sunny": [0.5, 0.0, 0.5261, 0.001, 0.5521, 0.0042, 0.5777, 0.0094, 0.6027, 0.0167, 0.6269, 0.0263, 0.65, 0.0383, 0.6713, 0.0539, 0.6944, 0.0634, 0.7204, 0.0674, 0.7452, 0.0753, 0.7691, 0.0857, 0.792, 0.0982, 0.8138, 0.1126, 0.8343, 0.1287, 0.8536, 0.1464, 0.8713, 0.1657, 0.8874, 0.1862, 0.9018, 0.208, 0.9143, 0.2309, 0.9247, 0.2548, 0.9326, 0.2796, 0.9366, 0.3056, 0.9461, 0.3287, 0.9617, 0.35, 0.9737, 0.3731, 0.9833, 0.3973, 0.9906, 0.4223, 0.9958, 0.4479, 0.999, 0.4739, 1.0, 0.5, 0.999, 0.5261, 0.9958, 0.5521, 0.9906, 0.5777, 0.9833, 0.6027, 0.9737, 0.6269, 0.9617, 0.65, 0.9461, 0.6713, 0.9366, 0.6944, 0.9326, 0.7204, 0.9247, 0.7452, 0.9143, 0.7691, 0.9018, 0.792, 0.8874, 0.8138, 0.8713, 0.8343, 0.8536, 0.8536, 0.8343, 0.8713, 0.8138, 0.8874, 0.792, 0.9018, 0.7691, 0.9143, 0.7452, 0.9247, 0.7204, 0.9326, 0.6944, 0.9366, 0.6713, 0.9461, 0.65, 0.9617, 0.6269, 0.9737, 0.6027, 0.9833, 0.5777, 0.9906, 0.5521, 0.9958, 0.5261, 0.999, 0.5, 1.0, 0.4739, 0.999, 0.4479, 0.9958, 0.4223, 0.9906, 0.3973, 0.9833, 0.3731, 0.9737, 0.35, 0.9617, 0.3287, 0.9461, 0.3056, 0.9366, 0.2796, 0.9326, 0.2548, 0.9247, 0.2309, 0.9143, 0.208, 0.9018, 0.1862, 0.8874, 0.1657, 0.8713, 0.1464, 0.8536, 0.1287, 0.8343, 0.1126, 0.8138, 0.0982, 0.792, 0.0857, 0.7691, 0.0753, 0.7452, 0.0674, 0.7204, 0.0634, 0.6944, 0.0539, 0.6713, 0.0383, 0.65, 0.0263, 0.6269, 0.0167, 0.6027, 0.0094, 0.5777, 0.0042, 0.5521, 0.001, 0.5261, 0.0, 0.5, 0.001, 0.4739, 0.0042, 0.4479, 0.0094, 0.4223, 0.0167, 0.3973, 0.0263, 0.3731, 0.0383, 0.35, 0.0539, 0.3287, 0.0634, 0.3056, 0.0674, 0.2796, 0.0753, 0.2548, 0.0857, 0.2309, 0.0982, 0.208, 0.1126, 0.1862, 0.1287, 0.1657, 0.1464, 0.1464, 0.1657, 0.1287, 0.1862, 0.1126, 0.208, 0.0982, 0.2309, 0.0857, 0.2548, 0.0753, 0.2796, 0.0674, 0.3056, 0.0634, 0.3287, 0.0539, 0.35, 0.0383, 0.3731, 0.0263, 0.3973, 0.0167, 0.4223, 0.0094, 0.4479, 0.0042, 0.4739, 0.001], "squircle": [0.5, 0.0939, 0.5213, 0.0939, 0.5427, 0.0939, 0.5643, 0.0939, 0.5863, 0.0939, 0.6088, 0.094, 0.6319, 0.0942, 0.6556, 0.0945, 0.6802, 0.0953, 0.7055, 0.0966, 0.7316, 0.0989, 0.758, 0.1027, 0.7844, 0.1086, 0.8098, 0.1174, 0.8332, 0.1299, 0.8536, 0.1464, 0.8701, 0.1668, 0.8826, 0.1902, 0.8914, 0.2156, 0.8973, 0.242, 0.9011, 0.2684, 0.9034, 0.2945, 0.9047, 0.3198, 0.9055, 0.3444, 0.9058, 0.3681, 0.906, 0.3912, 0.9061, 0.4137, 0.9061, 0.4357, 0.9061, 0.4573, 0.9061, 0.4787, 0.9061, 0.5, 0.9061, 0.5213, 0.9061, 0.5427, 0.9061, 0.5643, 0.9061, 0.5863, 0.906, 0.6088, 0.9058, 0.6319, 0.9055, 0.6556, 0.9047, 0.6802, 0.9034, 0.7055, 0.9011, 0.7316, 0.8973, 0.758, 0.8914, 0.7844, 0.8826, 0.8098, 0.8701, 0.8332, 0.8536, 0.8536, 0.8332, 0.8701, 0.8098, 0.8826, 0.7844, 0.8914, 0.758, 0.8973, 0.7316, 0.9011, 0.7055, 0.9034, 0.6802, 0.9047, 0.6556, 0.9055, 0.6319, 0.9058, 0.6088, 0.906, 0.5863, 0.9061, 0.5643, 0.9061, 0.5427, 0.9061, 0.5213, 0.9061, 0.5, 0.9061, 0.4787, 0.9061, 0.4573, 0.9061, 0.4357, 0.9061, 0.4137, 0.9061, 0.3912, 0.906, 0.3681, 0.9058, 0.3444, 0.9055, 0.3198, 0.9047, 0.2945, 0.9034, 0.2684, 0.9011, 0.242, 0.8973, 0.2156, 0.8914, 0.1902, 0.8826, 0.1668, 0.8701, 0.1464, 0.8536, 0.1299, 0.8332, 0.1174, 0.8098, 0.1086, 0.7844, 0.1027, 0.758, 0.0989, 0.7316, 0.0966, 0.7055, 0.0953, 0.6802, 0.0945, 0.6556, 0.0942, 0.6319, 0.094, 0.6088, 0.0939, 0.5863, 0.0939, 0.5643, 0.0939, 0.5427, 0.0939, 0.5213, 0.0939, 0.5, 0.0939, 0.4787, 0.0939, 0.4573, 0.0939, 0.4357, 0.0939, 0.4137, 0.094, 0.3912, 0.0942, 0.3681, 0.0945, 0.3444, 0.0953, 0.3198, 0.0966, 0.2945, 0.0989, 0.2684, 0.1027, 0.242, 0.1086, 0.2156, 0.1174, 0.1902, 0.1299, 0.1668, 0.1464, 0.1464, 0.1668, 0.1299, 0.1902, 0.1174, 0.2156, 0.1086, 0.242, 0.1027, 0.2684, 0.0989, 0.2945, 0.0966, 0.3198, 0.0953, 0.3444, 0.0945, 0.3681, 0.0942, 0.3912, 0.094, 0.4137, 0.0939, 0.4357, 0.0939, 0.4573, 0.0939, 0.4787, 0.0939], "flower": [0.5, 0.0, 0.5259, 0.0053, 0.5504, 0.0204, 0.5724, 0.0427, 0.5917, 0.0688, 0.6086, 0.0947, 0.6246, 0.1166, 0.6412, 0.1321, 0.6603, 0.14, 0.683, 0.1408, 0.7098, 0.1366, 0.7401, 0.1303, 0.7721, 0.1254, 0.8035, 0.1252, 0.8315, 0.1319, 0.8536, 0.1464, 0.8681, 0.1685, 0.8748, 0.1965, 0.8746, 0.2279, 0.8697, 0.2599, 0.8634, 0.2902, 0.8592, 0.317, 0.86, 0.3397, 0.8679, 0.3588, 0.8834, 0.3754, 0.9053, 0.3914, 0.9312, 0.4083, 0.9573, 0.4276, 0.9796, 0.4496, 0.9947, 0.4741, 1.0, 0.5, 0.9947, 0.5259, 0.9796, 0.5504, 0.9573, 0.5724, 0.9312, 0.5917, 0.9053, 0.6086, 0.8834, 0.6246, 0.8679, 0.6412, 0.86, 0.6603, 0.8592, 0.683, 0.8634, 0.7098, 0.8697, 0.7401, 0.8746, 0.7721, 0.8748, 0.8035, 0.8681, 0.8315, 0.8536, 0.8536, 0.8315, 0.8681, 0.8035, 0.8748, 0.7721, 0.8746, 0.7401, 0.8697, 0.7098, 0.8634, 0.683, 0.8592, 0.6603, 0.86, 0.6412, 0.8679, 0.6246, 0.8834, 0.6086, 0.9053, 0.5917, 0.9312, 0.5724, 0.9573, 0.5504, 0.9796, 0.5259, 0.9947, 0.5, 1.0, 0.4741, 0.9947, 0.4496, 0.9796, 0.4276, 0.9573, 0.4083, 0.9312, 0.3914, 0.9053, 0.3754, 0.8834, 0.3588, 0.8679, 0.3397, 0.86, 0.317, 0.8592, 0.2902, 0.8634, 0.2599, 0.8697, 0.2279, 0.8746, 0.1965, 0.8748, 0.1685, 0.8681, 0.1464, 0.8536, 0.1319, 0.8315, 0.1252, 0.8035, 0.1254, 0.7721, 0.1303, 0.7401, 0.1366, 0.7098, 0.1408, 0.683, 0.14, 0.6603, 0.1321, 0.6412, 0.1166, 0.6246, 0.0947, 0.6086, 0.0688, 0.5917, 0.0427, 0.5724, 0.0204, 0.5504, 0.0053, 0.5259, 0.0, 0.5, 0.0053, 0.4741, 0.0204, 0.4496, 0.0427, 0.4276, 0.0688, 0.4083, 0.0947, 0.3914, 0.1166, 0.3754, 0.1321, 0.3588, 0.14, 0.3397, 0.1408, 0.317, 0.1366, 0.2902, 0.1303, 0.2599, 0.1254, 0.2279, 0.1252, 0.1965, 0.1319, 0.1685, 0.1464, 0.1464, 0.1685, 0.1319, 0.1965, 0.1252, 0.2279, 0.1254, 0.2599, 0.1303, 0.2902, 0.1366, 0.317, 0.1408, 0.3397, 0.14, 0.3588, 0.1321, 0.3754, 0.1166, 0.3914, 0.0947, 0.4083, 0.0688, 0.4276, 0.0427, 0.4496, 0.0204, 0.4741, 0.0053], "cookie12": [0.5, 0.0, 0.526, 0.0048, 0.5507, 0.0175, 0.5738, 0.034, 0.5959, 0.049, 0.6183, 0.0586, 0.6425, 0.0615, 0.6691, 0.0595, 0.6973, 0.0568, 0.7251, 0.0582, 0.75, 0.067, 0.7701, 0.0841, 0.7851, 0.1075, 0.7969, 0.1333, 0.8085, 0.1574, 0.8231, 0.1769, 0.8426, 0.1915, 0.8667, 0.2031, 0.8925, 0.2149, 0.9159, 0.2299, 0.933, 0.25, 0.9418, 0.2749, 0.9432, 0.3027, 0.9405, 0.3309, 0.9385, 0.3575, 0.9414, 0.3817, 0.951, 0.4041, 0.966, 0.4262, 0.9825, 0.4493, 0.9952, 0.474, 1.0, 0.5, 0.9952, 0.526, 0.9825, 0.5507, 0.966, 0.5738, 0.951, 0.5959, 0.9414, 0.6183, 0.9385, 0.6425, 0.9405, 0.6691, 0.9432, 0.6973, 0.9418, 0.7251, 0.933, 0.75, 0.9159, 0.7701, 0.8925, 0.7851, 0.8667, 0.7969, 0.8426, 0.8085, 0.8231, 0.8231, 0.8085, 0.8426, 0.7969, 0.8667, 0.7851, 0.8925, 0.7701, 0.9159, 0.75, 0.933, 0.7251, 0.9418, 0.6973, 0.9432, 0.6691, 0.9405, 0.6425, 0.9385, 0.6183, 0.9414, 0.5959, 0.951, 0.5738, 0.966, 0.5507, 0.9825, 0.526, 0.9952, 0.5, 1.0, 0.474, 0.9952, 0.4493, 0.9825, 0.4262, 0.966, 0.4041, 0.951, 0.3817, 0.9414, 0.3575, 0.9385, 0.3309, 0.9405, 0.3027, 0.9432, 0.2749, 0.9418, 0.25, 0.933, 0.2299, 0.9159, 0.2149, 0.8925, 0.2031, 0.8667, 0.1915, 0.8426, 0.1769, 0.8231, 0.1574, 0.8085, 0.1333, 0.7969, 0.1075, 0.7851, 0.0841, 0.7701, 0.067, 0.75, 0.0582, 0.7251, 0.0568, 0.6973, 0.0595, 0.6691, 0.0615, 0.6425, 0.0586, 0.6183, 0.049, 0.5959, 0.034, 0.5738, 0.0175, 0.5507, 0.0048, 0.526, 0.0, 0.5, 0.0048, 0.474, 0.0175, 0.4493, 0.034, 0.4262, 0.049, 0.4041, 0.0586, 0.3817, 0.0615, 0.3575, 0.0595, 0.3309, 0.0568, 0.3027, 0.0582, 0.2749, 0.067, 0.25, 0.0841, 0.2299, 0.1075, 0.2149, 0.1333, 0.2031, 0.1574, 0.1915, 0.1769, 0.1769, 0.1915, 0.1574, 0.2031, 0.1333, 0.2149, 0.1075, 0.2299, 0.0841, 0.25, 0.067, 0.2749, 0.0582, 0.3027, 0.0568, 0.3309, 0.0595, 0.3575, 0.0615, 0.3817, 0.0586, 0.4041, 0.049, 0.4262, 0.034, 0.4493, 0.0175, 0.474, 0.0048], "soft4": [0.5, 0.0, 0.5261, 0.0016, 0.5519, 0.0063, 0.577, 0.0139, 0.6011, 0.0243, 0.6241, 0.037, 0.6457, 0.0516, 0.6659, 0.0677, 0.6848, 0.0849, 0.7025, 0.1026, 0.719, 0.1206, 0.7348, 0.1385, 0.75, 0.1559, 0.7649, 0.1728, 0.7799, 0.1891, 0.7952, 0.2048, 0.8109, 0.2201, 0.8272, 0.2351, 0.8441, 0.25, 0.8615, 0.2652, 0.8794, 0.281, 0.8974, 0.2975, 0.9151, 0.3152, 0.9323, 0.3341, 0.9484, 0.3543, 0.963, 0.3759, 0.9757, 0.3989, 0.9861, 0.423, 0.9937, 0.4481, 0.9984, 0.4739, 1.0, 0.5, 0.9984, 0.5261, 0.9937, 0.5519, 0.9861, 0.577, 0.9757, 0.6011, 0.963, 0.6241, 0.9484, 0.6457, 0.9323, 0.6659, 0.9151, 0.6848, 0.8974, 0.7025, 0.8794, 0.719, 0.8615, 0.7348, 0.8441, 0.75, 0.8272, 0.7649, 0.8109, 0.7799, 0.7952, 0.7952, 0.7799, 0.8109, 0.7649, 0.8272, 0.75, 0.8441, 0.7348, 0.8615, 0.719, 0.8794, 0.7025, 0.8974, 0.6848, 0.9151, 0.6659, 0.9323, 0.6457, 0.9484, 0.6241, 0.963, 0.6011, 0.9757, 0.577, 0.9861, 0.5519, 0.9937, 0.5261, 0.9984, 0.5, 1.0, 0.4739, 0.9984, 0.4481, 0.9937, 0.423, 0.9861, 0.3989, 0.9757, 0.3759, 0.963, 0.3543, 0.9484, 0.3341, 0.9323, 0.3152, 0.9151, 0.2975, 0.8974, 0.281, 0.8794, 0.2652, 0.8615, 0.25, 0.8441, 0.2351, 0.8272, 0.2201, 0.8109, 0.2048, 0.7952, 0.1891, 0.7799, 0.1728, 0.7649, 0.1559, 0.75, 0.1385, 0.7348, 0.1206, 0.719, 0.1026, 0.7025, 0.0849, 0.6848, 0.0677, 0.6659, 0.0516, 0.6457, 0.037, 0.6241, 0.0243, 0.6011, 0.0139, 0.577, 0.0063, 0.5519, 0.0016, 0.5261, 0.0, 0.5, 0.0016, 0.4739, 0.0063, 0.4481, 0.0139, 0.423, 0.0243, 0.3989, 0.037, 0.3759, 0.0516, 0.3543, 0.0677, 0.3341, 0.0849, 0.3152, 0.1026, 0.2975, 0.1206, 0.281, 0.1385, 0.2652, 0.1559, 0.25, 0.1728, 0.2351, 0.1891, 0.2201, 0.2048, 0.2048, 0.2201, 0.1891, 0.2351, 0.1728, 0.25, 0.1559, 0.2652, 0.1385, 0.281, 0.1206, 0.2975, 0.1026, 0.3152, 0.0849, 0.3341, 0.0677, 0.3543, 0.0516, 0.3759, 0.037, 0.3989, 0.0243, 0.423, 0.0139, 0.4481, 0.0063, 0.4739, 0.0016], "heart": [0.5, 0.2738, 0.5001, 0.2723, 0.5005, 0.2673, 0.5018, 0.259, 0.5042, 0.2485, 0.5082, 0.2348, 0.5142, 0.2188, 0.5217, 0.2023, 0.5321, 0.1837, 0.5449, 0.1646, 0.5593, 0.1468, 0.5772, 0.1287, 0.5975, 0.1119, 0.6187, 0.0978, 0.6433, 0.0853, 0.6697, 0.0757, 0.6959, 0.0695, 0.7247, 0.0664, 0.7542, 0.0669, 0.782, 0.0709, 0.8112, 0.0787, 0.8395, 0.0901, 0.8649, 0.104, 0.8901, 0.1219, 0.9129, 0.1427, 0.9319, 0.1646, 0.9489, 0.19, 0.9625, 0.2172, 0.9718, 0.2441, 0.9779, 0.2736, 0.98, 0.3038, 0.9782, 0.3326, 0.9723, 0.3632, 0.9625, 0.3937, 0.9498, 0.4221, 0.9329, 0.4517, 0.9129, 0.4808, 0.8915, 0.5076, 0.8665, 0.5355, 0.8395, 0.5627, 0.8129, 0.5878, 0.7837, 0.6139, 0.7542, 0.6395, 0.7264, 0.6632, 0.6976, 0.6878, 0.6697, 0.712, 0.6448, 0.7344, 0.6201, 0.7575, 0.5975, 0.78, 0.5783, 0.8004, 0.5603, 0.8212, 0.5449, 0.8409, 0.5328, 0.8581, 0.5223, 0.875, 0.5142, 0.8901, 0.5085, 0.9026, 0.5044, 0.9137, 0.5018, 0.9225, 0.5006, 0.9286, 0.5001, 0.9325, 0.5, 0.9338, 0.4999, 0.9327, 0.4995, 0.9289, 0.4982, 0.9225, 0.4958, 0.9143, 0.4918, 0.9033, 0.4858, 0.8901, 0.4783, 0.8759, 0.4679, 0.8592, 0.4551, 0.8409, 0.4407, 0.8224, 0.4228, 0.8017, 0.4025, 0.78, 0.3813, 0.7588, 0.3567, 0.7357, 0.3303, 0.712, 0.3041, 0.6893, 0.2753, 0.6646, 0.2458, 0.6395, 0.218, 0.6154, 0.1888, 0.5894, 0.1605, 0.5627, 0.1351, 0.5371, 0.1099, 0.5093, 0.0871, 0.4808, 0.0681, 0.4535, 0.0511, 0.4238, 0.0375, 0.3937, 0.0282, 0.365, 0.0221, 0.3344, 0.02, 0.3038, 0.0218, 0.2754, 0.0277, 0.2458, 0.0375, 0.2172, 0.0502, 0.1916, 0.0671, 0.1661, 0.0871, 0.1427, 0.1085, 0.1231, 0.1335, 0.105, 0.1605, 0.0901, 0.1871, 0.0792, 0.2163, 0.0712, 0.2458, 0.0669, 0.2736, 0.0663, 0.3024, 0.0692, 0.3303, 0.0757, 0.3552, 0.0847, 0.3799, 0.097, 0.4025, 0.1119, 0.4217, 0.1276, 0.4397, 0.1457, 0.4551, 0.1646, 0.4672, 0.1826, 0.4777, 0.2012, 0.4858, 0.2188, 0.4915, 0.2339, 0.4956, 0.2478, 0.4982, 0.259, 0.4994, 0.2669, 0.4999, 0.2721], "circle": [0.5, 0.0, 0.5262, 0.0007, 0.5523, 0.0027, 0.5782, 0.0062, 0.604, 0.0109, 0.6294, 0.017, 0.6545, 0.0245, 0.6792, 0.0332, 0.7034, 0.0432, 0.727, 0.0545, 0.75, 0.067, 0.7723, 0.0807, 0.7939, 0.0955, 0.8147, 0.1114, 0.8346, 0.1284, 0.8536, 0.1464, 0.8716, 0.1654, 0.8886, 0.1853, 0.9045, 0.2061, 0.9193, 0.2277, 0.933, 0.25, 0.9455, 0.273, 0.9568, 0.2966, 0.9668, 0.3208, 0.9755, 0.3455, 0.983, 0.3706, 0.9891, 0.396, 0.9938, 0.4218, 0.9973, 0.4477, 0.9993, 0.4738, 1.0, 0.5, 0.9993, 0.5262, 0.9973, 0.5523, 0.9938, 0.5782, 0.9891, 0.604, 0.983, 0.6294, 0.9755, 0.6545, 0.9668, 0.6792, 0.9568, 0.7034, 0.9455, 0.727, 0.933, 0.75, 0.9193, 0.7723, 0.9045, 0.7939, 0.8886, 0.8147, 0.8716, 0.8346, 0.8536, 0.8536, 0.8346, 0.8716, 0.8147, 0.8886, 0.7939, 0.9045, 0.7723, 0.9193, 0.75, 0.933, 0.727, 0.9455, 0.7034, 0.9568, 0.6792, 0.9668, 0.6545, 0.9755, 0.6294, 0.983, 0.604, 0.9891, 0.5782, 0.9938, 0.5523, 0.9973, 0.5262, 0.9993, 0.5, 1.0, 0.4738, 0.9993, 0.4477, 0.9973, 0.4218, 0.9938, 0.396, 0.9891, 0.3706, 0.983, 0.3455, 0.9755, 0.3208, 0.9668, 0.2966, 0.9568, 0.273, 0.9455, 0.25, 0.933, 0.2277, 0.9193, 0.2061, 0.9045, 0.1853, 0.8886, 0.1654, 0.8716, 0.1464, 0.8536, 0.1284, 0.8346, 0.1114, 0.8147, 0.0955, 0.7939, 0.0807, 0.7723, 0.067, 0.75, 0.0545, 0.727, 0.0432, 0.7034, 0.0332, 0.6792, 0.0245, 0.6545, 0.017, 0.6294, 0.0109, 0.604, 0.0062, 0.5782, 0.0027, 0.5523, 0.0007, 0.5262, 0.0, 0.5, 0.0007, 0.4738, 0.0027, 0.4477, 0.0062, 0.4218, 0.0109, 0.396, 0.017, 0.3706, 0.0245, 0.3455, 0.0332, 0.3208, 0.0432, 0.2966, 0.0545, 0.273, 0.067, 0.25, 0.0807, 0.2277, 0.0955, 0.2061, 0.1114, 0.1853, 0.1284, 0.1654, 0.1464, 0.1464, 0.1654, 0.1284, 0.1853, 0.1114, 0.2061, 0.0955, 0.2277, 0.0807, 0.25, 0.067, 0.273, 0.0545, 0.2966, 0.0432, 0.3208, 0.0332, 0.3455, 0.0245, 0.3706, 0.017, 0.396, 0.0109, 0.4218, 0.0062, 0.4477, 0.0027, 0.4738, 0.0007]};
-const P = a => { let d='M'+a[0]+' '+a[1]; for(let i=2;i<a.length;i+=2) d+='L'+a[i].toFixed(4)+' '+a[i+1].toFixed(4); return d+'Z'; };
-document.querySelectorAll('[data-shape]').forEach(p => p.setAttribute('d', P(SH[p.dataset.shape])));
+const SH={"circle": [0.5, 0.0, 0.5262, 0.0007, 0.5523, 0.0027, 0.5782, 0.0062, 0.604, 0.0109, 0.6294, 0.017, 0.6545, 0.0245, 0.6792, 0.0332, 0.7034, 0.0432, 0.727, 0.0545, 0.75, 0.067, 0.7723, 0.0807, 0.7939, 0.0955, 0.8147, 0.1114, 0.8346, 0.1284, 0.8536, 0.1464, 0.8716, 0.1654, 0.8886, 0.1853, 0.9045, 0.2061, 0.9193, 0.2277, 0.933, 0.25, 0.9455, 0.273, 0.9568, 0.2966, 0.9668, 0.3208, 0.9755, 0.3455, 0.983, 0.3706, 0.9891, 0.396, 0.9938, 0.4218, 0.9973, 0.4477, 0.9993, 0.4738, 1.0, 0.5, 0.9993, 0.5262, 0.9973, 0.5523, 0.9938, 0.5782, 0.9891, 0.604, 0.983, 0.6294, 0.9755, 0.6545, 0.9668, 0.6792, 0.9568, 0.7034, 0.9455, 0.727, 0.933, 0.75, 0.9193, 0.7723, 0.9045, 0.7939, 0.8886, 0.8147, 0.8716, 0.8346, 0.8536, 0.8536, 0.8346, 0.8716, 0.8147, 0.8886, 0.7939, 0.9045, 0.7723, 0.9193, 0.75, 0.933, 0.727, 0.9455, 0.7034, 0.9568, 0.6792, 0.9668, 0.6545, 0.9755, 0.6294, 0.983, 0.604, 0.9891, 0.5782, 0.9938, 0.5523, 0.9973, 0.5262, 0.9993, 0.5, 1.0, 0.4738, 0.9993, 0.4477, 0.9973, 0.4218, 0.9938, 0.396, 0.9891, 0.3706, 0.983, 0.3455, 0.9755, 0.3208, 0.9668, 0.2966, 0.9568, 0.273, 0.9455, 0.25, 0.933, 0.2277, 0.9193, 0.2061, 0.9045, 0.1853, 0.8886, 0.1654, 0.8716, 0.1464, 0.8536, 0.1284, 0.8346, 0.1114, 0.8147, 0.0955, 0.7939, 0.0807, 0.7723, 0.067, 0.75, 0.0545, 0.727, 0.0432, 0.7034, 0.0332, 0.6792, 0.0245, 0.6545, 0.017, 0.6294, 0.0109, 0.604, 0.0062, 0.5782, 0.0027, 0.5523, 0.0007, 0.5262, 0.0, 0.5, 0.0007, 0.4738, 0.0027, 0.4477, 0.0062, 0.4218, 0.0109, 0.396, 0.017, 0.3706, 0.0245, 0.3455, 0.0332, 0.3208, 0.0432, 0.2966, 0.0545, 0.273, 0.067, 0.25, 0.0807, 0.2277, 0.0955, 0.2061, 0.1114, 0.1853, 0.1284, 0.1654, 0.1464, 0.1464, 0.1654, 0.1284, 0.1853, 0.1114, 0.2061, 0.0955, 0.2277, 0.0807, 0.25, 0.067, 0.273, 0.0545, 0.2966, 0.0432, 0.3208, 0.0332, 0.3455, 0.0245, 0.3706, 0.017, 0.396, 0.0109, 0.4218, 0.0062, 0.4477, 0.0027, 0.4738, 0.0007], "cookie4": [0.5, 0.0, 0.5261, 0.0018, 0.5518, 0.007, 0.5767, 0.0155, 0.6005, 0.027, 0.623, 0.041, 0.6439, 0.057, 0.6633, 0.0746, 0.6811, 0.0932, 0.6975, 0.1123, 0.7128, 0.1314, 0.7273, 0.15, 0.7412, 0.168, 0.755, 0.1851, 0.769, 0.2013, 0.7835, 0.2165, 0.7987, 0.231, 0.8149, 0.245, 0.832, 0.2588, 0.85, 0.2727, 0.8686, 0.2872, 0.8877, 0.3025, 0.9068, 0.3189, 0.9254, 0.3367, 0.943, 0.3561, 0.959, 0.377, 0.973, 0.3995, 0.9845, 0.4233, 0.993, 0.4482, 0.9982, 0.4739, 1.0, 0.5, 0.9982, 0.5261, 0.993, 0.5518, 0.9845, 0.5767, 0.973, 0.6005, 0.959, 0.623, 0.943, 0.6439, 0.9254, 0.6633, 0.9068, 0.6811, 0.8877, 0.6975, 0.8686, 0.7128, 0.85, 0.7273, 0.832, 0.7412, 0.8149, 0.755, 0.7987, 0.769, 0.7835, 0.7835, 0.769, 0.7987, 0.755, 0.8149, 0.7412, 0.832, 0.7273, 0.85, 0.7128, 0.8686, 0.6975, 0.8877, 0.6811, 0.9068, 0.6633, 0.9254, 0.6439, 0.943, 0.623, 0.959, 0.6005, 0.973, 0.5767, 0.9845, 0.5518, 0.993, 0.5261, 0.9982, 0.5, 1.0, 0.4739, 0.9982, 0.4482, 0.993, 0.4233, 0.9845, 0.3995, 0.973, 0.377, 0.959, 0.3561, 0.943, 0.3367, 0.9254, 0.3189, 0.9068, 0.3025, 0.8877, 0.2872, 0.8686, 0.2727, 0.85, 0.2588, 0.832, 0.245, 0.8149, 0.231, 0.7987, 0.2165, 0.7835, 0.2013, 0.769, 0.1851, 0.755, 0.168, 0.7412, 0.15, 0.7273, 0.1314, 0.7128, 0.1123, 0.6975, 0.0932, 0.6811, 0.0746, 0.6633, 0.057, 0.6439, 0.041, 0.623, 0.027, 0.6005, 0.0155, 0.5767, 0.007, 0.5518, 0.0018, 0.5261, 0.0, 0.5, 0.0018, 0.4739, 0.007, 0.4482, 0.0155, 0.4233, 0.027, 0.3995, 0.041, 0.377, 0.057, 0.3561, 0.0746, 0.3367, 0.0932, 0.3189, 0.1123, 0.3025, 0.1314, 0.2872, 0.15, 0.2727, 0.168, 0.2588, 0.1851, 0.245, 0.2013, 0.231, 0.2165, 0.2165, 0.231, 0.2013, 0.245, 0.1851, 0.2588, 0.168, 0.2727, 0.15, 0.2872, 0.1314, 0.3025, 0.1123, 0.3189, 0.0932, 0.3367, 0.0746, 0.3561, 0.057, 0.377, 0.041, 0.3995, 0.027, 0.4233, 0.0155, 0.4482, 0.007, 0.4739, 0.0018], "cookie6": [0.5, 0.0, 0.5261, 0.0024, 0.5516, 0.0094, 0.576, 0.0204, 0.5989, 0.0345, 0.6204, 0.0507, 0.6404, 0.0679, 0.6593, 0.0849, 0.6777, 0.1009, 0.6961, 0.1151, 0.7151, 0.1274, 0.7353, 0.1377, 0.7568, 0.1465, 0.7798, 0.1545, 0.804, 0.1624, 0.8289, 0.1711, 0.8537, 0.1816, 0.8774, 0.1944, 0.8991, 0.21, 0.9179, 0.2286, 0.933, 0.25, 0.944, 0.2738, 0.9507, 0.2993, 0.9534, 0.326, 0.9526, 0.3529, 0.9493, 0.3796, 0.9444, 0.4055, 0.9391, 0.4304, 0.9345, 0.4543, 0.9313, 0.4774, 0.9302, 0.5, 0.9313, 0.5226, 0.9345, 0.5457, 0.9391, 0.5696, 0.9444, 0.5945, 0.9493, 0.6204, 0.9526, 0.6471, 0.9534, 0.674, 0.9507, 0.7007, 0.944, 0.7262, 0.933, 0.75, 0.9179, 0.7714, 0.8991, 0.79, 0.8774, 0.8056, 0.8537, 0.8184, 0.8289, 0.8289, 0.804, 0.8376, 0.7798, 0.8455, 0.7568, 0.8535, 0.7353, 0.8623, 0.7151, 0.8726, 0.6961, 0.8849, 0.6777, 0.8991, 0.6593, 0.9151, 0.6404, 0.9321, 0.6204, 0.9493, 0.5989, 0.9655, 0.576, 0.9796, 0.5516, 0.9906, 0.5261, 0.9976, 0.5, 1.0, 0.4739, 0.9976, 0.4484, 0.9906, 0.424, 0.9796, 0.4011, 0.9655, 0.3796, 0.9493, 0.3596, 0.9321, 0.3407, 0.9151, 0.3223, 0.8991, 0.3039, 0.8849, 0.2849, 0.8726, 0.2647, 0.8623, 0.2432, 0.8535, 0.2202, 0.8455, 0.196, 0.8376, 0.1711, 0.8289, 0.1463, 0.8184, 0.1226, 0.8056, 0.1009, 0.79, 0.0821, 0.7714, 0.067, 0.75, 0.056, 0.7262, 0.0493, 0.7007, 0.0466, 0.674, 0.0474, 0.6471, 0.0507, 0.6204, 0.0556, 0.5945, 0.0609, 0.5696, 0.0655, 0.5457, 0.0687, 0.5226, 0.0698, 0.5, 0.0687, 0.4774, 0.0655, 0.4543, 0.0609, 0.4304, 0.0556, 0.4055, 0.0507, 0.3796, 0.0474, 0.3529, 0.0466, 0.326, 0.0493, 0.2993, 0.056, 0.2738, 0.067, 0.25, 0.0821, 0.2286, 0.1009, 0.21, 0.1226, 0.1944, 0.1463, 0.1816, 0.1711, 0.1711, 0.196, 0.1624, 0.2202, 0.1545, 0.2432, 0.1465, 0.2647, 0.1377, 0.2849, 0.1274, 0.3039, 0.1151, 0.3223, 0.1009, 0.3407, 0.0849, 0.3596, 0.0679, 0.3796, 0.0507, 0.4011, 0.0345, 0.424, 0.0204, 0.4484, 0.0094, 0.4739, 0.0024], "cookie9": [0.5, 0.0, 0.526, 0.0038, 0.551, 0.0143, 0.5745, 0.0297, 0.5963, 0.0472, 0.6169, 0.0637, 0.6374, 0.077, 0.659, 0.0857, 0.6825, 0.09, 0.7083, 0.0912, 0.7358, 0.0915, 0.7639, 0.0936, 0.7907, 0.0999, 0.8144, 0.1117, 0.8336, 0.1295, 0.8477, 0.1523, 0.857, 0.1785, 0.8631, 0.2059, 0.8682, 0.2325, 0.8745, 0.2568, 0.884, 0.2783, 0.8978, 0.2973, 0.9157, 0.3149, 0.9362, 0.3325, 0.9569, 0.3515, 0.975, 0.3727, 0.9877, 0.3963, 0.9935, 0.4218, 0.9919, 0.4483, 0.9839, 0.4746, 0.9717, 0.5, 0.9582, 0.524, 0.9463, 0.5469, 0.9383, 0.5694, 0.9351, 0.5925, 0.9363, 0.6169, 0.9403, 0.6431, 0.9445, 0.6706, 0.9461, 0.6986, 0.9428, 0.7256, 0.933, 0.75, 0.9167, 0.7706, 0.8951, 0.787, 0.87, 0.7996, 0.844, 0.8098, 0.8194, 0.8194, 0.7976, 0.8305, 0.7793, 0.8449, 0.7638, 0.8631, 0.7499, 0.8848, 0.7358, 0.9085, 0.72, 0.9317, 0.7012, 0.9518, 0.6791, 0.9665, 0.6541, 0.9742, 0.6273, 0.975, 0.5999, 0.9699, 0.5731, 0.9615, 0.5476, 0.9526, 0.5234, 0.9459, 0.5, 0.9434, 0.4766, 0.9459, 0.4524, 0.9526, 0.4269, 0.9615, 0.4001, 0.9699, 0.3727, 0.975, 0.3459, 0.9742, 0.3209, 0.9665, 0.2988, 0.9518, 0.28, 0.9317, 0.2642, 0.9085, 0.2501, 0.8848, 0.2362, 0.8631, 0.2207, 0.8449, 0.2024, 0.8305, 0.1806, 0.8194, 0.156, 0.8098, 0.13, 0.7996, 0.1049, 0.787, 0.0833, 0.7706, 0.067, 0.75, 0.0572, 0.7256, 0.0539, 0.6986, 0.0555, 0.6706, 0.0597, 0.6431, 0.0637, 0.6169, 0.0649, 0.5925, 0.0617, 0.5694, 0.0537, 0.5469, 0.0418, 0.524, 0.0283, 0.5, 0.0161, 0.4746, 0.0081, 0.4483, 0.0065, 0.4218, 0.0123, 0.3963, 0.025, 0.3727, 0.0431, 0.3515, 0.0638, 0.3325, 0.0843, 0.3149, 0.1022, 0.2973, 0.116, 0.2783, 0.1255, 0.2568, 0.1318, 0.2325, 0.1369, 0.2059, 0.143, 0.1785, 0.1523, 0.1523, 0.1664, 0.1295, 0.1856, 0.1117, 0.2093, 0.0999, 0.2361, 0.0936, 0.2642, 0.0915, 0.2917, 0.0912, 0.3175, 0.09, 0.341, 0.0857, 0.3626, 0.077, 0.3831, 0.0637, 0.4037, 0.0472, 0.4255, 0.0297, 0.449, 0.0143, 0.474, 0.0038], "cookie12": [0.5, 0.0, 0.526, 0.0048, 0.5507, 0.0175, 0.5738, 0.034, 0.5959, 0.049, 0.6183, 0.0586, 0.6425, 0.0615, 0.6691, 0.0595, 0.6973, 0.0568, 0.7251, 0.0582, 0.75, 0.067, 0.7701, 0.0841, 0.7851, 0.1075, 0.7969, 0.1333, 0.8085, 0.1574, 0.8231, 0.1769, 0.8426, 0.1915, 0.8667, 0.2031, 0.8925, 0.2149, 0.9159, 0.2299, 0.933, 0.25, 0.9418, 0.2749, 0.9432, 0.3027, 0.9405, 0.3309, 0.9385, 0.3575, 0.9414, 0.3817, 0.951, 0.4041, 0.966, 0.4262, 0.9825, 0.4493, 0.9952, 0.474, 1.0, 0.5, 0.9952, 0.526, 0.9825, 0.5507, 0.966, 0.5738, 0.951, 0.5959, 0.9414, 0.6183, 0.9385, 0.6425, 0.9405, 0.6691, 0.9432, 0.6973, 0.9418, 0.7251, 0.933, 0.75, 0.9159, 0.7701, 0.8925, 0.7851, 0.8667, 0.7969, 0.8426, 0.8085, 0.8231, 0.8231, 0.8085, 0.8426, 0.7969, 0.8667, 0.7851, 0.8925, 0.7701, 0.9159, 0.75, 0.933, 0.7251, 0.9418, 0.6973, 0.9432, 0.6691, 0.9405, 0.6425, 0.9385, 0.6183, 0.9414, 0.5959, 0.951, 0.5738, 0.966, 0.5507, 0.9825, 0.526, 0.9952, 0.5, 1.0, 0.474, 0.9952, 0.4493, 0.9825, 0.4262, 0.966, 0.4041, 0.951, 0.3817, 0.9414, 0.3575, 0.9385, 0.3309, 0.9405, 0.3027, 0.9432, 0.2749, 0.9418, 0.25, 0.933, 0.2299, 0.9159, 0.2149, 0.8925, 0.2031, 0.8667, 0.1915, 0.8426, 0.1769, 0.8231, 0.1574, 0.8085, 0.1333, 0.7969, 0.1075, 0.7851, 0.0841, 0.7701, 0.067, 0.75, 0.0582, 0.7251, 0.0568, 0.6973, 0.0595, 0.6691, 0.0615, 0.6425, 0.0586, 0.6183, 0.049, 0.5959, 0.034, 0.5738, 0.0175, 0.5507, 0.0048, 0.526, 0.0, 0.5, 0.0048, 0.474, 0.0175, 0.4493, 0.034, 0.4262, 0.049, 0.4041, 0.0586, 0.3817, 0.0615, 0.3575, 0.0595, 0.3309, 0.0568, 0.3027, 0.0582, 0.2749, 0.067, 0.25, 0.0841, 0.2299, 0.1075, 0.2149, 0.1333, 0.2031, 0.1574, 0.1915, 0.1769, 0.1769, 0.1915, 0.1574, 0.2031, 0.1333, 0.2149, 0.1075, 0.2299, 0.0841, 0.25, 0.067, 0.2749, 0.0582, 0.3027, 0.0568, 0.3309, 0.0595, 0.3575, 0.0615, 0.3817, 0.0586, 0.4041, 0.049, 0.4262, 0.034, 0.4493, 0.0175, 0.474, 0.0048], "clover4": [0.5, 0.0, 0.5261, 0.0025, 0.5515, 0.0099, 0.5757, 0.0219, 0.5982, 0.0379, 0.6186, 0.0573, 0.6367, 0.0792, 0.6524, 0.1029, 0.6659, 0.1273, 0.6775, 0.1517, 0.6875, 0.1752, 0.6966, 0.1973, 0.7053, 0.2175, 0.7143, 0.2354, 0.7243, 0.2509, 0.7357, 0.2643, 0.7491, 0.2757, 0.7646, 0.2857, 0.7825, 0.2947, 0.8027, 0.3034, 0.8248, 0.3125, 0.8483, 0.3225, 0.8727, 0.3341, 0.8971, 0.3476, 0.9208, 0.3633, 0.9427, 0.3814, 0.9621, 0.4018, 0.9781, 0.4243, 0.9901, 0.4485, 0.9975, 0.4739, 1.0, 0.5, 0.9975, 0.5261, 0.9901, 0.5515, 0.9781, 0.5757, 0.9621, 0.5982, 0.9427, 0.6186, 0.9208, 0.6367, 0.8971, 0.6524, 0.8727, 0.6659, 0.8483, 0.6775, 0.8248, 0.6875, 0.8027, 0.6966, 0.7825, 0.7053, 0.7646, 0.7143, 0.7491, 0.7243, 0.7357, 0.7357, 0.7243, 0.7491, 0.7143, 0.7646, 0.7053, 0.7825, 0.6966, 0.8027, 0.6875, 0.8248, 0.6775, 0.8483, 0.6659, 0.8727, 0.6524, 0.8971, 0.6367, 0.9208, 0.6186, 0.9427, 0.5982, 0.9621, 0.5757, 0.9781, 0.5515, 0.9901, 0.5261, 0.9975, 0.5, 1.0, 0.4739, 0.9975, 0.4485, 0.9901, 0.4243, 0.9781, 0.4018, 0.9621, 0.3814, 0.9427, 0.3633, 0.9208, 0.3476, 0.8971, 0.3341, 0.8727, 0.3225, 0.8483, 0.3125, 0.8248, 0.3034, 0.8027, 0.2947, 0.7825, 0.2857, 0.7646, 0.2757, 0.7491, 0.2643, 0.7357, 0.2509, 0.7243, 0.2354, 0.7143, 0.2175, 0.7053, 0.1973, 0.6966, 0.1752, 0.6875, 0.1517, 0.6775, 0.1273, 0.6659, 0.1029, 0.6524, 0.0792, 0.6367, 0.0573, 0.6186, 0.0379, 0.5982, 0.0219, 0.5757, 0.0099, 0.5515, 0.0025, 0.5261, 0.0, 0.5, 0.0025, 0.4739, 0.0099, 0.4485, 0.0219, 0.4243, 0.0379, 0.4018, 0.0573, 0.3814, 0.0792, 0.3633, 0.1029, 0.3476, 0.1273, 0.3341, 0.1517, 0.3225, 0.1752, 0.3125, 0.1973, 0.3034, 0.2175, 0.2947, 0.2354, 0.2857, 0.2509, 0.2757, 0.2643, 0.2643, 0.2757, 0.2509, 0.2857, 0.2354, 0.2947, 0.2175, 0.3034, 0.1973, 0.3125, 0.1752, 0.3225, 0.1517, 0.3341, 0.1273, 0.3476, 0.1029, 0.3633, 0.0792, 0.3814, 0.0573, 0.4018, 0.0379, 0.4243, 0.0219, 0.4485, 0.0099, 0.4739, 0.0025], "clover8": [0.5, 0.0, 0.5259, 0.005, 0.5506, 0.019, 0.5729, 0.04, 0.5926, 0.0645, 0.6102, 0.0888, 0.6268, 0.1097, 0.6441, 0.1247, 0.6635, 0.1328, 0.6863, 0.1344, 0.7128, 0.1314, 0.7425, 0.1266, 0.7738, 0.1232, 0.8043, 0.1242, 0.8317, 0.1316, 0.8536, 0.1464, 0.8684, 0.1683, 0.8758, 0.1957, 0.8768, 0.2262, 0.8734, 0.2575, 0.8686, 0.2872, 0.8656, 0.3137, 0.8672, 0.3365, 0.8753, 0.3559, 0.8903, 0.3732, 0.9112, 0.3898, 0.9355, 0.4074, 0.96, 0.4271, 0.981, 0.4494, 0.995, 0.4741, 1.0, 0.5, 0.995, 0.5259, 0.981, 0.5506, 0.96, 0.5729, 0.9355, 0.5926, 0.9112, 0.6102, 0.8903, 0.6268, 0.8753, 0.6441, 0.8672, 0.6635, 0.8656, 0.6863, 0.8686, 0.7128, 0.8734, 0.7425, 0.8768, 0.7738, 0.8758, 0.8043, 0.8684, 0.8317, 0.8536, 0.8536, 0.8317, 0.8684, 0.8043, 0.8758, 0.7738, 0.8768, 0.7425, 0.8734, 0.7128, 0.8686, 0.6863, 0.8656, 0.6635, 0.8672, 0.6441, 0.8753, 0.6268, 0.8903, 0.6102, 0.9112, 0.5926, 0.9355, 0.5729, 0.96, 0.5506, 0.981, 0.5259, 0.995, 0.5, 1.0, 0.4741, 0.995, 0.4494, 0.981, 0.4271, 0.96, 0.4074, 0.9355, 0.3898, 0.9112, 0.3732, 0.8903, 0.3559, 0.8753, 0.3365, 0.8672, 0.3137, 0.8656, 0.2872, 0.8686, 0.2575, 0.8734, 0.2262, 0.8768, 0.1957, 0.8758, 0.1683, 0.8684, 0.1464, 0.8536, 0.1316, 0.8317, 0.1242, 0.8043, 0.1232, 0.7738, 0.1266, 0.7425, 0.1314, 0.7128, 0.1344, 0.6863, 0.1328, 0.6635, 0.1247, 0.6441, 0.1097, 0.6268, 0.0888, 0.6102, 0.0645, 0.5926, 0.04, 0.5729, 0.019, 0.5506, 0.005, 0.5259, 0.0, 0.5, 0.005, 0.4741, 0.019, 0.4494, 0.04, 0.4271, 0.0645, 0.4074, 0.0888, 0.3898, 0.1097, 0.3732, 0.1247, 0.3559, 0.1328, 0.3365, 0.1344, 0.3137, 0.1314, 0.2872, 0.1266, 0.2575, 0.1232, 0.2262, 0.1242, 0.1957, 0.1316, 0.1683, 0.1464, 0.1464, 0.1683, 0.1316, 0.1957, 0.1242, 0.2262, 0.1232, 0.2575, 0.1266, 0.2872, 0.1314, 0.3137, 0.1344, 0.3365, 0.1328, 0.3559, 0.1247, 0.3732, 0.1097, 0.3898, 0.0888, 0.4074, 0.0645, 0.4271, 0.04, 0.4494, 0.019, 0.4741, 0.005], "sunny": [0.5, 0.0, 0.5261, 0.0011, 0.5521, 0.0045, 0.5776, 0.01, 0.6025, 0.0178, 0.6265, 0.0278, 0.6494, 0.0402, 0.6705, 0.0559, 0.6935, 0.0654, 0.7195, 0.0692, 0.7444, 0.0766, 0.7685, 0.0865, 0.7916, 0.0987, 0.8136, 0.1128, 0.8343, 0.1287, 0.8536, 0.1464, 0.8713, 0.1657, 0.8872, 0.1864, 0.9013, 0.2084, 0.9135, 0.2315, 0.9234, 0.2556, 0.9308, 0.2805, 0.9346, 0.3065, 0.9441, 0.3295, 0.9598, 0.3506, 0.9722, 0.3735, 0.9822, 0.3975, 0.99, 0.4224, 0.9955, 0.4479, 0.9989, 0.4739, 1.0, 0.5, 0.9989, 0.5261, 0.9955, 0.5521, 0.99, 0.5776, 0.9822, 0.6025, 0.9722, 0.6265, 0.9598, 0.6494, 0.9441, 0.6705, 0.9346, 0.6935, 0.9308, 0.7195, 0.9234, 0.7444, 0.9135, 0.7685, 0.9013, 0.7916, 0.8872, 0.8136, 0.8713, 0.8343, 0.8536, 0.8536, 0.8343, 0.8713, 0.8136, 0.8872, 0.7916, 0.9013, 0.7685, 0.9135, 0.7444, 0.9234, 0.7195, 0.9308, 0.6935, 0.9346, 0.6705, 0.9441, 0.6494, 0.9598, 0.6265, 0.9722, 0.6025, 0.9822, 0.5776, 0.99, 0.5521, 0.9955, 0.5261, 0.9989, 0.5, 1.0, 0.4739, 0.9989, 0.4479, 0.9955, 0.4224, 0.99, 0.3975, 0.9822, 0.3735, 0.9722, 0.3506, 0.9598, 0.3295, 0.9441, 0.3065, 0.9346, 0.2805, 0.9308, 0.2556, 0.9234, 0.2315, 0.9135, 0.2084, 0.9013, 0.1864, 0.8872, 0.1657, 0.8713, 0.1464, 0.8536, 0.1287, 0.8343, 0.1128, 0.8136, 0.0987, 0.7916, 0.0865, 0.7685, 0.0766, 0.7444, 0.0692, 0.7195, 0.0654, 0.6935, 0.0559, 0.6705, 0.0402, 0.6494, 0.0278, 0.6265, 0.0178, 0.6025, 0.01, 0.5776, 0.0045, 0.5521, 0.0011, 0.5261, 0.0, 0.5, 0.0011, 0.4739, 0.0045, 0.4479, 0.01, 0.4224, 0.0178, 0.3975, 0.0278, 0.3735, 0.0402, 0.3506, 0.0559, 0.3295, 0.0654, 0.3065, 0.0692, 0.2805, 0.0766, 0.2556, 0.0865, 0.2315, 0.0987, 0.2084, 0.1128, 0.1864, 0.1287, 0.1657, 0.1464, 0.1464, 0.1657, 0.1287, 0.1864, 0.1128, 0.2084, 0.0987, 0.2315, 0.0865, 0.2556, 0.0766, 0.2805, 0.0692, 0.3065, 0.0654, 0.3295, 0.0559, 0.3506, 0.0402, 0.3735, 0.0278, 0.3975, 0.0178, 0.4224, 0.01, 0.4479, 0.0045, 0.4739, 0.0011], "burst": [0.5, 0.0, 0.5256, 0.0123, 0.5482, 0.0417, 0.5678, 0.0717, 0.5871, 0.09, 0.6078, 0.0975, 0.6295, 0.1014, 0.6554, 0.0952, 0.6874, 0.079, 0.7217, 0.0649, 0.75, 0.067, 0.766, 0.0904, 0.7708, 0.1272, 0.7729, 0.163, 0.7804, 0.1885, 0.7946, 0.2054, 0.8115, 0.2196, 0.837, 0.2271, 0.8728, 0.2292, 0.9096, 0.234, 0.933, 0.25, 0.9351, 0.2783, 0.921, 0.3126, 0.9048, 0.3446, 0.8986, 0.3705, 0.9025, 0.3922, 0.91, 0.4129, 0.9283, 0.4322, 0.9583, 0.4518, 0.9877, 0.4744, 1.0, 0.5, 0.9877, 0.5256, 0.9583, 0.5482, 0.9283, 0.5678, 0.91, 0.5871, 0.9025, 0.6078, 0.8986, 0.6295, 0.9048, 0.6554, 0.921, 0.6874, 0.9351, 0.7217, 0.933, 0.75, 0.9096, 0.766, 0.8728, 0.7708, 0.837, 0.7729, 0.8115, 0.7804, 0.7946, 0.7946, 0.7804, 0.8115, 0.7729, 0.837, 0.7708, 0.8728, 0.766, 0.9096, 0.75, 0.933, 0.7217, 0.9351, 0.6874, 0.921, 0.6554, 0.9048, 0.6295, 0.8986, 0.6078, 0.9025, 0.5871, 0.91, 0.5678, 0.9283, 0.5482, 0.9583, 0.5256, 0.9877, 0.5, 1.0, 0.4744, 0.9877, 0.4518, 0.9583, 0.4322, 0.9283, 0.4129, 0.91, 0.3922, 0.9025, 0.3705, 0.8986, 0.3446, 0.9048, 0.3126, 0.921, 0.2783, 0.9351, 0.25, 0.933, 0.234, 0.9096, 0.2292, 0.8728, 0.2271, 0.837, 0.2196, 0.8115, 0.2054, 0.7946, 0.1885, 0.7804, 0.163, 0.7729, 0.1272, 0.7708, 0.0904, 0.766, 0.067, 0.75, 0.0649, 0.7217, 0.079, 0.6874, 0.0952, 0.6554, 0.1014, 0.6295, 0.0975, 0.6078, 0.09, 0.5871, 0.0717, 0.5678, 0.0417, 0.5482, 0.0123, 0.5256, 0.0, 0.5, 0.0123, 0.4744, 0.0417, 0.4518, 0.0717, 0.4322, 0.09, 0.4129, 0.0975, 0.3922, 0.1014, 0.3705, 0.0952, 0.3446, 0.079, 0.3126, 0.0649, 0.2783, 0.067, 0.25, 0.0904, 0.234, 0.1272, 0.2292, 0.163, 0.2271, 0.1885, 0.2196, 0.2054, 0.2054, 0.2196, 0.1885, 0.2271, 0.163, 0.2292, 0.1272, 0.234, 0.0904, 0.25, 0.067, 0.2783, 0.0649, 0.3126, 0.079, 0.3446, 0.0952, 0.3705, 0.1014, 0.3922, 0.0975, 0.4129, 0.09, 0.4322, 0.0717, 0.4518, 0.0417, 0.4744, 0.0123], "square": [0.5, 0.0939, 0.5213, 0.0939, 0.5427, 0.0939, 0.5643, 0.0939, 0.5863, 0.0939, 0.6088, 0.094, 0.6319, 0.0942, 0.6556, 0.0945, 0.6802, 0.0953, 0.7055, 0.0966, 0.7316, 0.0989, 0.758, 0.1027, 0.7844, 0.1086, 0.8098, 0.1174, 0.8332, 0.1299, 0.8536, 0.1464, 0.8701, 0.1668, 0.8826, 0.1902, 0.8914, 0.2156, 0.8973, 0.242, 0.9011, 0.2684, 0.9034, 0.2945, 0.9047, 0.3198, 0.9055, 0.3444, 0.9058, 0.3681, 0.906, 0.3912, 0.9061, 0.4137, 0.9061, 0.4357, 0.9061, 0.4573, 0.9061, 0.4787, 0.9061, 0.5, 0.9061, 0.5213, 0.9061, 0.5427, 0.9061, 0.5643, 0.9061, 0.5863, 0.906, 0.6088, 0.9058, 0.6319, 0.9055, 0.6556, 0.9047, 0.6802, 0.9034, 0.7055, 0.9011, 0.7316, 0.8973, 0.758, 0.8914, 0.7844, 0.8826, 0.8098, 0.8701, 0.8332, 0.8536, 0.8536, 0.8332, 0.8701, 0.8098, 0.8826, 0.7844, 0.8914, 0.758, 0.8973, 0.7316, 0.9011, 0.7055, 0.9034, 0.6802, 0.9047, 0.6556, 0.9055, 0.6319, 0.9058, 0.6088, 0.906, 0.5863, 0.9061, 0.5643, 0.9061, 0.5427, 0.9061, 0.5213, 0.9061, 0.5, 0.9061, 0.4787, 0.9061, 0.4573, 0.9061, 0.4357, 0.9061, 0.4137, 0.9061, 0.3912, 0.906, 0.3681, 0.9058, 0.3444, 0.9055, 0.3198, 0.9047, 0.2945, 0.9034, 0.2684, 0.9011, 0.242, 0.8973, 0.2156, 0.8914, 0.1902, 0.8826, 0.1668, 0.8701, 0.1464, 0.8536, 0.1299, 0.8332, 0.1174, 0.8098, 0.1086, 0.7844, 0.1027, 0.758, 0.0989, 0.7316, 0.0966, 0.7055, 0.0953, 0.6802, 0.0945, 0.6556, 0.0942, 0.6319, 0.094, 0.6088, 0.0939, 0.5863, 0.0939, 0.5643, 0.0939, 0.5427, 0.0939, 0.5213, 0.0939, 0.5, 0.0939, 0.4787, 0.0939, 0.4573, 0.0939, 0.4357, 0.0939, 0.4137, 0.094, 0.3912, 0.0942, 0.3681, 0.0945, 0.3444, 0.0953, 0.3198, 0.0966, 0.2945, 0.0989, 0.2684, 0.1027, 0.242, 0.1086, 0.2156, 0.1174, 0.1902, 0.1299, 0.1668, 0.1464, 0.1464, 0.1668, 0.1299, 0.1902, 0.1174, 0.2156, 0.1086, 0.242, 0.1027, 0.2684, 0.0989, 0.2945, 0.0966, 0.3198, 0.0953, 0.3444, 0.0945, 0.3681, 0.0942, 0.3912, 0.094, 0.4137, 0.0939, 0.4357, 0.0939, 0.4573, 0.0939, 0.4787, 0.0939], "soft4": [0.5, 0.0121, 0.5252, 0.0195, 0.5495, 0.0291, 0.5728, 0.0406, 0.5949, 0.0534, 0.616, 0.0672, 0.636, 0.0816, 0.6551, 0.096, 0.6735, 0.1103, 0.6916, 0.1241, 0.7094, 0.1373, 0.7274, 0.1499, 0.7457, 0.1619, 0.7644, 0.1735, 0.7838, 0.1848, 0.8037, 0.1963, 0.8242, 0.2081, 0.845, 0.2206, 0.8659, 0.2342, 0.8865, 0.249, 0.9065, 0.2653, 0.9254, 0.2832, 0.9428, 0.3029, 0.9582, 0.3241, 0.9712, 0.3469, 0.9816, 0.371, 0.989, 0.3961, 0.9933, 0.4219, 0.9945, 0.448, 0.9927, 0.4742, 0.9879, 0.5, 0.9805, 0.5252, 0.9709, 0.5495, 0.9594, 0.5728, 0.9466, 0.5949, 0.9328, 0.616, 0.9184, 0.636, 0.904, 0.6551, 0.8897, 0.6735, 0.8759, 0.6916, 0.8627, 0.7094, 0.8501, 0.7274, 0.8381, 0.7457, 0.8265, 0.7644, 0.8152, 0.7838, 0.8037, 0.8037, 0.7919, 0.8242, 0.7794, 0.845, 0.7658, 0.8659, 0.751, 0.8865, 0.7347, 0.9065, 0.7168, 0.9254, 0.6971, 0.9428, 0.6759, 0.9582, 0.6531, 0.9712, 0.629, 0.9816, 0.6039, 0.989, 0.5781, 0.9933, 0.552, 0.9945, 0.5258, 0.9927, 0.5, 0.9879, 0.4748, 0.9805, 0.4505, 0.9709, 0.4272, 0.9594, 0.4051, 0.9466, 0.384, 0.9328, 0.364, 0.9184, 0.3449, 0.904, 0.3265, 0.8897, 0.3084, 0.8759, 0.2906, 0.8627, 0.2726, 0.8501, 0.2543, 0.8381, 0.2356, 0.8265, 0.2162, 0.8152, 0.1963, 0.8037, 0.1758, 0.7919, 0.155, 0.7794, 0.1341, 0.7658, 0.1135, 0.751, 0.0935, 0.7347, 0.0746, 0.7168, 0.0572, 0.6971, 0.0418, 0.6759, 0.0288, 0.6531, 0.0184, 0.629, 0.011, 0.6039, 0.0067, 0.5781, 0.0055, 0.552, 0.0073, 0.5258, 0.0121, 0.5, 0.0195, 0.4748, 0.0291, 0.4505, 0.0406, 0.4272, 0.0534, 0.4051, 0.0672, 0.384, 0.0816, 0.364, 0.096, 0.3449, 0.1103, 0.3265, 0.1241, 0.3084, 0.1373, 0.2906, 0.1499, 0.2726, 0.1619, 0.2543, 0.1735, 0.2356, 0.1848, 0.2162, 0.1963, 0.1963, 0.2081, 0.1758, 0.2206, 0.155, 0.2342, 0.1341, 0.249, 0.1135, 0.2653, 0.0935, 0.2832, 0.0746, 0.3029, 0.0572, 0.3241, 0.0418, 0.3469, 0.0288, 0.371, 0.0184, 0.3961, 0.011, 0.4219, 0.0067, 0.448, 0.0055, 0.4742, 0.0073], "pent": [0.5, 0.0, 0.5261, 0.0018, 0.5518, 0.0071, 0.5767, 0.0156, 0.6006, 0.0269, 0.6231, 0.0405, 0.6444, 0.0556, 0.6644, 0.0717, 0.6834, 0.0881, 0.7016, 0.1043, 0.7195, 0.1198, 0.7373, 0.1346, 0.7554, 0.1484, 0.7742, 0.1614, 0.7937, 0.1738, 0.8141, 0.1859, 0.8351, 0.1983, 0.8566, 0.2113, 0.878, 0.2253, 0.899, 0.2409, 0.9188, 0.2582, 0.937, 0.2774, 0.9528, 0.2984, 0.9657, 0.3212, 0.9755, 0.3455, 0.9819, 0.3709, 0.9848, 0.397, 0.9844, 0.4233, 0.981, 0.4494, 0.9751, 0.4751, 0.9673, 0.5, 0.9582, 0.524, 0.9485, 0.5471, 0.9387, 0.5695, 0.9294, 0.5913, 0.9208, 0.6128, 0.9133, 0.6343, 0.9068, 0.6561, 0.901, 0.6785, 0.8957, 0.7016, 0.8905, 0.7255, 0.8848, 0.7499, 0.878, 0.7747, 0.8697, 0.7994, 0.8594, 0.8236, 0.8468, 0.8468, 0.8316, 0.8683, 0.814, 0.8877, 0.7939, 0.9045, 0.7717, 0.9184, 0.7478, 0.9292, 0.7226, 0.937, 0.6967, 0.9418, 0.6705, 0.9442, 0.6444, 0.9444, 0.6188, 0.9432, 0.5938, 0.9411, 0.5695, 0.9387, 0.5459, 0.9366, 0.5228, 0.9351, 0.5, 0.9346, 0.4772, 0.9351, 0.4541, 0.9366, 0.4305, 0.9387, 0.4062, 0.9411, 0.3812, 0.9432, 0.3556, 0.9444, 0.3295, 0.9442, 0.3033, 0.9418, 0.2774, 0.937, 0.2522, 0.9292, 0.2283, 0.9184, 0.2061, 0.9045, 0.186, 0.8877, 0.1684, 0.8683, 0.1532, 0.8468, 0.1406, 0.8236, 0.1303, 0.7994, 0.122, 0.7747, 0.1152, 0.7499, 0.1095, 0.7255, 0.1043, 0.7016, 0.099, 0.6785, 0.0932, 0.6561, 0.0867, 0.6343, 0.0792, 0.6128, 0.0706, 0.5913, 0.0613, 0.5695, 0.0515, 0.5471, 0.0418, 0.524, 0.0327, 0.5, 0.0249, 0.4751, 0.019, 0.4494, 0.0156, 0.4233, 0.0152, 0.397, 0.0181, 0.3709, 0.0245, 0.3455, 0.0343, 0.3212, 0.0472, 0.2984, 0.063, 0.2774, 0.0812, 0.2582, 0.101, 0.2409, 0.122, 0.2253, 0.1434, 0.2113, 0.1649, 0.1983, 0.1859, 0.1859, 0.2063, 0.1738, 0.2258, 0.1614, 0.2446, 0.1484, 0.2627, 0.1346, 0.2805, 0.1198, 0.2984, 0.1043, 0.3166, 0.0881, 0.3356, 0.0717, 0.3556, 0.0556, 0.3769, 0.0405, 0.3994, 0.0269, 0.4233, 0.0156, 0.4482, 0.0071, 0.4739, 0.0018], "heart": [0.5, 0.2738, 0.5001, 0.2723, 0.5005, 0.2673, 0.5018, 0.259, 0.5042, 0.2485, 0.5082, 0.2348, 0.5142, 0.2188, 0.5217, 0.2023, 0.5321, 0.1837, 0.5449, 0.1646, 0.5593, 0.1468, 0.5772, 0.1287, 0.5975, 0.1119, 0.6187, 0.0978, 0.6433, 0.0853, 0.6697, 0.0757, 0.6959, 0.0695, 0.7247, 0.0664, 0.7542, 0.0669, 0.782, 0.0709, 0.8112, 0.0787, 0.8395, 0.0901, 0.8649, 0.104, 0.8901, 0.1219, 0.9129, 0.1427, 0.9319, 0.1646, 0.9489, 0.19, 0.9625, 0.2172, 0.9718, 0.2441, 0.9779, 0.2736, 0.98, 0.3038, 0.9782, 0.3326, 0.9723, 0.3632, 0.9625, 0.3937, 0.9498, 0.4221, 0.9329, 0.4517, 0.9129, 0.4808, 0.8915, 0.5076, 0.8665, 0.5355, 0.8395, 0.5627, 0.8129, 0.5878, 0.7837, 0.6139, 0.7542, 0.6395, 0.7264, 0.6632, 0.6976, 0.6878, 0.6697, 0.712, 0.6448, 0.7344, 0.6201, 0.7575, 0.5975, 0.78, 0.5783, 0.8004, 0.5603, 0.8212, 0.5449, 0.8409, 0.5328, 0.8581, 0.5223, 0.875, 0.5142, 0.8901, 0.5085, 0.9026, 0.5044, 0.9137, 0.5018, 0.9225, 0.5006, 0.9286, 0.5001, 0.9325, 0.5, 0.9338, 0.4999, 0.9327, 0.4995, 0.9289, 0.4982, 0.9225, 0.4958, 0.9143, 0.4918, 0.9033, 0.4858, 0.8901, 0.4783, 0.8759, 0.4679, 0.8592, 0.4551, 0.8409, 0.4407, 0.8224, 0.4228, 0.8017, 0.4025, 0.78, 0.3813, 0.7588, 0.3567, 0.7357, 0.3303, 0.712, 0.3041, 0.6893, 0.2753, 0.6646, 0.2458, 0.6395, 0.218, 0.6154, 0.1888, 0.5894, 0.1605, 0.5627, 0.1351, 0.5371, 0.1099, 0.5093, 0.0871, 0.4808, 0.0681, 0.4535, 0.0511, 0.4238, 0.0375, 0.3937, 0.0282, 0.365, 0.0221, 0.3344, 0.02, 0.3038, 0.0218, 0.2754, 0.0277, 0.2458, 0.0375, 0.2172, 0.0502, 0.1916, 0.0671, 0.1661, 0.0871, 0.1427, 0.1085, 0.1231, 0.1335, 0.105, 0.1605, 0.0901, 0.1871, 0.0792, 0.2163, 0.0712, 0.2458, 0.0669, 0.2736, 0.0663, 0.3024, 0.0692, 0.3303, 0.0757, 0.3552, 0.0847, 0.3799, 0.097, 0.4025, 0.1119, 0.4217, 0.1276, 0.4397, 0.1457, 0.4551, 0.1646, 0.4672, 0.1826, 0.4777, 0.2012, 0.4858, 0.2188, 0.4915, 0.2339, 0.4956, 0.2478, 0.4982, 0.259, 0.4994, 0.2669, 0.4999, 0.2721]};
+const P=(a,s=1,ox=0,oy=0)=>{let d='M'+(a[0]*s+ox).toFixed(4)+' '+(a[1]*s+oy).toFixed(4);for(let i=2;i<a.length;i+=2)d+='L'+(a[i]*s+ox).toFixed(4)+' '+(a[i+1]*s+oy).toFixed(4);return d+'Z'};
+document.querySelectorAll('[data-shape]').forEach(p=>p.setAttribute('d',P(SH[p.dataset.shape])));
+const $=id=>document.getElementById(id), RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SN=['cookie9','clover4','sunny','square','clover8','cookie12','heart','soft4','burst','pent','cookie6','cookie4'];
+const ease=t=>{const c=2.2,x=t-1;return 1+(c+1)*x*x*x+c*x*x};
 
-/* морф аватара */
-const order=['cookie9','clover4','sunny','squircle','flower','cookie12','heart','soft4'];
-const bp=document.getElementById('bp'), bu=document.getElementById('bu'), av=document.getElementById('av');
-let cur=SH.cookie9.slice(), from=cur, to=cur, mt=1, si=0, rot=0, rv=0, spin=0, last=performance.now();
-const ease=t=>{const c=2.38,x=t-1;return 1+(c+1)*x*x*x+c*x*x};
-function next(){ si=(si+1)%order.length; from=cur.slice(); to=SH[order[si]]; mt=0; spin+=45; }
-setInterval(next, 3000); av.addEventListener('click',()=>{next(); spin+=135;});
-function frame(now){
-  const dt=Math.min(48,now-last); last=now;
-  if(mt<1){ mt=Math.min(1,mt+dt/750); const k=ease(mt); for(let i=0;i<cur.length;i++) cur[i]=from[i]+(to[i]-from[i])*k; }
-  rv+=((spin-rot)*.012-rv*.16)*dt/16; rot+=rv*dt/16;
-  const d=P(cur), t=`rotate(${rot.toFixed(2)} .5 .5)`;
-  bp.setAttribute('d',d); bp.setAttribute('transform',t); bu.setAttribute('d',d); bu.setAttribute('transform',t);
-  requestAnimationFrame(frame);
+/* morph helper */
+function morpher(paths, list, period, dur){
+  let cur=SH[list[0]].slice(), from=cur, to=cur, t=1, i=0, rot=0, rv=0, spin=0;
+  const o={next(extra=0){i=(i+1)%list.length;from=cur.slice();to=SH[list[i]];t=0;spin+=45+extra},
+    step(dt){ if(t<1){t=Math.min(1,t+dt/dur);const k=ease(t);for(let j=0;j<cur.length;j++)cur[j]=from[j]+(to[j]-from[j])*k}
+      rv+=((spin-rot)*.012-rv*.16)*dt/16; rot+=rv*dt/16;
+      const d=P(cur), tr=`rotate(${rot.toFixed(2)} .5 .5)`; paths.forEach(p=>{p.setAttribute('d',d);p.setAttribute('transform',tr)}); }};
+  if(period) setInterval(()=>o.next(),period);
+  return o;
 }
+const loadM=morpher([$('lp')],['cookie9','clover4','sunny','pent','burst','cookie4'],0,420);
+const avM=morpher([$('bp'),$('bu')],SN,3200,750);
+$('av').addEventListener('click',e=>{avM.next(135);burst(e.clientX,e.clientY,10)});
 
-/* лента снизу вверх */
-const track=document.getElementById('track'), panels=[...document.querySelectorAll('.panel')], rail=document.getElementById('rail'), prog=document.getElementById('prog');
-panels.forEach((p,i)=>{ const b=document.createElement('button'); b.setAttribute('aria-label',p.dataset.t); b.innerHTML=`<span>${p.dataset.t}</span>`; b.onclick=()=>go(i); rail.appendChild(b); });
-const dots=[...rail.children];
-const H=()=>track.clientHeight;
-// позиция секции i: 0 = низ (scrollTop максимальный)
-const topOf=i=>panels[i].offsetTop;
-let idx=0, lock=0;
-function go(i){ i=Math.max(0,Math.min(panels.length-1,i)); track.scrollTo({top:topOf(i),behavior:'smooth'}); }
-track.addEventListener('wheel',e=>{
-  e.preventDefault(); const now=performance.now(); if(now<lock||Math.abs(e.deltaY)<4) return;
-  lock=now+700; go(idx+(e.deltaY>0?1:-1));   // колесо вниз = подняться выше
-},{passive:false});
-addEventListener('keydown',e=>{
-  if(['ArrowUp','ArrowDown','PageUp','PageDown',' ','Home','End'].includes(e.key)) e.preventDefault();
-  if(['ArrowUp','PageUp',' ','ArrowRight'].includes(e.key)) go(idx+1);
-  if(['ArrowDown','PageDown','ArrowLeft'].includes(e.key)) go(idx-1);
-  if(e.key==='Home') go(0); if(e.key==='End') go(panels.length-1);
-});
-function onScroll(){
-  let best=0, bd=1e9; panels.forEach((p,i)=>{ const d=Math.abs(p.offsetTop-track.scrollTop); if(d<bd){bd=d;best=i;} });
-  if(best!==idx||!dots[idx].classList.contains('on')){ idx=best; dots.forEach((d,j)=>d.classList.toggle('on',j===idx)); }
-  panels.forEach(p=>{ if(Math.abs(p.offsetTop-track.scrollTop)<H()*.6) p.classList.add('in'); });
-  const max=track.scrollHeight-H()||1; prog.style.height=(Math.min(1,Math.abs(track.scrollTop)/max)*100)+'%';
-}
-track.addEventListener('scroll',onScroll,{passive:true});
-addEventListener('resize',()=>{ track.scrollTo({top:topOf(idx)}); fit(); });
+/* boot */
+let bootT=setInterval(()=>loadM.next(),450);
+function done(){ $('boot').classList.add('done'); clearInterval(bootT); }
+addEventListener('load',()=>setTimeout(done,350)); setTimeout(done,1600);
 
-/* имя по ширине */
-const nm=document.getElementById('name'); nm.setAttribute('aria-label','R Λ Z Ξ'); nm.innerHTML=[...nm.textContent].map(c=>`<span>${c}</span>`).join('');
-function fit(){ const w=nm.parentElement.clientWidth; nm.style.fontSize='100px'; nm.style.fontSize=Math.min(200,100*w/nm.scrollWidth*.97)+'px'; }
-
-/* тема */
-const root=document.documentElement, meta=document.querySelector('meta[name=theme-color]');
-const setT=t=>{ root.dataset.theme=t; meta.content=t==='dark'?'#16110f':'#fff8f6'; try{localStorage.t=t}catch(_){} };
+/* theme switch */
+const root=document.documentElement, meta=document.querySelector('meta[name=theme-color]'), sw=$('sw');
+function setT(t){root.dataset.theme=t;sw.setAttribute('aria-checked',t==='dark');meta.content=t==='dark'?'#1a110f':'#fff8f6';try{localStorage.t=t}catch(_){}}
 setT((()=>{try{return localStorage.t}catch(_){}})()||'dark');
-document.getElementById('theme').onclick=()=>setT(root.dataset.theme==='dark'?'light':'dark');
+sw.onclick=()=>setT(root.dataset.theme==='dark'?'light':'dark');
 
-/* ID */
-const ido=document.getElementById('ido');
-document.getElementById('idc').onclick=()=>{ navigator.clipboard&&navigator.clipboard.writeText('318357554').then(()=>{ido.textContent='скопировано';setTimeout(()=>ido.textContent='копировать',1500)}).catch(()=>{}); };
+/* name fit + letters */
+const nm=$('name'); nm.setAttribute('aria-label','R Λ Z Ξ'); nm.innerHTML=[...nm.textContent].map(c=>`<span>${c}</span>`).join('');
+function fit(){const w=nm.parentElement.clientWidth;nm.style.fontSize='100px';nm.style.fontSize=Math.min(170,100*w/nm.scrollWidth*.92)+'px'}
+nm.addEventListener('click',e=>{burst(e.clientX,e.clientY,14);kick()});
 
-/* старт снизу */
-function start(){ fit(); track.scrollTop=topOf(0); onScroll(); panels[0].classList.add('in'); }
-start(); document.fonts&&document.fonts.ready.then(()=>{fit(); track.scrollTop=topOf(idx);}); addEventListener('load',()=>track.scrollTop=topOf(idx));
-requestAnimationFrame(frame);
+/* ═══ физика фигур ═══ */
+const pit=$('pit'), LABELS=['Python','Heroku','Femboy','09.11','11?','RU','@rz3nx','One Piece','plugins','UwU','mya','real'];
+const FILLS=[['--primary','--on-primary'],['--tc','--on-tc'],['--secondary','--on-primary'],['--pc','--on-pc'],['--tertiary','--on-primary']];
+const bodies=[]; let W=0,H=0, pitVisible=true;
+function size(){W=pit.clientWidth;H=pit.clientHeight}
+function add(label,x,y){
+  const small=W<600, r=(small?34:44)+Math.random()*(small?14:22), el=document.createElement('div'), f=FILLS[bodies.length%FILLS.length], sh=SN[(bodies.length*5)%SN.length];
+  el.className='body'; el.style.width=el.style.height=r*2+'px';
+  el.innerHTML=`<svg viewBox="0 0 1 1"><path d="${P(SH[sh])}" style="fill:var(${f[0]})"/></svg><span style="color:var(${f[1]});font-size:${Math.max(12,r*.32)}px">${label}</span>`;
+  pit.appendChild(el);
+  const sv=el.querySelector('svg'), lb=el.querySelector('span');
+  const b={el,sv,lb,r,x:x??(r+Math.random()*(W-2*r)),y:y??(-r-Math.random()*H*.8),vx:(Math.random()-.5)*4,vy:0,a:Math.random()*360,va:0,drag:null};
+  bodies.push(b); bindDrag(b); return b;
+}
+function bindDrag(b){
+  b.el.addEventListener('pointerdown',e=>{e.preventDefault();b.el.setPointerCapture(e.pointerId);const R=pit.getBoundingClientRect();
+    b.drag={ox:e.clientX-R.left-b.x,oy:e.clientY-R.top-b.y,lx:e.clientX,ly:e.clientY,t:performance.now()};b.vx=b.vy=0;$('hint').style.opacity=0});
+  b.el.addEventListener('pointermove',e=>{if(!b.drag)return;const R=pit.getBoundingClientRect(),now=performance.now(),dt=Math.max(8,now-b.drag.t);
+    const nx=e.clientX-R.left-b.drag.ox, ny=e.clientY-R.top-b.drag.oy;
+    b.vx=(e.clientX-b.drag.lx)/dt*16; b.vy=(e.clientY-b.drag.ly)/dt*16; b.x=nx; b.y=ny; b.drag.lx=e.clientX; b.drag.ly=e.clientY; b.drag.t=now});
+  const up=()=>{if(b.drag){b.drag=null;b.vx=Math.max(-40,Math.min(40,b.vx));b.vy=Math.max(-40,Math.min(40,b.vy))}};
+  b.el.addEventListener('pointerup',up); b.el.addEventListener('pointercancel',up);
+}
+function kick(){bodies.forEach(b=>{b.vy-=10+Math.random()*10;b.vx+=(Math.random()-.5)*14;b.va+=(Math.random()-.5)*20})}
+let gx=0, gy=.55;
+addEventListener('deviceorientation',e=>{ if(e.gamma==null)return; gx=Math.max(-1,Math.min(1,e.gamma/45))*.5; gy=.55*Math.max(.2,Math.min(1,(e.beta||45)/45)); });
+function physics(dt){
+  const k=Math.min(2,dt/16);
+  for(const b of bodies){ if(b.drag) continue;
+    b.vx+=gx*k; b.vy+=gy*k; b.vx*=.995; b.vy*=.995; b.x+=b.vx*k; b.y+=b.vy*k;
+    if(b.x<b.r){b.x=b.r;b.vx*=-.55} if(b.x>W-b.r){b.x=W-b.r;b.vx*=-.55}
+    if(b.y>H-b.r){b.y=H-b.r;b.vy*=-.42;b.vx*=.94} if(b.y<-H){b.y=-H;b.vy=0}
+    b.va=b.va*.96+(b.vx/b.r)*1.2; }
+  for(let it=0;it<3;it++) for(let i=0;i<bodies.length;i++) for(let j=i+1;j<bodies.length;j++){
+    const A=bodies[i],B=bodies[j],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy)||.01,m=(A.r+B.r)*.94;
+    if(d<m){ const o=(m-d)/2,nx=dx/d,ny=dy/d, wa=A.drag?0:(B.drag?2:1), wb=B.drag?0:(A.drag?2:1);
+      A.x-=nx*o*wa;A.y-=ny*o*wa;B.x+=nx*o*wb;B.y+=ny*o*wb;
+      const rv=(B.vx-A.vx)*nx+(B.vy-A.vy)*ny; if(rv<0){const im=-rv*.75; if(!A.drag){A.vx-=im*nx*.5*wa;A.vy-=im*ny*.5*wa} if(!B.drag){B.vx+=im*nx*.5*wb;B.vy+=im*ny*.5*wb}} } }
+  for(const b of bodies){ b.a+=b.va*k; b.el.style.transform=`translate(${(b.x-b.r).toFixed(1)}px,${(b.y-b.r).toFixed(1)}px)`; b.sv.style.transform=`rotate(${b.a.toFixed(1)}deg)`; b.lb.style.transform=`rotate(${(Math.sin(b.a*Math.PI/180)*12).toFixed(1)}deg)`; }
+}
+
+/* частицы-фигуры */
+function burst(x,y,n=16){ if(RM) return;
+  const cols=['--primary','--tc','--pc','--sc','--secondary'];
+  for(let i=0;i<n;i++){ const el=document.createElement('div'), a=Math.random()*Math.PI*2, d=80+Math.random()*160, s=14+Math.random()*22;
+    el.className='pt'; el.style.cssText=`--s:${s}px;--d:${700+Math.random()*500}ms;--x0:${x-s/2}px;--y0:${y-s/2}px;--x1:${x-s/2+Math.cos(a)*d}px;--y1:${y-s/2+Math.sin(a)*d+60}px;--r:${(Math.random()-.5)*540}deg`;
+    el.innerHTML=`<svg viewBox="0 0 1 1"><path d="${P(SH[SN[i%SN.length]])}" style="fill:var(${cols[i%cols.length]})"/></svg>`;
+    document.body.appendChild(el); setTimeout(()=>el.remove(),1300); } }
+
+/* постер */
+let cnt=0; const cntEl=$('cnt');
+$('poster').addEventListener('click',e=>{cnt++;cntEl.textContent=(cnt>=10?'REAL!! · ':'real · ')+cnt;cntEl.classList.add('pop');setTimeout(()=>cntEl.classList.remove('pop'),180);burst(e.clientX,e.clientY,cnt>=10?26:14)});
+
+/* split button copy */
+const split=$('split');
+function copyID(e){ (navigator.clipboard?navigator.clipboard.writeText('318357554'):Promise.reject()).then(()=>{snack('ID скопирован');split.classList.add('ok');setTimeout(()=>split.classList.remove('ok'),1500);if(e)burst(e.clientX,e.clientY,8)}).catch(()=>snack('ID: 318357554')); }
+$('idA').onclick=copyID; $('idB').onclick=copyID;
+let snT; function snack(t){const s=$('snack');s.textContent=t;s.classList.add('on');clearTimeout(snT);snT=setTimeout(()=>s.classList.remove('on'),1800)}
+
+/* FAB menu */
+const fab=$('fab'), menu=$('menu');
+const setMenu=o=>{fab.setAttribute('aria-expanded',o);menu.classList.toggle('open',o)};
+fab.onclick=()=>setMenu(fab.getAttribute('aria-expanded')!=='true');
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('.fabw'))setMenu(false)});
+$('mShape').onclick=e=>{ add(LABELS[bodies.length%LABELS.length]); $('s0').scrollIntoView({behavior:'smooth'}); setMenu(false) };
+$('mBurst').onclick=e=>{ burst(e.clientX,e.clientY,30); setTimeout(()=>burst(innerWidth/2,innerHeight/3,24),200); setMenu(false) };
+
+/* toolbar + scroll */
+const tbs=[...document.querySelectorAll('.tb')], secs=tbs.map(b=>$(b.dataset.to));
+tbs.forEach(b=>b.onclick=()=>window.scrollTo({top:$(b.dataset.to).offsetTop-(b.dataset.to==='s0'?0:24),behavior:RM?'auto':'smooth'}));
+function onScroll(){
+  let a=0; secs.forEach((s,i)=>{ if(s.getBoundingClientRect().top<innerHeight*.45) a=i; });
+  if(innerHeight+scrollY>=document.documentElement.scrollHeight-4) a=secs.length-1;
+  tbs.forEach((b,i)=>b.classList.toggle('on',i===a));
+}
+addEventListener('scroll',onScroll,{passive:true});
+
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=((i%4)*60)+'ms';io.observe(el)});
+new IntersectionObserver(es=>{pitVisible=es[0].isIntersecting}).observe(pit);
+
+/* wavy progress */
+const pwv=$('pwv'), ptr=$('ptr');
+function prog(now){ const max=document.documentElement.scrollHeight-innerHeight||1, k=Math.min(1,scrollY/max), w=1000*k, ph=now*.006;
+  let d='M0 7'; for(let x=0;x<=w;x+=5) d+=`L${x.toFixed(0)} ${(7+Math.sin(x/16-ph)*3.2*Math.min(1,k*8)).toFixed(2)}`;
+  pwv.setAttribute('d',w<1?'':d); ptr.setAttribute('x1',Math.min(1000,w+(w>0?14:0))); }
+
+/* ripple */
+document.querySelectorAll('.rp').forEach(el=>el.addEventListener('pointerdown',e=>{const r=el.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2,s=document.createElement('span');
+  s.className='rip';s.style.width=s.style.height=d+'px';s.style.left=(e.clientX-r.left)+'px';s.style.top=(e.clientY-r.top)+'px';el.appendChild(s);setTimeout(()=>s.remove(),650)}));
+
+/* loop */
+let last=performance.now();
+function frame(now){ const dt=Math.min(40,now-last); last=now;
+  if(!$('boot').classList.contains('done')) loadM.step(dt);
+  avM.step(dt); if(pitVisible && !RM) physics(dt); prog(now); requestAnimationFrame(frame); }
+function init(){ size(); fit(); const n=W<600?8:11; for(let i=0;i<n;i++) add(LABELS[i]); if(RM){ bodies.forEach((b,i)=>{b.y=H-b.r-(i%2)*b.r*1.6; b.x=b.r+(i*(W-2*b.r)/n)}); physics(16);} onScroll(); requestAnimationFrame(frame); }
+addEventListener('resize',()=>{size();fit()});
+document.fonts&&document.fonts.ready.then(fit);
+init();
 </script>
 </body>
 </html>
