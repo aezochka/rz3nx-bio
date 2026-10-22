@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Aèzα — R Λ Z Ξ</title>
-<meta name="description" content="R Λ Z Ξ · Aeza · @rz3nx">
-<meta property="og:title" content="R Λ Z Ξ"><meta property="og:description" content="Aeza · модули и плагины на Python"><meta property="og:image" content="avatar.jpg">
+<meta name="description" content="Aèzα · @rz3nx — Android на Kotlin + Compose в стиле Material 3 Expressive, модули на Python.">
+<meta property="og:type" content="profile"><meta property="og:site_name" content="aezo.loc.cc"><meta property="og:url" content="https://bio.aezo.loc.cc/"><meta property="og:title" content="RΛZΞ — Aèzα"><meta property="og:description" content="@rz3nx · Kotlin, Compose, M3E · проекты, ссылки, гостевая стена"><meta property="og:image" content="https://bio.aezo.loc.cc/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://bio.aezo.loc.cc/og.jpg">
 <link rel="icon" href="avatar.jpg">
 <meta name="theme-color" content="#141218">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -238,6 +238,33 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 @media (max-width:700px){
   .projects{grid-template-columns:minmax(0,1fr)}.proj,.proj.big,.proj:nth-child(4),.proj:nth-child(5){grid-column:auto;min-height:230px}
 }
+
+/* ── стена ── */
+.wform{background:var(--c1);border-radius:32px;padding:18px;display:flex;flex-direction:column;gap:10px;max-width:640px}
+.wshapes{display:flex;gap:6px;flex-wrap:wrap}
+.wsh{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:var(--c2);transition:border-radius .45s var(--spring),background .25s,transform .45s var(--spring)}
+.wsh svg{width:26px;height:26px}.wsh path{fill:var(--fg2);transition:fill .25s}
+.wsh[aria-checked=true]{background:var(--primary);border-radius:22px;transform:rotate(-8deg)}.wsh[aria-checked=true] path{fill:var(--on-primary)}
+.wf{width:100%;height:56px;border:0;border-radius:16px;background:var(--c2);color:var(--fg);padding:0 18px;font:500 16px "Roboto Flex",system-ui;letter-spacing:.2px;outline:none;
+  box-shadow:inset 0 -2px 0 var(--ov);transition:box-shadow .2s,border-radius .4s var(--spring)}
+.wf:focus{box-shadow:inset 0 -3px 0 var(--primary);border-radius:12px}
+.wf::placeholder{color:var(--fg2);opacity:.7}
+.wrow{display:flex;gap:8px}
+.wsend{flex:0 0 56px;height:56px;border-radius:18px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center;transition:border-radius .45s var(--spring),transform .45s var(--spring)}
+.wsend svg{width:22px;height:22px;fill:currentColor;transition:transform .5s var(--spring)}
+.wsend:hover{border-radius:28px}.wsend:active svg{transform:translateX(6px) rotate(-20deg)}
+.wcount{font-size:12px;color:var(--fg2);text-align:right;padding:6px 8px 0 0;font-variant-numeric:tabular-nums}
+.wall{margin-top:16px;columns:3 220px;column-gap:10px}
+.wnote{break-inside:avoid;margin-bottom:10px;padding:16px 16px 14px;border-radius:24px;background:var(--c1);display:flex;gap:12px;align-items:flex-start;
+  animation:wpop .7s var(--spring) both;transition:border-radius .5s var(--spring),transform .5s var(--spring)}
+.wnote:hover{border-radius:12px;transform:rotate(-1deg)}
+.wnote svg{flex:0 0 36px;width:36px;height:36px;transition:transform 1s var(--spring)}.wnote:hover svg{transform:rotate(90deg)}
+.wnote b{display:block;font-size:14px;font-weight:750;font-variation-settings:"wdth" 110}
+.wnote b small{font-weight:500;color:var(--fg2);margin-left:6px;font-size:12px}
+.wnote p{font-size:15px;line-height:1.4;color:var(--fg);margin-top:2px;word-break:break-word}
+.wnote:nth-child(3n+1) path{fill:var(--primary)}.wnote:nth-child(3n+2) path{fill:var(--tertiary)}.wnote:nth-child(3n) path{fill:var(--secondary)}
+.wempty{color:var(--fg2);font-size:15px;padding:12px 4px}
+@keyframes wpop{from{opacity:0;transform:translateY(20px) scale(.9)}}
 /* ripple + particles */
 .rp{position:relative;overflow:hidden;isolation:isolate}
 .rip{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);background:currentColor;opacity:.16;pointer-events:none;animation:rip .6s var(--emph) forwards;z-index:-1}
@@ -347,7 +374,20 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
   <section id="s3">
     <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Факт</div>
     <h2 class="rv">One Piece <em>is</em> real</h2>
-    <button class="poster rv" id="poster" aria-label="Подтвердить"><img src="onepiece.jpg" alt="ONE PIECE is real" loading="lazy"><span class="cnt" id="cnt">тыкни · 0</span></button>
+    <button class="poster rv" id="poster" aria-label="Подтвердить"><img src="onepiece.jpg" alt="ONE PIECE is real" loading="lazy"><span class="cnt" id="cnt">real · …</span></button>
+  </section>
+
+
+  <section id="sw">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="clover8"/></svg></i>Стена</div>
+    <h2 class="rv">Оставь <em>след</em></h2>
+    <form class="wform rv" id="wform" autocomplete="off">
+      <div class="wshapes" id="wshapes" role="radiogroup" aria-label="Фигура"></div>
+      <input class="wf" id="wname" maxlength="24" placeholder="Имя (необязательно)">
+      <div class="wrow"><input class="wf" id="wtext" maxlength="120" placeholder="Напиши что-нибудь…" required><button class="wsend rp" type="submit" aria-label="Отправить"><svg viewBox="0 0 24 24"><path d="M3 20.5v-7l9-1.5-9-1.5v-7L22 12z"/></svg></button></div>
+      <div class="wcount"><span id="wleft">120</span></div>
+    </form>
+    <div class="wall" id="wall"><div class="wempty">Пока пусто — будь первым ✦</div></div>
   </section>
 
   <section id="s4">
@@ -469,10 +509,15 @@ function burst(x,y,n=16){ if(RM) return;
     el.innerHTML=`<svg viewBox="0 0 1 1"><path d="${P(SH[SN[i%SN.length]])}" style="fill:var(${cols[i%cols.length]})"/></svg>`;
     document.body.appendChild(el); setTimeout(()=>el.remove(),1300); } }
 
-/* постер */
-let cnt=0; const cntEl=$('cnt');
-$('poster').addEventListener('click',e=>{cnt++;cntEl.textContent=(cnt>=10?'REAL!! · ':'real · ')+cnt;cntEl.classList.add('pop');setTimeout(()=>cntEl.classList.remove('pop'),180);burst(e.clientX,e.clientY,cnt>=10?26:14)});
-
+/* постер: общий счётчик real (копится на сервере) */
+let realV=null, pend=0, sending=false; const cntEl=$('cnt');
+const showReal=()=>{ cntEl.textContent='real · '+(realV==null?'…':(realV+pend).toLocaleString('ru-RU')); };
+fetch('/api/real').then(r=>r.json()).then(d=>{realV=d.real;showReal()}).catch(()=>{});
+async function flush(){ if(sending||!pend) return; sending=true; const n=pend;
+  try{ for(let i=0;i<n;i++){ const r=await fetch('/api/real',{method:'POST'}); const d=await r.json(); if(r.ok){realV=d.real;pend--} else {pend=0;realV=d.real;snack('притормози ✦');break} } }catch(_){pend=0}
+  sending=false; showReal(); if(pend) flush(); }
+$('poster').addEventListener('click',e=>{ pend++; showReal(); cntEl.classList.add('pop'); setTimeout(()=>cntEl.classList.remove('pop'),180);
+  burst(e.clientX,e.clientY,14); clearTimeout(flush.t); flush.t=setTimeout(flush,250); });
 /* split button copy */
 const split=$('split');
 function copyID(e){ (navigator.clipboard?navigator.clipboard.writeText('318357554'):Promise.reject()).then(()=>{snack('ID скопирован');split.classList.add('ok');setTimeout(()=>split.classList.remove('ok'),1500);if(e)burst(e.clientX,e.clientY,8)}).catch(()=>snack('ID: 318357554')); }
@@ -553,6 +598,27 @@ document.querySelectorAll('.proj').forEach(c=>{ c.addEventListener('pointermove'
   let buf=''; addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toLowerCase(); if(buf==='uwu')party()}); })();
 /* скролл-вращение фигур фактов */
 addEventListener('scroll',()=>{ const k=scrollY*.15; document.querySelectorAll('.fact svg').forEach((s,i)=>s.style.rotate=(i%2?-k:k)+'deg'); },{passive:true});
+
+
+/* ═══ стена ═══ */
+(()=>{ const WS=['cookie9','clover4','heart','sunny','burst','pent'], box=$('wshapes'); let pick='cookie9';
+  WS.forEach((n,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='wsh'; b.setAttribute('role','radio'); b.setAttribute('aria-checked',i===0); b.setAttribute('aria-label',n);
+    b.innerHTML=`<svg viewBox="0 0 1 1"><path d="${P(SH[n])}"/></svg>`; b.onclick=()=>{pick=n; box.querySelectorAll('.wsh').forEach(x=>x.setAttribute('aria-checked',x===b))}; box.appendChild(b); });
+  const wall=$('wall'), txt=$('wtext'), nm=$('wname'), left=$('wleft');
+  try{ nm.value=localStorage.wn||'' }catch(_){}
+  txt.addEventListener('input',()=>left.textContent=120-txt.value.length);
+  const ago=t=>{const m=(Date.now()/1e3-t)/60; if(m<1)return 'только что'; if(m<60)return Math.round(m)+' мин'; if(m<1440)return Math.round(m/60)+' ч'; return Math.round(m/1440)+' дн'};
+  const card=it=>`<div class="wnote"><svg viewBox="0 0 1 1"><path d="${P(SH[it.shape]||SH.cookie9)}"/></svg><div><b>${it.name}<small>${ago(it.t)}</small></b><p>${it.text}</p></div></div>`;
+  const render=list=>{ wall.innerHTML=list.length?list.map(card).join(''):'<div class="wempty">Пока пусто — будь первым ✦</div>' };
+  fetch('/api/wall').then(r=>r.json()).then(d=>render(d.wall)).catch(()=>{});
+  $('wform').addEventListener('submit',async e=>{ e.preventDefault(); const text=txt.value.trim(); if(!text) return;
+    try{ localStorage.wn=nm.value }catch(_){}
+    try{ const r=await fetch('/api/wall',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:nm.value,text,shape:pick})}); const d=await r.json();
+      if(!r.ok){ snack(d.error||'ошибка'); return }
+      if(wall.querySelector('.wempty')) wall.innerHTML=''; wall.insertAdjacentHTML('afterbegin',card(d.item)); txt.value=''; left.textContent=120; snack('Оставлено ✦');
+      const rb=$('wform').querySelector('.wsend').getBoundingClientRect(); burst(rb.x+rb.width/2,rb.y+rb.height/2,16);
+    }catch(_){ snack('нет связи с сервером') } });
+})();
 
 /* loop */
 let last=performance.now();
