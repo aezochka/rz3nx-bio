@@ -316,6 +316,20 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 .mz-stat b{display:block;font-size:20px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .mz-stat span{display:block;margin-top:2px;font-size:11px;font-weight:600;color:var(--fg2)}
 .mz-stat[hidden]{display:none}
+.mz-toggle{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:40px;border:0;
+    border-radius:14px;background:var(--c1);color:var(--fg2);font:650 13px "Roboto Flex",system-ui;cursor:pointer;
+    transition:border-radius .4s var(--spring),background .25s,color .25s}
+.mz-toggle:hover{background:var(--c2);color:var(--fg)}
+.mz-toggle svg{width:16px;height:16px;fill:currentColor;transition:transform .45s var(--spring)}
+.mz-toggle[aria-expanded=true] svg{transform:rotate(180deg)}
+.mz-toggle[aria-expanded=true]{border-radius:20px}
+.mz-more{display:grid;gap:12px;max-height:0;opacity:0;overflow:hidden;transition:max-height .55s var(--emph),opacity .35s var(--emph)}
+.mz-more.open{max-height:640px;opacity:1}
+.mz-sub{display:grid;gap:6px}
+.mz-sub h4{margin:0;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--fg2)}
+.mz-chipbar{display:flex;flex-wrap:wrap;gap:6px}
+.mz-chip{font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--c1);color:var(--fg2)}
+.mz-chip b{color:var(--primary);font-weight:700}
 .mz-chart{display:grid;gap:8px}
 .mz-chart[hidden]{display:none}
 .mz-chart-h{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--fg2)}
@@ -395,7 +409,6 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
         <div class="mz-cover">
           <span class="ph">♪</span>
           <img id="mzImg" alt="" loading="lazy" hidden>
-          <span class="mz-eq"><i></i><i></i><i></i><i></i></span>
         </div>
         <div class="mz-meta">
           <small id="mzKick">Любимый трек</small>
@@ -414,11 +427,25 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
         <div class="mz-stat"><b id="mzLevel">—</b><span>уровень</span></div>
         <div class="mz-stat" id="mzTodayWrap" hidden><b id="mzToday">—</b><span>сегодня</span></div>
       </div>
-      <div class="mz-chart" id="mzChart" hidden>
-        <div class="mz-chart-h"><span>Последние 7 дней</span><b id="mzWeek">—</b></div>
-        <div class="mz-bars" id="mzBars"></div>
+      <button class="mz-toggle" id="mzToggle" type="button" aria-expanded="false">
+        Подробнее
+        <svg viewBox="0 0 24 24"><path d="M12 16.5 5.5 10 7 8.5l5 5 5-5 1.5 1.5z"/></svg>
+      </button>
+      <div class="mz-more" id="mzMore">
+        <div class="mz-chart" id="mzChart" hidden>
+          <div class="mz-chart-h"><span>Последние 7 дней</span><b id="mzWeek">—</b></div>
+          <div class="mz-bars" id="mzBars"></div>
+        </div>
+        <div class="mz-sub" id="mzTopWrap" hidden>
+          <h4>Топ треков</h4>
+          <div class="mz-list" id="mzList"></div>
+        </div>
+        <div class="mz-sub" id="mzArtWrap" hidden>
+          <h4>Топ артистов</h4>
+          <div class="mz-list" id="mzArtists"></div>
+        </div>
+        <div class="mz-chipbar" id="mzChips" hidden></div>
       </div>
-      <div class="mz-list" id="mzList" hidden></div>
       <div class="mz-bar"><i id="mzBar"></i></div>
       <div class="mz-foot">
         <span id="mzSrc">30-секундный превью</span>
@@ -760,7 +787,17 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     var c=t.cover||'';
     if(c){ img.src=c.indexOf('http')===0?c:CDN+c; img.hidden=false; if(ph) ph.style.display='none' }
   }
-
+  function rows(host, items, key, sub, cnt){
+    host.innerHTML='';
+    items.forEach(function(t){
+      var row=document.createElement('div'); row.className='mz-row';
+      var b=document.createElement('b'); b.textContent=t[key]||'—';
+      var s=document.createElement('span'); s.textContent=t[sub]||'';
+      var i=document.createElement('i'); i.textContent='×'+t[cnt];
+      row.appendChild(b); row.appendChild(s); row.appendChild(i);
+      host.appendChild(row);
+    });
+  }
   function render(d){
     $('mzTracks').textContent=num(d.tracks);
     if(typeof d.tracks==='number') $('mzTracksLbl').textContent=plural(d.tracks,['трек','трека','треков']);
@@ -769,45 +806,46 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     if(d.favorite) show('Любимый трек',d.favorite);
     else if(d.avatar){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
     if(d.accent) box.style.setProperty('--mz-accent',d.accent);
+
     var loc=d.local||{};
-    if(loc.plays_today>0){
-      $('mzTodayWrap').hidden=false;
-      $('mzToday').textContent=num(loc.plays_today);
-    }
+    if(loc.plays_today>0){ $('mzTodayWrap').hidden=false; $('mzToday').textContent=num(loc.plays_today) }
     if(loc.plays>0 && (loc.top||[]).length){
-      var list=$('mzList'); list.hidden=false; list.innerHTML='';
-      loc.top.slice(0,3).forEach(function(t){
-        var row=document.createElement('div'); row.className='mz-row';
-        var b=document.createElement('b'); b.textContent=t.track||'—';
-        var s=document.createElement('span'); s.textContent=t.artist||'';
-        var i=document.createElement('i'); i.textContent='×'+t.plays;
-        row.appendChild(b); row.appendChild(s); row.appendChild(i);
-        list.appendChild(row);
-      });
+      $('mzTopWrap').hidden=false;
+      rows($('mzList'), loc.top.slice(0,3), 'track', 'artist', 'plays');
+    }
+    if(loc.plays>0 && (loc.artists||[]).length){
+      $('mzArtWrap').hidden=false;
+      rows($('mzArtists'), loc.artists, 'artist', '', 'plays');
+    }
+    if(loc.plays>0){
+      var chips=$('mzChips'); chips.hidden=false; chips.innerHTML='';
+      var add=function(label,val){
+        var c=document.createElement('span'); c.className='mz-chip';
+        c.innerHTML=label+' <b>'+val+'</b>'; chips.appendChild(c);
+      };
+      add('прослушиваний', num(loc.plays));
+      if(loc.minutes) add('минут', num(loc.minutes));
+      if(loc.peak) add('пик', loc.peak);
     }
   }
-
   function renderHistory(hd){
     if(!hd||!hd.days) return;
     var max=0;
     hd.days.forEach(function(d){ if(d.tracks>max) max=d.tracks });
-    var box=$('mzBars');
     if(max<=0) return;
-    box.innerHTML='';
+    var boxEl=$('mzBars'); boxEl.innerHTML='';
     var today=hd.days[hd.days.length-1].date;
     hd.days.forEach(function(d){
       var el=document.createElement('i');
-      var pct=max>0?Math.max(6,Math.round(d.tracks/max*100)):6;
-      el.style.height=pct+'%';
-      el.title=d.label+' · '+d.tracks+' трек.';
+      el.style.height=Math.max(8,Math.round(d.tracks/max*100))+'%';
+      el.title=d.label+' · '+d.tracks+' '+plural(d.tracks,['трек','трека','треков']);
       if(d.date===today) el.className='today';
       if(!d.tracks) el.className=(el.className?el.className+' ':'')+'empty';
-      box.appendChild(el);
+      boxEl.appendChild(el);
     });
-    $('mzWeek').textContent=hd.week_tracks>0?(hd.week_tracks+' за неделю'):'мало данных';
+    $('mzWeek').textContent=hd.week_tracks+' за неделю';
     $('mzChart').hidden=false;
   }
-
   function loadMeta(){
     if(loaded) return Promise.resolve(meta);
     return fetch('/api/dotify/preview',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
@@ -824,7 +862,6 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
       return meta;
     }).catch(function(){ return null });
   }
-
   function pull(){
     if(busy) return; busy=true;
     fetch('/api/dotify',{cache:'no-store'}).then(function(r){return r.json()})
@@ -839,6 +876,13 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     fetch('/api/dotify/history',{cache:'no-store'}).then(function(r){return r.json()})
       .then(function(d){ renderHistory(d) }).catch(function(){});
   }
+
+  var toggle=$('mzToggle'), more=$('mzMore');
+  toggle.addEventListener('click',function(){
+    var open=more.classList.toggle('open');
+    toggle.setAttribute('aria-expanded',open?'true':'false');
+    toggle.firstChild.textContent=open?'Свернуть':'Подробнее';
+  });
 
   btn.addEventListener('click',function(){
     if(audio.src && !audio.paused){ audio.pause(); return }
