@@ -736,7 +736,10 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     var c=t.cover||'';
     if(c){ img.src=c.indexOf('http')===0?c:CDN+c; img.hidden=false; if(ph) ph.style.display='none' }
   }
+  var curTrack=null;
   function render(d){
+    var ft=(d.favorite&&d.favorite.track)||null;
+    if(ft!==curTrack){ curTrack=ft; loaded=false; meta=null; if(audio.src){ audio.pause(); audio.removeAttribute('src'); bar.style.width='0%' } }
     $('mzTracks').textContent=num(d.tracks);
     $('mzHours').textContent=num(d.hours);
     $('mzLevel').textContent=num(d.level);
@@ -781,6 +784,10 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
   audio.addEventListener('play',function(){ setPlaying(true) });
   audio.addEventListener('pause',function(){ setPlaying(false) });
   audio.addEventListener('ended',function(){ setPlaying(false); bar.style.width='0%' });
+  audio.addEventListener('error',function(){
+    if(!audio.getAttribute('src')) return;
+    loaded=false; meta=null; audio.removeAttribute('src'); setPlaying(false); bar.style.width='0%';
+  });
   audio.addEventListener('timeupdate',function(){
     if(!audio.duration||!isFinite(audio.duration)) return;
     bar.style.width=Math.min(100,(audio.currentTime/audio.duration)*100).toFixed(1)+'%';
