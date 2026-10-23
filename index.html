@@ -316,6 +316,14 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 .mz-stat b{display:block;font-size:20px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
 .mz-stat span{display:block;margin-top:2px;font-size:11px;font-weight:600;color:var(--fg2)}
 .mz-stat[hidden]{display:none}
+.mz-chart{display:grid;gap:8px}
+.mz-chart[hidden]{display:none}
+.mz-chart-h{display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--fg2)}
+.mz-chart-h b{color:var(--primary);font-variant-numeric:tabular-nums}
+.mz-bars{display:flex;align-items:flex-end;gap:6px;height:56px}
+.mz-bars i{flex:1;display:block;border-radius:6px 6px 3px 3px;background:color-mix(in srgb,var(--primary) 35%,transparent);transition:height .6s var(--spring),background .3s}
+.mz-bars i.today{background:var(--primary)}
+.mz-bars i.empty{height:4px!important;background:var(--c2)}
 .mz-list{display:grid;gap:6px}
 .mz-list[hidden]{display:none}
 .mz-row{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:14px;background:var(--c1);font-size:13px;transition:border-radius .4s var(--spring)}
@@ -382,7 +390,7 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 
   <section id="sm">
     <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Музыка</div>
-    <div class="mz rv" id="mz" data-playing="false">
+    <div class="mz rv" id="mz">
       <div class="mz-top">
         <div class="mz-cover">
           <span class="ph">♪</span>
@@ -390,21 +398,25 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
           <span class="mz-eq"><i></i><i></i><i></i><i></i></span>
         </div>
         <div class="mz-meta">
-          <small id="mzKick">Статистика</small>
+          <small id="mzKick">Любимый трек</small>
           <h3 id="mzTrack">Слушаю Dotify</h3>
           <p id="mzArtist">подтягиваю…</p>
           <p class="mz-extra" id="mzExtra" hidden></p>
         </div>
         <button class="mz-play" id="mzPlay" type="button" aria-label="Слушать">
           <svg id="mzIcPlay" viewBox="0 0 24 24"><path d="M8 5.14v13.72L19 12z"/></svg>
-          <svg id="mzIcPause" viewBox="0 0 24 24" hidden><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          <svg id="mzIcPause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
         </button>
       </div>
       <div class="mz-stats">
         <div class="mz-stat"><b id="mzTracks">—</b><span>треков</span></div>
         <div class="mz-stat"><b id="mzHours">—</b><span>часов</span></div>
         <div class="mz-stat"><b id="mzLevel">—</b><span>уровень</span></div>
-        <div class="mz-stat" id="mzPlaysWrap" hidden><b id="mzPlays">—</b><span>прослушиваний</span></div>
+        <div class="mz-stat" id="mzTodayWrap" hidden><b id="mzToday">—</b><span>сегодня</span></div>
+      </div>
+      <div class="mz-chart" id="mzChart" hidden>
+        <div class="mz-chart-h"><span>Последние 7 дней</span><b id="mzWeek">—</b></div>
+        <div class="mz-bars" id="mzBars"></div>
       </div>
       <div class="mz-list" id="mzList" hidden></div>
       <div class="mz-bar"><i id="mzBar"></i></div>
@@ -726,10 +738,10 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
 (function(){
   var box=document.getElementById('mz'); if(!box) return;
   var $=function(i){return document.getElementById(i)};
-  var USER='YouRooni', CDN='https://share.dotify.fun', DEEP='dotify://profile/'+USER;
+  var USER='YouRooni', CDN='https://share.dotify.fun';
   var img=$('mzImg'), ph=box.querySelector('.mz-cover .ph'), btn=$('mzPlay');
   var icPlay=$('mzIcPlay'), icPause=$('mzIcPause'), bar=$('mzBar'), src=$('mzSrc');
-  var audio=new Audio(), meta=null, busy=false, loaded=false;
+  var audio=new Audio(), meta=null, busy=false, loaded=false, curTrack=null;
 
   function num(v){ return (v===null||v===undefined)?'—':Number(v).toLocaleString('ru-RU') }
   function mmss(s){ s=Math.max(0,Math.round(s||0)); return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2) }
@@ -747,37 +759,53 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     var c=t.cover||'';
     if(c){ img.src=c.indexOf('http')===0?c:CDN+c; img.hidden=false; if(ph) ph.style.display='none' }
   }
-  var curTrack=null;
-  function renderStats(local){
-    if(!local||!local.plays) return;
-    $('mzPlaysWrap').hidden=false;
-    $('mzPlays').textContent=num(local.plays);
-    var top=(local.top||[]).slice(0,3);
-    if(top.length){
-      var box=$('mzList'); box.hidden=false; box.innerHTML='';
-      top.forEach(function(t){
+
+  function render(d){
+    $('mzTracks').textContent=num(d.tracks);
+    $('mzHours').textContent=num(d.hours);
+    $('mzLevel').textContent=num(d.level);
+    if(d.favorite) show('Любимый трек',d.favorite);
+    else if(d.avatar){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
+    if(d.accent) box.style.setProperty('--mz-accent',d.accent);
+    var loc=d.local||{};
+    if(loc.plays_today>0){
+      $('mzTodayWrap').hidden=false;
+      $('mzToday').textContent=num(loc.plays_today);
+    }
+    if(loc.plays>0 && (loc.top||[]).length){
+      var list=$('mzList'); list.hidden=false; list.innerHTML='';
+      loc.top.slice(0,3).forEach(function(t){
         var row=document.createElement('div'); row.className='mz-row';
         var b=document.createElement('b'); b.textContent=t.track||'—';
         var s=document.createElement('span'); s.textContent=t.artist||'';
         var i=document.createElement('i'); i.textContent=t.plays;
         row.appendChild(b); row.appendChild(s); row.appendChild(i);
-        box.appendChild(row);
+        list.appendChild(row);
       });
     }
   }
-  function render(d){
-    renderStats(d.local);
-    if(live){ return }
-    var ft=(d.favorite&&d.favorite.track)||null;
-    if(ft!==curTrack){ curTrack=ft; loaded=false; meta=null; if(audio.src){ audio.pause(); audio.removeAttribute('src'); bar.style.width='0%' } }
-    $('mzTracks').textContent=num(d.tracks);
-    $('mzHours').textContent=num(d.hours);
-    $('mzLevel').textContent=num(d.level);
-    if(d.favorite) show('Любимый трек',d.favorite);
-    else{ $('mzTrack').textContent='Пока пусто'; $('mzArtist').textContent='включи что-нибудь в Dotify' }
-    if(d.avatar && !d.favorite){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
-    if(d.accent) box.style.setProperty('--mz-accent',d.accent);
+
+  function renderHistory(hd){
+    if(!hd||!hd.days) return;
+    var max=0;
+    hd.days.forEach(function(d){ if(d.tracks>max) max=d.tracks });
+    var box=$('mzBars');
+    if(max<=0 && !hd.samples) return;
+    box.innerHTML='';
+    var today=hd.days[hd.days.length-1].date;
+    hd.days.forEach(function(d){
+      var el=document.createElement('i');
+      var pct=max>0?Math.max(6,Math.round(d.tracks/max*100)):6;
+      el.style.height=pct+'%';
+      el.title=d.label+' · '+d.tracks+' трек.';
+      if(d.date===today) el.className='today';
+      if(!d.tracks) el.className=(el.className?el.className+' ':'')+'empty';
+      box.appendChild(el);
+    });
+    $('mzWeek').textContent=hd.week_tracks>0?(hd.week_tracks+' за неделю'):'мало данных';
+    $('mzChart').hidden=false;
   }
+
   function loadMeta(){
     if(loaded) return Promise.resolve(meta);
     return fetch('/api/dotify/preview',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
@@ -794,11 +822,20 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
       return meta;
     }).catch(function(){ return null });
   }
+
   function pull(){
     if(busy) return; busy=true;
     fetch('/api/dotify',{cache:'no-store'}).then(function(r){return r.json()})
-      .then(function(d){ if(d&&d.ok) render(d) }).catch(function(){})
+      .then(function(d){ if(d&&d.ok){
+        if(curTrack!==null && d.favorite && d.favorite.track!==curTrack){ loaded=false; meta=null; audio.pause(); audio.removeAttribute('src'); bar.style.width='0%' }
+        if(d.favorite) curTrack=d.favorite.track;
+        render(d);
+      }}).catch(function(){})
       .then(function(){ busy=false });
+  }
+  function pullHistory(){
+    fetch('/api/dotify/history',{cache:'no-store'}).then(function(r){return r.json()})
+      .then(function(d){ renderHistory(d) }).catch(function(){});
   }
 
   btn.addEventListener('click',function(){
@@ -814,39 +851,17 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
   audio.addEventListener('play',function(){ setPlaying(true) });
   audio.addEventListener('pause',function(){ setPlaying(false) });
   audio.addEventListener('ended',function(){ setPlaying(false); bar.style.width='0%' });
-  audio.addEventListener('error',function(){
-    if(!audio.getAttribute('src')) return;
-    loaded=false; meta=null; audio.removeAttribute('src'); setPlaying(false); bar.style.width='0%';
-  });
   audio.addEventListener('timeupdate',function(){
     if(!audio.duration||!isFinite(audio.duration)) return;
     bar.style.width=Math.min(100,(audio.currentTime/audio.duration)*100).toFixed(1)+'%';
   });
+  audio.addEventListener('error',function(){
+    if(!audio.getAttribute('src')) return;
+    loaded=false; meta=null; audio.removeAttribute('src'); setPlaying(false); bar.style.width='0%';
+  });
 
-  var live=null, liveAt=0;
-  function tick(){
-    if(!live||!live.playing) return;
-    var cur=(live.position||0)+(Date.now()-liveAt)/1000;
-    if(live.duration) bar.style.width=Math.min(100,cur/live.duration*100).toFixed(1)+'%';
-  }
-  function pullNow(){
-    fetch('/api/now',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
-      var n=d&&d.now;
-      if(n&&n.playing&&n.title){
-        live=n; liveAt=Date.now();
-        if(curTrack!==n.title){ curTrack=n.title; loaded=false; meta=null }
-        box.dataset.live='true';
-        $('mzKick').textContent='Сейчас играет';
-        $('mzTrack').textContent=n.title;
-        $('mzArtist').textContent=n.artist||'';
-        if(n.duration) bar.style.width=Math.min(100,(n.position||0)/n.duration*100).toFixed(1)+'%';
-      }else if(live){
-        live=null; box.dataset.live='false'; bar.style.width='0%'; pull();
-      }
-    }).catch(function(){});
-  }
-  pull(); setInterval(pull,60000);
-  pullNow(); setInterval(pullNow,10000); setInterval(tick,1000);
+  pull(); pullHistory();
+  setInterval(pull,60000); setInterval(pullHistory,300000);
   loadMeta();
 })();
 init();
