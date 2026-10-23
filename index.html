@@ -6,10 +6,10 @@
 <title>Aèzα — R Λ Z Ξ</title>
 <meta name="description" content="Aèzα · @rz3nx — Android на Kotlin + Compose в стиле Material 3 Expressive, модули на Python.">
 <meta property="og:type" content="profile"><meta property="og:site_name" content="aezo.loc.cc"><meta property="og:url" content="https://bio.aezo.loc.cc/"><meta property="og:title" content="RΛZΞ — Aèzα"><meta property="og:description" content="@rz3nx · Kotlin, Compose, M3E · проекты, ссылки, гостевая стена"><meta property="og:image" content="https://bio.aezo.loc.cc/og.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://bio.aezo.loc.cc/og.jpg">
-<link rel="icon" href="avatar.jpg">
+<link rel="icon" type="image/png" sizes="64x64" href="icon-64.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#141218">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,300..1000&display=swap" rel="stylesheet">
+<link rel="preload" href="rf-4eadd9c3.woff2" as="font" type="font/woff2" crossorigin>
+<style>@font-face{font-family:"Roboto Flex";src:url(rf-4eadd9c3.woff2) format("woff2-variations"),url(rf-4eadd9c3.woff2) format("woff2");font-weight:300 1000;font-stretch:25% 151%;font-style:normal;font-display:swap}</style>
 <style>
 :root{
   --primary:#6b4fa8;--on-primary:#fff;--pc:#ebddff;--on-pc:#25005a;
@@ -286,6 +286,43 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
   .item{min-height:76px;gap:14px;padding:12px 16px 12px 12px}.item .ic{width:46px;height:46px}
   .poster{border-radius:32px}
 }
+
+/* --- dotify: музыка --- */
+.mz{position:relative;margin-top:16px;padding:16px;border-radius:28px;background:var(--c0);
+    border:1px solid color-mix(in srgb,var(--primary) 14%,transparent);display:grid;gap:14px;overflow:hidden;
+    transition:border-radius .6s var(--spring),background .4s var(--emph),border-color .4s}
+.mz:hover{border-radius:20px}
+.mz-top{display:flex;align-items:center;gap:14px;min-width:0}
+.mz-cover{position:relative;flex:0 0 auto;width:64px;height:64px;border-radius:20px;overflow:hidden;
+    background:var(--pc);color:var(--on-pc);display:grid;place-items:center;
+    transition:border-radius .7s var(--spring),transform .7s var(--spring)}
+.mz:hover .mz-cover{border-radius:14px;transform:rotate(-3deg) scale(1.04)}
+.mz-cover .ph{font-size:24px;line-height:1}
+.mz-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mz-meta{flex:1;min-width:0}
+.mz-meta small{display:block;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--fg2)}
+.mz-meta h3{margin:3px 0 0;font-size:18px;font-weight:750;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-meta p{margin:2px 0 0;font-size:13px;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-play{flex:0 0 auto;width:56px;height:56px;border-radius:20px;background:var(--primary);color:var(--on-primary);
+    display:grid;place-items:center;transition:border-radius .5s var(--spring),transform .45s var(--spring),background .3s}
+.mz-play svg{width:26px;height:26px;fill:currentColor;transition:transform .5s var(--spring)}
+.mz-play:hover{border-radius:50%}
+.mz-play:hover svg{transform:scale(1.14)}
+.mz-play:active{transform:scale(.94)}
+.mz-stats{display:flex;gap:8px}
+.mz-stat{flex:1;padding:10px 6px;border-radius:18px;background:var(--c1);text-align:center;
+    transition:border-radius .5s var(--spring),background .3s}
+.mz:hover .mz-stat{border-radius:12px}
+.mz-stat b{display:block;font-size:20px;font-weight:800;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.mz-stat span{display:block;margin-top:2px;font-size:11px;font-weight:600;color:var(--fg2)}
+.mz-eq{position:absolute;right:6px;bottom:6px;display:none;align-items:flex-end;gap:2px;height:16px;
+    padding:3px 4px;border-radius:9px;background:rgba(0,0,0,.5)}
+.mz[data-playing=true] .mz-eq{display:flex}
+.mz-eq i{display:block;width:2px;height:4px;border-radius:2px;background:#7cf29b;animation:eq .9s var(--emph) infinite}
+.mz-eq i:nth-child(2){animation-delay:.15s;background:#a7f3c0}
+.mz-eq i:nth-child(3){animation-delay:.3s}
+.mz-eq i:nth-child(4){animation-delay:.45s;background:#a7f3c0}
+@keyframes eq{0%,100%{height:4px}50%{height:12px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
 </style>
 </head>
@@ -303,7 +340,7 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
       <svg class="av" id="av" viewBox="-.04 -.04 1.08 1.08" aria-label="Аватар">
         <defs><clipPath id="clip" clipPathUnits="userSpaceOnUse"><path id="bp"/></clipPath></defs>
         <path class="u" id="bu"/>
-        <image href="avatar.jpg" x="0" y="0" width="1" height="1" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
+        <image href="avatar.webp" x="0" y="0" width="1" height="1" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip)"/>
       </svg>
       <h1 class="name" id="name">RΛZΞ</h1>
       <p class="tag">Aèzα, <b>@rz3nx</b> · <span class="typer" id="typer">Android на Compose</span><span class="caret"></span></p>
@@ -322,6 +359,32 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
       <div class="fact f2 rv"><svg viewBox="0 0 1 1"><path data-shape="clover4"/></svg><div><b>09.11</b><span>др 🎂</span></div></div>
       <div class="fact f3 rv"><svg viewBox="0 0 1 1"><path data-shape="pent"/></svg><div><b>RU</b><span>Russia</span></div></div>
       <div class="fact f4 rv"><svg viewBox="0 0 1 1"><path data-shape="burst"/></svg><div><b data-n="5">5</b><span>репо</span></div></div>
+    </div>
+  </section>
+
+  <section id="sm">
+    <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Музыка</div>
+    <div class="mz rv" id="mz" data-playing="false">
+      <div class="mz-top">
+        <div class="mz-cover">
+          <span class="ph">♪</span>
+          <img id="mzImg" alt="" loading="lazy" hidden>
+          <span class="mz-eq"><i></i><i></i><i></i><i></i></span>
+        </div>
+        <div class="mz-meta">
+          <small id="mzKick">Статистика</small>
+          <h3 id="mzTrack">Слушаю Dotify</h3>
+          <p id="mzArtist">подтягиваю…</p>
+        </div>
+        <a class="mz-play" id="mzPlay" href="https://share.dotify.fun/pr/YouRooni" target="_blank" rel="noopener" aria-label="Включить музыку">
+          <svg viewBox="0 0 24 24"><path d="M8 5.14v13.72L19 12z"/></svg>
+        </a>
+      </div>
+      <div class="mz-stats">
+        <div class="mz-stat"><b id="mzTracks">—</b><span>треков</span></div>
+        <div class="mz-stat"><b id="mzHours">—</b><span>часов</span></div>
+        <div class="mz-stat"><b id="mzLevel">—</b><span>уровень</span></div>
+      </div>
     </div>
   </section>
 
@@ -374,7 +437,7 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
   <section id="s3">
     <div class="lbl rv"><i><svg viewBox="0 0 1 1"><path data-shape="sunny"/></svg></i>Факт</div>
     <h2 class="rv">One Piece <em>is</em> real</h2>
-    <button class="poster rv" id="poster" aria-label="Подтвердить"><img src="onepiece.jpg" alt="ONE PIECE is real" loading="lazy"><span class="cnt" id="cnt">real · …</span></button>
+    <button class="poster rv" id="poster" aria-label="Подтвердить"><picture><source type="image/webp" srcset="onepiece-640.webp 640w, onepiece.webp 1280w" sizes="(max-width:720px) 100vw, 900px"><img src="onepiece.jpg" alt="ONE PIECE is real" width="1280" height="720" loading="lazy" decoding="async"></picture><span class="cnt" id="cnt">real · …</span></button>
   </section>
 
 
@@ -437,7 +500,7 @@ function morpher(paths, list, period, dur){
     step(dt){ if(t<1){t=Math.min(1,t+dt/dur);const k=ease(t);for(let j=0;j<cur.length;j++)cur[j]=from[j]+(to[j]-from[j])*k}
       rv+=((spin-rot)*.012-rv*.16)*dt/16; rot+=rv*dt/16;
       const d=P(cur), tr=`rotate(${rot.toFixed(2)} .5 .5)`; paths.forEach(p=>{p.setAttribute('d',d);p.setAttribute('transform',tr)}); }};
-  if(period) setInterval(()=>o.next(),period);
+  if(period) setInterval(()=>{ if(!document.hidden) o.next() },period);
   return o;
 }
 const loadM=morpher([$('lp')],['cookie9','clover4','sunny','pent','burst','cookie4'],0,420);
@@ -588,16 +651,18 @@ document.querySelectorAll('.proj').forEach(c=>{ c.addEventListener('pointermove'
 /* cursor blob */
 (()=>{ if(matchMedia('(hover:none)').matches||RM) return; const c=$('cur'), cp=$('curp'); let x=innerWidth/2,y=innerHeight/2,tx=x,ty=y,si=0;
   cp.setAttribute('d',P(SH.cookie9));
-  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;c.classList.add('on'); c.classList.toggle('big',!!e.target.closest('a,button,.body,.fact,.proj'))});
+  addEventListener('pointermove',e=>{tx=e.clientX;ty=e.clientY;c.classList.add('on'); c.classList.toggle('big',!!e.target.closest('a,button,.body,.fact,.proj'))},{passive:true});
   document.addEventListener('pointerleave',()=>c.classList.remove('on'));
-  setInterval(()=>{si=(si+1)%SN.length; cp.setAttribute('d',P(SH[SN[si]]))},900);
-  (function loop(){ x+=(tx-x)*.2; y+=(ty-y)*.2; const s=c.offsetWidth/2; c.style.transform=`translate(${x-s}px,${y-s}px) rotate(${(x+y)*.4}deg)`; requestAnimationFrame(loop) })(); })();
+  setInterval(()=>{ if(document.hidden||!c.classList.contains('on')) return; si=(si+1)%SN.length; cp.setAttribute('d',P(SH[SN[si]]))},900);
+  let run=false, cs=c.offsetWidth/2; new ResizeObserver(()=>cs=c.offsetWidth/2).observe(c);
+  function loop(){ x+=(tx-x)*.2; y+=(ty-y)*.2; c.style.transform=`translate(${x-cs}px,${y-cs}px) rotate(${(x+y)*.4}deg)`; if(Math.abs(tx-x)+Math.abs(ty-y)>.3) requestAnimationFrame(loop); else run=false }
+  addEventListener('pointermove',()=>{ if(!run){run=true;requestAnimationFrame(loop)} },{passive:true}); })();
 /* party mode: 5 тапов по аве или «uwu» на клаве */
 (()=>{ let taps=0,tt; const party=()=>{document.body.classList.add('party'); snack('PARTY MODE ✦'); kick(); for(let i=0;i<4;i++) setTimeout(()=>burst(Math.random()*innerWidth,Math.random()*innerHeight*.7,22),i*180); setTimeout(()=>document.body.classList.remove('party'),6000)};
   $('av').addEventListener('click',()=>{taps++;clearTimeout(tt);tt=setTimeout(()=>taps=0,1200); if(taps>=5){taps=0;party()}});
   let buf=''; addEventListener('keydown',e=>{buf=(buf+e.key).slice(-3).toLowerCase(); if(buf==='uwu')party()}); })();
 /* скролл-вращение фигур фактов */
-addEventListener('scroll',()=>{ const k=scrollY*.15; document.querySelectorAll('.fact svg').forEach((s,i)=>s.style.rotate=(i%2?-k:k)+'deg'); },{passive:true});
+(()=>{ const fs=[...document.querySelectorAll('.fact svg')]; let tk=false; addEventListener('scroll',()=>{ if(tk) return; tk=true; requestAnimationFrame(()=>{ tk=false; const k=scrollY*.15; fs.forEach((s,i)=>s.style.rotate=(i%2?-k:k)+'deg') }) },{passive:true}); })();
 
 
 /* ═══ стена ═══ */
@@ -624,10 +689,56 @@ addEventListener('scroll',()=>{ const k=scrollY*.15; document.querySelectorAll('
 let last=performance.now();
 function frame(now){ const dt=Math.min(40,now-last); last=now;
   if(!$('boot').classList.contains('done')) loadM.step(dt);
-  avM.step(dt); if(pitVisible && !RM) physics(dt); prog(now); requestAnimationFrame(frame); }
+  if(pitVisible){ avM.step(dt); if(!RM) physics(dt); } if(scrollY>0||pwvOn){ prog(now); pwvOn=scrollY>0 } requestAnimationFrame(frame); }
+let pwvOn=true;
 function init(){ size(); fit(); const n=W<600?8:11; for(let i=0;i<n;i++) add(LABELS[i]); if(RM){ bodies.forEach((b,i)=>{b.y=H-b.r-(i%2)*b.r*1.6; b.x=b.r+(i*(W-2*b.r)/n)}); physics(16);} ind.style.transition='none'; setAct(0); calc(); requestAnimationFrame(()=>ind.style.transition=''); requestAnimationFrame(frame); }
 addEventListener('resize',()=>{size();fit()});
 document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
+
+/* --- dotify card --- */
+(function(){
+  var box=document.getElementById('mz'); if(!box) return;
+  var $=function(i){return document.getElementById(i)};
+  var USER='YouRooni', CDN='https://share.dotify.fun', DEEP='dotify://profile/'+USER;
+  var img=$('mzImg'), ph=box.querySelector('.mz-cover .ph'), play=$('mzPlay');
+  function num(v){ return (v===null||v===undefined)?'—':Number(v).toLocaleString('ru-RU') }
+  function show(kick,t){
+    if(!t) return;
+    $('mzKick').textContent=kick;
+    $('mzTrack').textContent=t.track||'—';
+    $('mzArtist').textContent=t.artist||'';
+    var c=t.cover||'';
+    if(c){ img.src=c.indexOf('http')===0?c:CDN+c; img.hidden=false; if(ph) ph.style.display='none' }
+  }
+  function render(d){
+    box.dataset.playing=d.playing?'true':'false';
+    $('mzTracks').textContent=num(d.tracks);
+    $('mzHours').textContent=num(d.hours);
+    $('mzLevel').textContent=num(d.level);
+    if(d.playing&&d.playing.track) show('Сейчас играет',d.playing);
+    else if(d.favorite) show('Любимый трек',d.favorite);
+    else{
+      $('mzKick').textContent='Статистика'; $('mzTrack').textContent='Пока пусто';
+      $('mzArtist').textContent='включи что-нибудь в Dotify';
+      if(d.avatar){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
+    }
+    if(d.accent) box.style.setProperty('--mz-accent',d.accent);
+  }
+  var busy=false;
+  function pull(){
+    if(busy) return; busy=true;
+    fetch('/api/dotify',{cache:'no-store'}).then(function(r){return r.json()})
+      .then(function(d){ if(d&&d.ok) render(d) }).catch(function(){})
+      .then(function(){ busy=false });
+  }
+  pull(); setInterval(pull,60000);
+  play.addEventListener('click',function(e){
+    if(!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+    e.preventDefault();
+    location.href=DEEP;
+    setTimeout(function(){ location.href=play.href },900);
+  });
+})();
 init();
 </script>
 </body>
