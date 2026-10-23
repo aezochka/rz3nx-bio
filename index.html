@@ -724,7 +724,8 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
   function mmss(s){ s=Math.max(0,Math.round(s||0)); return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2) }
   function setPlaying(on){
     box.dataset.playing=on?'true':'false';
-    icPlay.hidden=on; icPause.hidden=!on;
+    icPlay.style.display=on?'none':'';
+    icPause.style.display=on?'':'none';
     btn.setAttribute('aria-label',on?'Пауза':'Слушать');
   }
   function show(kick,t){
