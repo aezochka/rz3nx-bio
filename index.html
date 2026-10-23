@@ -301,7 +301,7 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 .mz-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mz-meta{flex:1;min-width:0}
 .mz-meta small{display:block;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--fg2)}
-.mz-meta h3{margin:3px 0 0;font-size:18px;font-weight:750;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-meta h3{margin:3px 0 0;font-size:18px;font-weight:750;letter-spacing:-.2px;line-height:1.22;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;white-space:normal;overflow:hidden}
 .mz-meta p{margin:2px 0 0;font-size:13px;color:var(--fg2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mz-play{flex:0 0 auto;width:56px;height:56px;border-radius:20px;background:var(--primary);color:var(--on-primary);
     display:grid;place-items:center;transition:border-radius .5s var(--spring),transform .45s var(--spring),background .3s}
@@ -323,6 +323,15 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
 .mz-eq i:nth-child(3){animation-delay:.3s}
 .mz-eq i:nth-child(4){animation-delay:.45s;background:#a7f3c0}
 @keyframes eq{0%,100%{height:4px}50%{height:12px}}
+.mz-extra{margin:3px 0 0;font-size:12px;color:var(--fg2);opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mz-bar{height:3px;border-radius:2px;background:var(--c2);overflow:hidden}
+.mz-bar i{display:block;height:100%;width:0;background:var(--primary);border-radius:2px}
+.mz-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--fg2);margin-top:-4px}
+.mz-foot a{color:var(--primary);font-weight:650;text-decoration:none;border-radius:8px;padding:2px 6px;transition:background .2s,color .2s}
+.mz-foot a:hover{background:var(--pc);color:var(--on-pc)}
+.mz-play[data-mode=link] svg{transform:none}
+.mz-play svg[hidden]{display:none}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}}
 </style>
 </head>
@@ -375,15 +384,22 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
           <small id="mzKick">Статистика</small>
           <h3 id="mzTrack">Слушаю Dotify</h3>
           <p id="mzArtist">подтягиваю…</p>
+          <p class="mz-extra" id="mzExtra" hidden></p>
         </div>
-        <a class="mz-play" id="mzPlay" href="https://share.dotify.fun/pr/YouRooni" target="_blank" rel="noopener" aria-label="Включить музыку">
-          <svg viewBox="0 0 24 24"><path d="M8 5.14v13.72L19 12z"/></svg>
-        </a>
+        <button class="mz-play" id="mzPlay" type="button" aria-label="Слушать">
+          <svg id="mzIcPlay" viewBox="0 0 24 24"><path d="M8 5.14v13.72L19 12z"/></svg>
+          <svg id="mzIcPause" viewBox="0 0 24 24" hidden><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+        </button>
       </div>
       <div class="mz-stats">
         <div class="mz-stat"><b id="mzTracks">—</b><span>треков</span></div>
         <div class="mz-stat"><b id="mzHours">—</b><span>часов</span></div>
         <div class="mz-stat"><b id="mzLevel">—</b><span>уровень</span></div>
+      </div>
+      <div class="mz-bar"><i id="mzBar"></i></div>
+      <div class="mz-foot">
+        <span id="mzSrc">30-секундный превью</span>
+        <a id="mzOpen" href="https://share.dotify.fun/pr/YouRooni" target="_blank" rel="noopener">в Dotify →</a>
       </div>
     </div>
   </section>
@@ -700,8 +716,17 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
   var box=document.getElementById('mz'); if(!box) return;
   var $=function(i){return document.getElementById(i)};
   var USER='YouRooni', CDN='https://share.dotify.fun', DEEP='dotify://profile/'+USER;
-  var img=$('mzImg'), ph=box.querySelector('.mz-cover .ph'), play=$('mzPlay');
+  var img=$('mzImg'), ph=box.querySelector('.mz-cover .ph'), btn=$('mzPlay');
+  var icPlay=$('mzIcPlay'), icPause=$('mzIcPause'), bar=$('mzBar'), src=$('mzSrc');
+  var audio=new Audio(), meta=null, busy=false, loaded=false;
+
   function num(v){ return (v===null||v===undefined)?'—':Number(v).toLocaleString('ru-RU') }
+  function mmss(s){ s=Math.max(0,Math.round(s||0)); return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2) }
+  function setPlaying(on){
+    box.dataset.playing=on?'true':'false';
+    icPlay.hidden=on; icPause.hidden=!on;
+    btn.setAttribute('aria-label',on?'Пауза':'Слушать');
+  }
   function show(kick,t){
     if(!t) return;
     $('mzKick').textContent=kick;
@@ -711,33 +736,57 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     if(c){ img.src=c.indexOf('http')===0?c:CDN+c; img.hidden=false; if(ph) ph.style.display='none' }
   }
   function render(d){
-    box.dataset.playing=d.playing?'true':'false';
     $('mzTracks').textContent=num(d.tracks);
     $('mzHours').textContent=num(d.hours);
     $('mzLevel').textContent=num(d.level);
-    if(d.playing&&d.playing.track) show('Сейчас играет',d.playing);
-    else if(d.favorite) show('Любимый трек',d.favorite);
-    else{
-      $('mzKick').textContent='Статистика'; $('mzTrack').textContent='Пока пусто';
-      $('mzArtist').textContent='включи что-нибудь в Dotify';
-      if(d.avatar){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
-    }
+    if(d.favorite) show('Любимый трек',d.favorite);
+    else{ $('mzTrack').textContent='Пока пусто'; $('mzArtist').textContent='включи что-нибудь в Dotify' }
+    if(d.avatar && !d.favorite){ img.src=d.avatar.indexOf('http')===0?d.avatar:CDN+d.avatar; img.hidden=false; if(ph) ph.style.display='none' }
     if(d.accent) box.style.setProperty('--mz-accent',d.accent);
   }
-  var busy=false;
+  function loadMeta(){
+    if(loaded) return Promise.resolve(meta);
+    return fetch('/api/dotify/preview',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+      loaded=true; meta=d&&d.ok?d:null;
+      if(meta){
+        var bits=[];
+        if(meta.album) bits.push(meta.album);
+        if(meta.duration) bits.push(mmss(meta.duration));
+        var e=$('mzExtra');
+        if(bits.length){ e.textContent=bits.join(' · '); e.hidden=false }
+        src.textContent=(meta.source==='deezer'?'Deezer':'Apple Music')+' · превью 30 с';
+        if(meta.cover){ img.src=meta.cover; img.hidden=false; if(ph) ph.style.display='none' }
+      }
+      return meta;
+    }).catch(function(){ return null });
+  }
   function pull(){
     if(busy) return; busy=true;
     fetch('/api/dotify',{cache:'no-store'}).then(function(r){return r.json()})
       .then(function(d){ if(d&&d.ok) render(d) }).catch(function(){})
       .then(function(){ busy=false });
   }
-  pull(); setInterval(pull,60000);
-  play.addEventListener('click',function(e){
-    if(!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
-    e.preventDefault();
-    location.href=DEEP;
-    setTimeout(function(){ location.href=play.href },900);
+
+  btn.addEventListener('click',function(){
+    if(audio.src && !audio.paused){ audio.pause(); return }
+    if(audio.src){ audio.play(); return }
+    btn.disabled=true;
+    loadMeta().then(function(m){
+      btn.disabled=false;
+      if(!m||!m.preview){ location.href=$('mzOpen').href; return }
+      audio.src=m.preview; audio.play().catch(function(){ location.href=$('mzOpen').href });
+    });
   });
+  audio.addEventListener('play',function(){ setPlaying(true) });
+  audio.addEventListener('pause',function(){ setPlaying(false) });
+  audio.addEventListener('ended',function(){ setPlaying(false); bar.style.width='0%' });
+  audio.addEventListener('timeupdate',function(){
+    if(!audio.duration||!isFinite(audio.duration)) return;
+    bar.style.width=Math.min(100,(audio.currentTime/audio.duration)*100).toFixed(1)+'%';
+  });
+
+  pull(); setInterval(pull,60000);
+  loadMeta();
 })();
 init();
 </script>
