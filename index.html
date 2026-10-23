@@ -405,11 +405,11 @@ body.party .fact svg,body.party .pshape svg{animation:spin 1.6s var(--spring) in
         </div>
         <button class="mz-play" id="mzPlay" type="button" aria-label="Слушать">
           <svg id="mzIcPlay" viewBox="0 0 24 24"><path d="M8 5.14v13.72L19 12z"/></svg>
-          <svg id="mzIcPause" viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+          <svg id="mzIcPause" viewBox="0 0 24 24" style="display:none"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
         </button>
       </div>
       <div class="mz-stats">
-        <div class="mz-stat"><b id="mzTracks">—</b><span>треков</span></div>
+        <div class="mz-stat"><b id="mzTracks">—</b><span id="mzTracksLbl">треков</span></div>
         <div class="mz-stat"><b id="mzHours">—</b><span>часов</span></div>
         <div class="mz-stat"><b id="mzLevel">—</b><span>уровень</span></div>
         <div class="mz-stat" id="mzTodayWrap" hidden><b id="mzToday">—</b><span>сегодня</span></div>
@@ -744,6 +744,7 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
   var audio=new Audio(), meta=null, busy=false, loaded=false, curTrack=null;
 
   function num(v){ return (v===null||v===undefined)?'—':Number(v).toLocaleString('ru-RU') }
+  function plural(n,forms){ n=Math.abs(n)%100; var d=n%10; if(n>10&&n<20) return forms[2]; if(d>1&&d<5) return forms[1]; if(d===1) return forms[0]; return forms[2] }
   function mmss(s){ s=Math.max(0,Math.round(s||0)); return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2) }
   function setPlaying(on){
     box.dataset.playing=on?'true':'false';
@@ -762,6 +763,7 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
 
   function render(d){
     $('mzTracks').textContent=num(d.tracks);
+    if(typeof d.tracks==='number') $('mzTracksLbl').textContent=plural(d.tracks,['трек','трека','треков']);
     $('mzHours').textContent=num(d.hours);
     $('mzLevel').textContent=num(d.level);
     if(d.favorite) show('Любимый трек',d.favorite);
@@ -778,7 +780,7 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
         var row=document.createElement('div'); row.className='mz-row';
         var b=document.createElement('b'); b.textContent=t.track||'—';
         var s=document.createElement('span'); s.textContent=t.artist||'';
-        var i=document.createElement('i'); i.textContent=t.plays;
+        var i=document.createElement('i'); i.textContent='×'+t.plays;
         row.appendChild(b); row.appendChild(s); row.appendChild(i);
         list.appendChild(row);
       });
@@ -790,7 +792,7 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     var max=0;
     hd.days.forEach(function(d){ if(d.tracks>max) max=d.tracks });
     var box=$('mzBars');
-    if(max<=0 && !hd.samples) return;
+    if(max<=0) return;
     box.innerHTML='';
     var today=hd.days[hd.days.length-1].date;
     hd.days.forEach(function(d){
@@ -860,6 +862,7 @@ document.fonts&&document.fonts.ready.then(()=>{fit(); act>=0&&place(act)});
     loaded=false; meta=null; audio.removeAttribute('src'); setPlaying(false); bar.style.width='0%';
   });
 
+  setPlaying(false);
   pull(); pullHistory();
   setInterval(pull,60000); setInterval(pullHistory,300000);
   loadMeta();
